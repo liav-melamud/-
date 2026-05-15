@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>STEAL A BRAINROT - מדריך מלא</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Rubik:wght@400;700;900&family=Rubik+Bubbles&display=swap" rel="stylesheet">
+<style>
+:root {
+  --neon: #39ff14;
+  --pink: #ff006e;
+  --blue: #00cfff;
+  --gold: #ffd700;
+  --purple: #bf00ff;
+  --orange: #ff6b00;
+  --red: #ff2d2d;
+  --dark: #07080f;
+  --card-bg: rgba(255,255,255,0.04);
+  --border: rgba(255,255,255,0.12);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--dark);
+  font-family: 'Rubik', sans-serif;
+  color: #fff;
+  overflow-x: hidden;
+  cursor: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='30' height='30'><text y='24' font-size='22'>🧠</text></svg>"), auto;
+}
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background:
+    linear-gradient(rgba(57,255,20,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(57,255,20,0.04) 1px, transparent 1px);
+  background-size: 40px 40px;
+  transform: perspective(600px) rotateX(15deg);
+  transform-origin: top;
+  pointer-events: none; z-index: 0;
+}
+body::after {
+  content: '';
+  position: fixed; top:0; left:0; right:0; height:50vh;
+  background: radial-gradient(ellipse at 50% 0%, rgba(191,0,255,0.18) 0%, transparent 70%);
+  pointer-events: none; z-index: 0;
+}
+
+/* NAV */
+nav {
+  position: fixed; top:0; width:100%; z-index:100;
+  background: rgba(7,8,15,0.92);
+  backdrop-filter: blur(16px);
+  border-bottom: 2px solid var(--neon);
+  padding: 10px 20px;
+  display: flex; align-items:center; justify-content:space-between;
+  box-shadow: 0 4px 40px rgba(57,255,20,0.15);
+}
+.nav-logo {
+  font-family: 'Rubik Bubbles', cursive; font-size:1.3rem;
+  background: linear-gradient(90deg, var(--neon), var(--blue), var(--pink));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+}
+.nav-links { display:flex; gap:4px; list-style:none; flex-wrap:wrap; }
+.nav-links a {
+  color:rgba(255,255,255,0.7); text-decoration:none;
+  font-size:0.78rem; font-weight:700;
+  padding:4px 10px; border-radius:50px;
+  border:1.5px solid rgba(255,255,255,0.1); transition:all 0.2s;
+}
+.nav-links a:hover { color:#000; background:var(--neon); border-color:var(--neon); transform:scale(1.08); }
+
+/* PARTICLES */
+.particles { position:fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden; }
+.particle { position:absolute; border-radius:50%; animation: floatUp linear infinite; opacity:0.5; }
+
+/* HERO */
+.hero {
+  min-height:100vh; display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  text-align:center; padding:120px 20px 60px;
+  position:relative; z-index:1;
+}
+.hero-3d-box { perspective:800px; margin-bottom:24px; }
+.hero-3d-inner {
+  display:inline-block;
+  transform: rotateX(8deg) rotateY(-5deg);
+  transform-style: preserve-3d;
+  animation: float3d 6s ease-in-out infinite;
+}
+.hero-title { font-family:'Rubik Bubbles',cursive; font-size:clamp(2.8rem,9vw,7rem); line-height:1; }
+.title-steal {
+  display:block;
+  background: linear-gradient(135deg, var(--gold), var(--orange), var(--red));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  filter: drop-shadow(0 0 30px rgba(255,215,0,0.5));
+  animation: pulse-title 2s ease-in-out infinite;
+}
+.title-a { display:block; color:white; font-size:60%; opacity:0.8; }
+.title-brainrot {
+  display:block;
+  background: linear-gradient(135deg, var(--pink), var(--purple), var(--blue));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  filter: drop-shadow(0 0 30px rgba(255,0,110,0.5));
+  animation: glitch-text 8s infinite;
+}
+.hero-emoji-row { font-size:2.5rem; margin:18px 0; display:flex; gap:8px; justify-content:center; flex-wrap:wrap; animation:sway 3s ease-in-out infinite; }
+.hero-badge {
+  display:inline-flex; gap:8px; align-items:center;
+  background: linear-gradient(135deg, rgba(255,0,110,0.2), rgba(191,0,255,0.2));
+  border:2px solid var(--pink); border-radius:50px; padding:7px 22px;
+  font-family:'Fredoka One',cursive; font-size:0.95rem; color:white; margin-bottom:26px;
+  box-shadow:0 0 20px rgba(255,0,110,0.3);
+  animation: badge-glow 2s ease-in-out infinite;
+}
+.hero-desc { max-width:660px; font-size:1.05rem; color:rgba(255,255,255,0.7); line-height:1.8; margin-bottom:36px; }
+.hero-desc strong { color:var(--neon); }
+.hero-cta-row { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
+.btn { font-family:'Fredoka One',cursive; font-size:1.05rem; padding:12px 28px; border-radius:50px; border:none; cursor:pointer; text-decoration:none; transition:all 0.3s; display:inline-flex; align-items:center; gap:7px; }
+.btn-gold { background:linear-gradient(135deg,var(--gold),var(--orange)); color:#000; box-shadow:0 0 25px rgba(255,215,0,0.4); }
+.btn-gold:hover { transform:scale(1.08) rotate(-2deg); box-shadow:0 0 50px rgba(255,215,0,0.7); }
+.btn-outline { background:transparent; color:var(--blue); border:2.5px solid var(--blue); }
+.btn-outline:hover { background:var(--blue); color:#000; transform:scale(1.08) rotate(2deg); }
+
+/* TICKER */
+.ticker-wrap {
+  position:relative; z-index:2;
+  background:linear-gradient(90deg,var(--purple),var(--pink),var(--orange),var(--gold));
+  padding:10px 0; overflow:hidden;
+  border-top:3px solid rgba(255,255,255,0.3);
+  border-bottom:3px solid rgba(255,255,255,0.3);
+}
+.ticker-inner { display:inline-block; white-space:nowrap; animation:ticker 30s linear infinite; }
+.ticker-inner span { font-family:'Fredoka One',cursive; font-size:1rem; color:white; margin:0 24px; }
+
+/* SECTIONS */
+section { position:relative; z-index:1; padding:70px 20px; }
+.container { max-width:1100px; margin:0 auto; }
+.sec-header { text-align:center; margin-bottom:50px; }
+.sec-title { font-family:'Rubik Bubbles',cursive; font-size:clamp(1.8rem,4vw,2.8rem); margin-bottom:8px; }
+.sec-sub { color:rgba(255,255,255,0.5); font-size:0.95rem; }
+
+/* SUMMARY */
+#summary { background:linear-gradient(180deg,#07080f 0%,#0d0820 100%); }
+.summary-card {
+  background:linear-gradient(135deg,rgba(57,255,20,0.06),rgba(0,207,255,0.06));
+  border:1.5px solid rgba(57,255,20,0.25); border-radius:24px; padding:36px;
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:20px;
+}
+.summary-item { text-align:center; padding:18px; background:rgba(255,255,255,0.04); border-radius:16px; border:1px solid var(--border); transition:all 0.3s; }
+.summary-item:hover { transform:translateY(-6px); background:rgba(57,255,20,0.06); border-color:rgba(57,255,20,0.4); }
+.summary-emoji { font-size:2.5rem; display:block; margin-bottom:8px; }
+.summary-label { font-family:'Fredoka One',cursive; font-size:0.95rem; color:var(--neon); margin-bottom:5px; }
+.summary-val { color:rgba(255,255,255,0.7); font-size:0.85rem; line-height:1.5; }
+
+/* ===== CHARACTERS ===== */
+#characters { background:#090a12; }
+
+.chars-controls { display:flex; gap:12px; flex-wrap:wrap; justify-content:center; margin-bottom:24px; }
+.search-box {
+  flex:1; min-width:220px; max-width:400px;
+  padding:11px 20px; border-radius:50px;
+  border:2px solid rgba(255,255,255,0.15);
+  background:rgba(255,255,255,0.05);
+  color:white; font-size:0.95rem; font-family:'Rubik',sans-serif;
+  outline:none; transition:all 0.3s;
+}
+.search-box::placeholder { color:rgba(255,255,255,0.35); }
+.search-box:focus { border-color:var(--neon); box-shadow:0 0 20px rgba(57,255,20,0.2); }
+
+.filter-btns { display:flex; gap:6px; flex-wrap:wrap; justify-content:center; margin-bottom:30px; }
+.filter-btn {
+  font-family:'Fredoka One',cursive; font-size:0.8rem;
+  padding:7px 15px; border-radius:50px; border:2px solid transparent;
+  cursor:pointer; transition:all 0.25s; background:rgba(255,255,255,0.06);
+  color:rgba(255,255,255,0.7);
+}
+.filter-btn.active, .filter-btn:hover { color:#000; transform:scale(1.06); }
+.fb-all    { border-color:#fff; }       .fb-all.active,    .fb-all:hover    { background:#fff; }
+.fb-common { border-color:#aaa; }       .fb-common.active, .fb-common:hover { background:#aaa; }
+.fb-rare   { border-color:#4db8ff; }    .fb-rare.active,   .fb-rare:hover   { background:#4db8ff; }
+.fb-epic   { border-color:#bf00ff; }    .fb-epic.active,   .fb-epic:hover   { background:#bf00ff; }
+.fb-legendary { border-color:#ffd700; } .fb-legendary.active, .fb-legendary:hover { background:#ffd700; }
+.fb-mythic { border-color:#ff006e; }    .fb-mythic.active, .fb-mythic:hover { background:#ff006e; }
+.fb-god    { border-color:#ff6b00; }    .fb-god.active,    .fb-god:hover    { background:#ff6b00; }
+.fb-secret { border-color:#ff2d2d; }    .fb-secret.active, .fb-secret:hover { background:#ff2d2d; }
+.fb-og     { border-color:#39ff14; }    .fb-og.active,     .fb-og:hover     { background:#39ff14; }
+
+/* Rarity group */
+.rarity-group { margin-bottom:36px; }
+.rarity-group-header {
+  display:flex; align-items:center; gap:12px;
+  padding:13px 20px; border-radius:14px;
+  margin-bottom:12px; cursor:pointer;
+  transition:all 0.3s; user-select:none;
+}
+.rarity-group-header:hover { filter:brightness(1.18); }
+.rg-icon { font-size:1.5rem; }
+.rg-title { font-family:'Rubik Bubbles',cursive; font-size:1.2rem; }
+.rg-count { margin-right:auto; font-family:'Fredoka One',cursive; font-size:0.82rem; padding:2px 10px; border-radius:50px; background:rgba(0,0,0,0.35); color:rgba(255,255,255,0.8); }
+.rg-arrow { font-size:0.9rem; transition:transform 0.3s; }
+.rg-arrow.open { transform:rotate(180deg); }
+
+/* chars grid */
+.chars-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:11px; }
+.char-card {
+  background:rgba(255,255,255,0.04);
+  border:1.5px solid var(--border);
+  border-radius:14px; padding:14px;
+  transition:all 0.3s; position:relative; overflow:hidden;
+}
+.char-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2.5px; background:var(--rc); }
+.char-card:hover { transform:translateY(-4px) scale(1.015); border-color:var(--rc); box-shadow:0 6px 24px rgba(0,0,0,0.4); }
+.char-name { font-family:'Fredoka One',cursive; font-size:0.9rem; color:white; margin-bottom:9px; line-height:1.3; display:flex; align-items:flex-start; gap:5px; }
+.char-dot { width:7px; height:7px; border-radius:50%; background:var(--rc); box-shadow:0 0 7px var(--rc); flex-shrink:0; margin-top:4px; }
+.char-stats { display:flex; flex-direction:column; gap:4px; }
+.char-stat { display:flex; justify-content:space-between; align-items:center; font-size:0.78rem; }
+.char-stat-label { color:rgba(255,255,255,0.4); }
+.char-cost-val { font-family:'Fredoka One',cursive; font-size:0.8rem; color:#7dff7d; }
+.char-cps-val  { font-family:'Fredoka One',cursive; font-size:0.8rem; color:var(--rc); text-shadow:0 0 8px var(--rc); }
+
+.no-results { text-align:center; padding:60px 20px; color:rgba(255,255,255,0.4); font-family:'Fredoka One',cursive; font-size:1.3rem; display:none; }
+
+/* MECHANICS */
+#mechanics { background:#07080f; }
+.mech-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:22px; }
+.mech-card { border-radius:20px; padding:28px; background:var(--card-bg); border:1.5px solid var(--border); transition:all 0.3s; position:relative; overflow:hidden; }
+.mech-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,var(--mc1),var(--mc2)); }
+.mech-card:hover { transform:translateY(-7px); border-color:var(--mc1); }
+.mech-card:nth-child(1){--mc1:var(--orange);--mc2:var(--red);}
+.mech-card:nth-child(2){--mc1:var(--blue);--mc2:var(--neon);}
+.mech-card:nth-child(3){--mc1:var(--purple);--mc2:var(--pink);}
+.mech-icon { width:56px;height:56px;border-radius:14px;background:linear-gradient(135deg,var(--mc1),var(--mc2));display:flex;align-items:center;justify-content:center;font-size:1.6rem;margin-bottom:16px; }
+.mech-title { font-family:'Fredoka One',cursive;font-size:1.2rem;margin-bottom:10px;color:white; }
+.mech-desc { color:rgba(255,255,255,0.62);font-size:0.9rem;line-height:1.7; }
+.mech-tag { display:inline-block;margin-top:12px;background:linear-gradient(135deg,var(--mc1),var(--mc2));color:#000;font-family:'Fredoka One',cursive;font-size:0.78rem;padding:3px 12px;border-radius:50px; }
+
+/* TIPS */
+#tips { background:linear-gradient(180deg,#07080f 0%,#0a1206 100%); }
+.tips-grid { display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px; }
+.tip-card { background:var(--card-bg);border:1.5px solid var(--border);border-radius:18px;padding:22px;transition:all 0.3s; }
+.tip-card:hover { transform:translateX(-5px);border-color:var(--neon);background:rgba(57,255,20,0.04); }
+.tip-icon { font-size:2rem;margin-bottom:10px;display:block; }
+.tip-title { font-family:'Fredoka One',cursive;font-size:1.05rem;color:var(--neon);margin-bottom:7px; }
+.tip-desc { color:rgba(255,255,255,0.62);font-size:0.88rem;line-height:1.65; }
+.tip-level { display:inline-block;font-size:0.68rem;font-family:'Fredoka One',cursive;letter-spacing:1px;padding:2px 9px;border-radius:50px;margin-bottom:8px; }
+.tip-beginner { background:rgba(57,255,20,0.15);color:var(--neon);border:1px solid rgba(57,255,20,0.3); }
+.tip-advanced { background:rgba(255,0,110,0.15);color:var(--pink);border:1px solid rgba(255,0,110,0.3); }
+
+/* FOOTER */
+footer { position:relative;z-index:1;background:#040508;border-top:2px solid rgba(57,255,20,0.3);padding:36px 20px 20px;text-align:center; }
+.footer-logo { font-family:'Rubik Bubbles',cursive;font-size:1.8rem;background:linear-gradient(90deg,var(--neon),var(--blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent;display:block;margin-bottom:8px; }
+.footer-copy { color:rgba(255,255,255,0.22);font-size:0.78rem;margin-top:14px; }
+
+/* ANIMATIONS */
+@keyframes float3d { 0%,100%{transform:rotateX(8deg) rotateY(-5deg);}50%{transform:rotateX(5deg) rotateY(5deg);} }
+@keyframes pulse-title { 0%,100%{filter:drop-shadow(0 0 30px rgba(255,215,0,0.5));}50%{filter:drop-shadow(0 0 55px rgba(255,215,0,0.8));} }
+@keyframes glitch-text { 0%,90%,100%{transform:none;}91%{transform:skewX(3deg) translateX(4px);}92%{transform:skewX(-3deg) translateX(-4px);}93%{transform:none;}94%{transform:skewX(1.5deg) translateX(2px);}95%{transform:none;} }
+@keyframes sway { 0%,100%{transform:rotate(-3deg);}50%{transform:rotate(3deg);} }
+@keyframes badge-glow { 0%,100%{box-shadow:0 0 20px rgba(255,0,110,0.3);}50%{box-shadow:0 0 40px rgba(255,0,110,0.5);} }
+@keyframes ticker { 0%{transform:translateX(0);}100%{transform:translateX(-50%);} }
+@keyframes floatUp { 0%{transform:translateY(110vh) scale(0.5);opacity:0;}10%{opacity:0.5;}90%{opacity:0.3;}100%{transform:translateY(-10vh);opacity:0;} }
+
+.reveal { opacity:0; transform:translateY(28px); transition:opacity 0.55s,transform 0.55s; }
+.reveal.vis { opacity:1; transform:none; }
+</style>
+</head>
+<body>
+
+<div class="particles" id="particles"></div>
+
+<nav>
+  <div class="nav-logo">🧠 STEAL A BRAINROT</div>
+  <ul class="nav-links">
+    <li><a href="#summary">המשחק</a></li>
+    <li><a href="#characters">דמויות</a></li>
+    <li><a href="#mechanics">מכניקות</a></li>
+    <li><a href="#tips">טיפים</a></li>
+  </ul>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">🎮 המדריך המלא לשחקן הישראלי</div>
+  <div class="hero-3d-box">
+    <div class="hero-3d-inner">
+      <h1 class="hero-title">
+        <span class="title-steal">STEAL</span>
+        <span class="title-a">A</span>
+        <span class="title-brainrot">BRAINROT</span>
+      </h1>
+    </div>
+  </div>
+  <div class="hero-emoji-row">🧠 💰 ⚡ 🔥 👾 💎 🚀 🎯</div>
+  <p class="hero-desc">
+    אסוף, הגן, וגנוב דמויות שמייצרות <strong>כסף פסיבי</strong>.<br>
+    בנה בסיס חזק, שדרג את הדמויות שלך, ותהיה <strong>הסיגמה הכי גדולה</strong> בשרת. 🗿
+  </p>
+  <div class="hero-cta-row">
+    <a href="#characters" class="btn btn-gold">💎 כל הדמויות</a>
+    <a href="#tips" class="btn btn-outline">💡 טיפים</a>
+  </div>
+</div>
+
+<div class="ticker-wrap">
+  <div class="ticker-inner">
+    <span>🧠 STEAL A BRAINROT</span><span>💰 750M$ לשנייה</span><span>🔥 NO CAP FR</span>
+    <span>⚡ FUSE MACHINE</span><span>💎 SECRET 0.001%</span><span>🗿 SIGMA GRINDSET</span>
+    <span>🍓 Strawberry Elephant</span><span>🐉 Dragon Cannelloni</span><span>🍝 Spaghetti Tualetti</span>
+    <span>👑 OG TIER</span><span>🔱 BRAINROT GOD</span><span>🎮 ROBLOX BASED</span>
+    <span>🧠 STEAL A BRAINROT</span><span>💰 750M$ לשנייה</span><span>🔥 NO CAP FR</span>
+    <span>⚡ FUSE MACHINE</span><span>💎 SECRET 0.001%</span><span>🗿 SIGMA GRINDSET</span>
+    <span>🍓 Strawberry Elephant</span><span>🐉 Dragon Cannelloni</span><span>🍝 Spaghetti Tualetti</span>
+    <span>👑 OG TIER</span><span>🔱 BRAINROT GOD</span><span>🎮 ROBLOX BASED</span>
+  </div>
+</div>
+
+<section id="summary">
+  <div class="container">
+    <div class="sec-header">
+      <div class="sec-title" style="background:linear-gradient(90deg,var(--neon),var(--blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">⚡ מה המשחק הזה בכלל?</div>
+      <p class="sec-sub">תמצית המשחק ב-4 נקודות</p>
+    </div>
+    <div class="summary-card reveal">
+      <div class="summary-item">
+        <span class="summary-emoji">💵</span>
+        <div class="summary-label">התחלה</div>
+        <div class="summary-val">מתחיל עם <strong style="color:var(--gold)">$100</strong> ומסוע בסיסי לקניית דמויות</div>
+      </div>
+      <div class="summary-item">
+        <span class="summary-emoji">🏭</span>
+        <div class="summary-label">מטרה</div>
+        <div class="summary-val">לייצר <strong style="color:var(--neon)">הכנסה פסיבית</strong> (Cash per Second) ע״י הנחת דמויות בבסיס</div>
+      </div>
+      <div class="summary-item">
+        <span class="summary-emoji">⚔️</span>
+        <div class="summary-label">גניבה</div>
+        <div class="summary-val">לפלוש לבסיסי שחקנים ו<strong style="color:var(--pink)">לגנוב</strong> את הדמויות שלהם</div>
+      </div>
+      <div class="summary-item">
+        <span class="summary-emoji">🛡️</span>
+        <div class="summary-label">הגנה</div>
+        <div class="summary-val">להגן על הבסיס מפני שחקנים שבאים <strong style="color:var(--red)">לרוקן</strong> אותו</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="characters">
+  <div class="container">
+    <div class="sec-header">
+      <div class="sec-title" style="background:linear-gradient(90deg,var(--gold),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">💎 כל הדמויות לפי דרגה</div>
+      <p class="sec-sub">חפש, סנן, וגלה את הדמות המושלמת לבסיס שלך</p>
+    </div>
+    <div class="chars-controls">
+      <input type="text" class="search-box" id="searchBox" placeholder="🔍 חפש שם דמות...">
+    </div>
+    <div class="filter-btns" id="filterBtns">
+      <button class="filter-btn fb-all active"      data-r="all">🌐 הכל</button>
+      <button class="filter-btn fb-common"          data-r="Common">⚪ Common</button>
+      <button class="filter-btn fb-rare"            data-r="Rare">🟢 Rare</button>
+      <button class="filter-btn fb-epic"            data-r="Epic">🔵 Epic</button>
+      <button class="filter-btn fb-legendary"       data-r="Legendary">🟡 Legendary</button>
+      <button class="filter-btn fb-mythic"          data-r="Mythic">🔴 Mythic</button>
+      <button class="filter-btn fb-god"             data-r="God">🔱 God</button>
+      <button class="filter-btn fb-secret"          data-r="Secret">🔮 Secret</button>
+      <button class="filter-btn fb-og"              data-r="OG">👑 OG</button>
+    </div>
+    <div id="charsContainer"></div>
+    <div class="no-results" id="noResults">😭 לא נמצאו דמויות... נסה שוב no cap</div>
+  </div>
+</section>
+
+<section id="mechanics">
+  <div class="container">
+    <div class="sec-header">
+      <div class="sec-title" style="background:linear-gradient(90deg,var(--blue),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">⚙️ מכניקות מרכזיות</div>
+      <p class="sec-sub">הכלים שיהפכו אותך למכונת כסף</p>
+    </div>
+    <div class="mech-grid">
+      <div class="mech-card reveal">
+        <div class="mech-icon">🔥</div>
+        <div class="mech-title">מכונת ההיתוך (Fuse Machine)</div>
+        <p class="mech-desc">ממוקמת ליד חנות המטבעות. מקריבים <strong style="color:var(--orange)">4 דמויות</strong> — ככל שהן יקרות יותר זמן ההיתוך ארוך יותר, אבל תקבל דמות נדירה שלא ניתן להשיג במסוע רגיל.</p>
+        <span class="mech-tag">⚠️ משתלם מאוד</span>
+      </div>
+      <div class="mech-card reveal">
+        <div class="mech-icon">🔧</div>
+        <div class="mech-title">מכונת היצירה (Craft Machine)</div>
+        <p class="mech-desc">מאפשרת לשלב <strong style="color:var(--blue)">דמויות ספציפיות</strong> כדי ליצור דמויות-על. לדוגמה: יצירת "Los Bros" — דורש ידע מדויק על הרכיבים.</p>
+        <span class="mech-tag">💡 קרא את המתכונים</span>
+      </div>
+      <div class="mech-card reveal">
+        <div class="mech-icon">✨</div>
+        <div class="mech-title">שינויים ותכונות (Mutations)</div>
+        <p class="mech-desc">אירועים מיוחדים במפה מעניקים לדמויות <strong style="color:var(--purple)">תכונות</strong> שמכפילות ייצור נזק או כסף. חלקן זמניות וחלקן קבועות.</p>
+        <span class="mech-tag">🎲 רנדומלי</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="tips">
+  <div class="container">
+    <div class="sec-header">
+      <div class="sec-title" style="background:linear-gradient(90deg,var(--neon),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">💡 טיפים ואסטרטגיות</div>
+      <p class="sec-sub">למתחילים ולמתקדמים — sigma knowledge בלבד</p>
+    </div>
+    <div class="tips-grid">
+      <div class="tip-card reveal">
+        <span class="tip-level tip-beginner">מתחיל</span><br>
+        <span class="tip-icon">🛡️</span>
+        <div class="tip-title">הגנת בסיס חכמה</div>
+        <p class="tip-desc">השקע ב<strong style="color:white">מנעולי בסיס, מלכודות ורובוטי שמירה (Sentries)</strong>. שחקנים חזקים יפסחו על בסיסים מוגנים ויחפשו מטרות קלות יותר.</p>
+      </div>
+      <div class="tip-card reveal">
+        <span class="tip-level tip-beginner">מתחיל</span><br>
+        <span class="tip-icon">💎</span>
+        <div class="tip-title">אל תשים הכל בסל אחד</div>
+        <p class="tip-desc">אם יש לך Secret או God — ודא שה<strong style="color:white">הגנות פעילות ב-100%</strong>. אחרת שקול לבצע Rebirth שפותח שדרוגים קבועים.</p>
+      </div>
+      <div class="tip-card reveal">
+        <span class="tip-level tip-advanced">מתקדם</span><br>
+        <span class="tip-icon">👻</span>
+        <div class="tip-title">ציוד גניבה מתקדם</div>
+        <p class="tip-desc">השתמש ב<strong style="color:white">גלימת היעלמות (Invisibility Cloak)</strong> או Quantum Cloner כדי לפלוש לבסיסי אויב ביעילות.</p>
+      </div>
+      <div class="tip-card reveal">
+        <span class="tip-level tip-advanced">מתקדם</span><br>
+        <span class="tip-icon">🔥</span>
+        <div class="tip-title">Fuse Machine = ROI ענק</div>
+        <p class="tip-desc">הקרב 4 דמויות אגדיות כדי לקבל מיתית. <strong style="color:white">ה-ROI עצום</strong> — תצבור מלאי ותפעיל ברצף.</p>
+      </div>
+      <div class="tip-card reveal">
+        <span class="tip-level tip-beginner">מתחיל</span><br>
+        <span class="tip-icon">⚡</span>
+        <div class="tip-title">ייצר כסף גם כשאתה לא שם</div>
+        <p class="tip-desc">כסף מצטבר <strong style="color:white">גם כשאתה אופליין</strong>. מלא את הבסיס לפני שאתה עוזב וחזור לבסיס עשיר.</p>
+      </div>
+      <div class="tip-card reveal">
+        <span class="tip-level tip-advanced">מתקדם</span><br>
+        <span class="tip-icon">🔄</span>
+        <div class="tip-title">Rebirth בזמן הנכון</div>
+        <p class="tip-desc">Rebirth פותח <strong style="color:white">שדרוגים קבועים</strong> שמשפרים ייצור כסף לנצח. עשה אותו כשיש לך מספיק דמויות חזקות — לא מוקדם מדי.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span class="footer-logo">🧠 STEAL A BRAINROT — מדריך מלא</span>
+  <p style="color:rgba(255,255,255,0.4);font-size:0.82rem;">כל המידע מבוסס על העדכונים האחרונים של המשחק</p>
+  <p class="footer-copy">Made with 🔥 sigma grindset | כל הזכויות שמורות 🗿 no cap fr fr</p>
+</footer>
+
+<script>
+const CHARS = [
+  {name:"Noobini Santanini",   r:"Common", cost:"$1,000",    cps:"5"},
+  {name:"Noobini Pizzanini",   r:"Common", cost:"$1,100",    cps:"6"},
+  {name:"Svinina Bombardino",  r:"Common", cost:"$1,200",    cps:"7"},
+  {name:"Raccooni Jandelini",  r:"Common", cost:"$1,300",    cps:"10"},
+  {name:"Pipi Kiwi",           r:"Common", cost:"$1,500",    cps:"11"},
+  {name:"Lirili Larila",       r:"Common", cost:"$1,600",    cps:"12"},
+  {name:"Pipi Corni",          r:"Common", cost:"$1,700",    cps:"12"},
+  {name:"Tartaragno",          r:"Common", cost:"$1,900",    cps:"12"},
+  {name:"Trippi Troppi",       r:"Rare",   cost:"$2,000",    cps:"15"},
+  {name:"Gangster Footera",    r:"Rare",   cost:"$4,000",    cps:"30"},
+  {name:"Bandito Bobritto",    r:"Rare",   cost:"$4,500",    cps:"35"},
+  {name:"Boneca Ambalabu",     r:"Rare",   cost:"$5,000",    cps:"40"},
+  {name:"Cacto Hipopotamo",    r:"Rare",   cost:"$6,500",    cps:"50"},
+  {name:"Ta Ta Ta Ta Sahur",   r:"Rare",   cost:"$7,500",    cps:"55"},
+  {name:"Tric Trac Baraboom",  r:"Rare",   cost:"$8,000",    cps:"60"},
+  {name:"Frogo Elfo",          r:"Rare",   cost:"$9,200",    cps:"67"},
+  {name:"Pipi Avocado",        r:"Rare",   cost:"$9,500",    cps:"70"},
+  {name:"Cappuccino Assassino",           r:"Epic", cost:"$10,000",  cps:"75"},
+  {name:"Brr Brr Patapim",                r:"Epic", cost:"$15,000",  cps:"100"},
+  {name:"Avocadini Antilopini",           r:"Epic", cost:"$17,500",  cps:"120"},
+  {name:"Trulimero Trulicina",            r:"Epic", cost:"$20,000",  cps:"150"},
+  {name:"Perochello Lemonchello",         r:"Epic", cost:"$25,000",  cps:"160"},
+  {name:"Brri Brri Bicus Dicus Bombicus", r:"Epic", cost:"$30,000",  cps:"175"},
+  {name:"Avocadini Guffo",                r:"Epic", cost:"$35,000",  cps:"225"},
+  {name:"Ti Ti Ti Sahur",                 r:"Epic", cost:"$37,500",  cps:"225"},
+  {name:"Mangolini Parrocini",            r:"Epic", cost:"$38,500",  cps:"240"},
+  {name:"Salamino Penguino",              r:"Epic", cost:"$42,000",  cps:"280"},
+  {name:"Burbaloni Loliloli",         r:"Legendary", cost:"$45,000",   cps:"300"},
+  {name:"Chimpanzini Bananini",       r:"Legendary", cost:"$50,000",   cps:"320"},
+  {name:"Ballerina Cappuccina",       r:"Legendary", cost:"$100,000",  cps:"500"},
+  {name:"Chef Crabracadabra",         r:"Legendary", cost:"$150,000",  cps:"600"},
+  {name:"Lionel Cactuseli",           r:"Legendary", cost:"$175,000",  cps:"650"},
+  {name:"Glorbo Fruttodrillo",        r:"Legendary", cost:"$200,000",  cps:"750"},
+  {name:"Quivioli Ameleonni",         r:"Legendary", cost:"$225,000",  cps:"900"},
+  {name:"Blueberrini Octopusini",     r:"Legendary", cost:"$250,000",  cps:"1000"},
+  {name:"Caramello Filtrello",        r:"Legendary", cost:"$255,000",  cps:"1000"},
+  {name:"Pipi Potato",                r:"Legendary", cost:"$265,000",  cps:"1100"},
+  {name:"Strawberrelli Flamingelli",  r:"Legendary", cost:"$275,000",  cps:"1150"},
+  {name:"Cocosini Mama",              r:"Legendary", cost:"$285,000",  cps:"1200"},
+  {name:"Pandaccini Bananini",        r:"Legendary", cost:"$300,000",  cps:"1250"},
+  {name:"Pi Pi Watermelon",           r:"Legendary", cost:"$315,000",  cps:"1300"},
+  {name:"Chocco Bunny",               r:"Legendary", cost:"$327,500",  cps:"1400"},
+  {name:"Sigma Girl",                 r:"Legendary", cost:"$340,000",  cps:"1750"},
+  {name:"Sealo Regalo",               r:"Legendary", cost:"$342,500",  cps:"1800"},
+  {name:"Frigo Camelo",                      r:"Mythic", cost:"$350,000",   cps:"2000"},
+  {name:"Orangutini Ananassini",             r:"Mythic", cost:"$400,000",   cps:"2100"},
+  {name:"Rhino Toasterino",                  r:"Mythic", cost:"$450,000",   cps:"2100"},
+  {name:"Bombardiro Crocodilo",              r:"Mythic", cost:"$500,000",   cps:"2500"},
+  {name:"Brutto Gialutto",                   r:"Mythic", cost:"$600,000",   cps:"3000"},
+  {name:"Spioniro Golubiro",                 r:"Mythic", cost:"$750,000",   cps:"3500"},
+  {name:"Bombombini Gusini",                 r:"Mythic", cost:"$1,000,000", cps:"5000"},
+  {name:"Cavallo Virtuoso",                  r:"Mythic", cost:"$2,500,000", cps:"7500"},
+  {name:"Gorillo Watermelondrillo",          r:"Mythic", cost:"$3,000,000", cps:"8000"},
+  {name:"Lerulerulerule",                    r:"Mythic", cost:"$3,500,000", cps:"8700"},
+  {name:"Te Te Te Sahur",                    r:"Mythic", cost:"$4,000,000", cps:"9500"},
+  {name:"Tracoducotulu Delapeladustuz",      r:"Mythic", cost:"$4,200,000", cps:"12000"},
+  {name:"Cachorrito Melonito",               r:"Mythic", cost:"$4,400,000", cps:"13000"},
+  {name:"Toiletto Focaccino",                r:"Mythic", cost:"$4,850,000", cps:"16000"},
+  {name:"Tralalero Tralala",       r:"God", cost:null, cps:"42000"},
+  {name:"Cocofanto / Elefanto",    r:"God", cost:null, cps:"95000"},
+  {name:"Girafa Celestre",         r:"God", cost:null, cps:"280000"},
+  {name:"Trenostruzzo Turbo 3000", r:"God", cost:null, cps:"315000"},
+  {name:"Ketchuru and Musturu", r:"Secret", cost:"$7.5B",  cps:"42500000"},
+  {name:"Garama and Madundung", r:"Secret", cost:"$10B",   cps:"50000000"},
+  {name:"Spaghetti Tualetti",   r:"Secret", cost:"$15B",   cps:"60000000"},
+  {name:"Dragon Cannelloni",    r:"Secret", cost:"$100B",  cps:"100000000"},
+  {name:"Griffin",              r:"Secret", cost:"$400B",  cps:"400000000"},
+  {name:"Skibidi Toilet",      r:"OG", cost:"$450B",  cps:"450000000"},
+  {name:"John Pork",           r:"OG", cost:"$500B",  cps:"500000000"},
+  {name:"Headless Horseman",   r:"OG", cost:"$550B",  cps:"550000000"},
+  {name:"Meowl",               r:"OG", cost:"$600B",  cps:"600000000"},
+  {name:"Strawberry Elephant", r:"OG", cost:"$750B",  cps:"750000000"},
+];
+
+const CFG = {
+  Common:    {color:"#aaa",    bg:"rgba(170,170,170,0.07)", border:"rgba(170,170,170,0.3)", icon:"⚪", label:"Common — נפוץ"},
+  Rare:      {color:"#4db8ff", bg:"rgba(77,184,255,0.07)",  border:"rgba(77,184,255,0.3)",  icon:"🟢", label:"Rare — נדיר"},
+  Epic:      {color:"#bf00ff", bg:"rgba(191,0,255,0.07)",   border:"rgba(191,0,255,0.3)",   icon:"🔵", label:"Epic — אפי"},
+  Legendary: {color:"#ffd700", bg:"rgba(255,215,0,0.07)",   border:"rgba(255,215,0,0.3)",   icon:"🟡", label:"Legendary — אגדי"},
+  Mythic:    {color:"#ff006e", bg:"rgba(255,0,110,0.07)",   border:"rgba(255,0,110,0.3)",   icon:"🔴", label:"Mythic — מיתי"},
+  God:       {color:"#ff6b00", bg:"rgba(255,107,0,0.07)",   border:"rgba(255,107,0,0.3)",   icon:"🔱", label:"Brainrot God — אלוהי"},
+  Secret:    {color:"#ff2d2d", bg:"rgba(255,45,45,0.07)",   border:"rgba(255,45,45,0.3)",   icon:"🔮", label:"Secret — סודי"},
+  OG:        {color:"#39ff14", bg:"rgba(57,255,20,0.07)",   border:"rgba(57,255,20,0.3)",   icon:"👑", label:"OG — מקורי"},
+};
+const ORDER = ["Common","Rare","Epic","Legendary","Mythic","God","Secret","OG"];
+
+function fmt(n){
+  n = parseFloat(n);
+  if(n>=1e9) return '$'+(n/1e9).toFixed(0)+'B';
+  if(n>=1e6) return '$'+(n/1e6).toFixed(1)+'M';
+  if(n>=1e3) return '$'+(n/1e3).toFixed(n>=10000?0:1)+'K';
+  return '$'+n;
+}
+
+function render(filter='all', search=''){
+  const con = document.getElementById('charsContainer');
+  con.innerHTML = '';
+  let total = 0;
+  ORDER.forEach(r => {
+    if(filter!=='all' && filter!==r) return;
+    const cfg = CFG[r];
+    const list = CHARS.filter(c => c.r===r && (search===''||c.name.toLowerCase().includes(search)));
+    if(!list.length) return;
+    total += list.length;
+
+    const g = document.createElement('div');
+    g.className = 'rarity-group';
+    const cards = list.map(c=>`
+      <div class="char-card" style="--rc:${cfg.color}">
+        <div class="char-name"><span class="char-dot"></span>${c.name}</div>
+        <div class="char-stats">
+          <div class="char-stat">
+            <span class="char-stat-label">💰 עלות</span>
+            <span class="char-cost-val">${c.cost || 'מכונות / שטיח אדום'}</span>
+          </div>
+          <div class="char-stat">
+            <span class="char-stat-label">⚡ הכנסה</span>
+            <span class="char-cps-val">${fmt(c.cps)} /שנ'</span>
+          </div>
+        </div>
+      </div>`).join('');
+
+    g.innerHTML = `
+      <div class="rarity-group-header" style="background:${cfg.bg};border:1.5px solid ${cfg.border}" onclick="toggle(this)">
+        <span class="rg-icon">${cfg.icon}</span>
+        <span class="rg-title" style="color:${cfg.color}">${cfg.label}</span>
+        <span class="rg-count">${list.length} דמויות</span>
+        <span class="rg-arrow open">▼</span>
+      </div>
+      <div class="chars-grid rg-body">${cards}</div>`;
+    con.appendChild(g);
+  });
+  document.getElementById('noResults').style.display = total===0?'block':'none';
+}
+
+function toggle(h){
+  const b = h.nextElementSibling;
+  const a = h.querySelector('.rg-arrow');
+  const open = a.classList.contains('open');
+  b.style.display = open?'none':'grid';
+  a.classList.toggle('open',!open);
+}
+
+let activeF='all';
+document.getElementById('filterBtns').addEventListener('click',e=>{
+  const btn=e.target.closest('.filter-btn');
+  if(!btn)return;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  activeF=btn.dataset.r;
+  render(activeF,document.getElementById('searchBox').value.toLowerCase().trim());
+});
+document.getElementById('searchBox').addEventListener('input',e=>{
+  render(activeF,e.target.value.toLowerCase().trim());
+});
+
+render();
+
+// Particles
+const colors=['#39ff14','#ff006e','#00cfff','#ffd700','#bf00ff','#ff6b00'];
+const pc=document.getElementById('particles');
+for(let i=0;i<28;i++){
+  const p=document.createElement('div');
+  p.className='particle';
+  const s=Math.random()*5+2;
+  p.style.cssText=`width:${s}px;height:${s}px;left:${Math.random()*100}%;background:${colors[Math.floor(Math.random()*colors.length)]};animation-duration:${Math.random()*13+9}s;animation-delay:${Math.random()*10}s;`;
+  pc.appendChild(p);
+}
+
+// Reveal
+const obs=new IntersectionObserver(entries=>entries.forEach((e,i)=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('vis'),i*60);}),{threshold:0.08});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
