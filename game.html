@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>🧠 STEAL A BRAINROT — 3D Multiplayer</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Rubik:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{width:100%;height:100%;overflow:hidden;background:#07080f;font-family:'Rubik',sans-serif;color:#fff;}
+canvas{display:block;position:fixed;inset:0;z-index:1;}
+
+/* ── LOBBY ── */
+.overlay{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
+  background:rgba(7,8,15,0.94);z-index:100;}
+.overlay.hidden{display:none;}
+.lobby-box{background:rgba(255,255,255,0.04);border:2px solid rgba(57,255,20,0.3);
+  border-radius:28px;padding:34px 28px;max-width:480px;width:92%;text-align:center;}
+.lobby-title{font-family:'Fredoka One',cursive;font-size:2rem;margin-bottom:4px;
+  background:linear-gradient(135deg,#39ff14,#00cfff,#ff006e);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.lobby-sub{color:rgba(255,255,255,0.45);font-size:0.82rem;margin-bottom:20px;line-height:1.6;}
+.mode-tabs{display:flex;gap:6px;margin-bottom:18px;justify-content:center;flex-wrap:wrap;}
+.mode-tab{padding:7px 14px;border-radius:50px;border:2px solid rgba(255,255,255,0.1);
+  background:rgba(255,255,255,0.04);color:rgba(255,255,255,0.6);cursor:pointer;
+  font-family:'Fredoka One',cursive;font-size:0.76rem;transition:all .2s;}
+.mode-tab.active{color:#000;background:var(--mc,#39ff14);border-color:var(--mc,#39ff14);}
+.lbtn{width:100%;padding:12px;border-radius:50px;border:none;cursor:pointer;
+  font-family:'Fredoka One',cursive;font-size:1rem;margin-bottom:8px;transition:all .25s;}
+.lbtn-create{background:linear-gradient(135deg,#39ff14,#00cfff);color:#000;}
+.lbtn-create:hover{transform:scale(1.04);box-shadow:0 0 22px rgba(57,255,20,0.4);}
+.lbtn-join{background:linear-gradient(135deg,#ff006e,#bf00ff);color:#fff;}
+.lbtn-join:hover{transform:scale(1.04);}
+.lbtn-secondary{background:rgba(255,255,255,0.06);border:2px solid rgba(255,255,255,0.12);
+  color:rgba(255,255,255,0.75);}
+.code-display{font-family:'Fredoka One',cursive;font-size:2.2rem;letter-spacing:8px;
+  color:#ffd700;background:rgba(255,215,0,0.08);border:2px solid rgba(255,215,0,0.3);
+  border-radius:16px;padding:14px;margin:12px 0;cursor:pointer;transition:all .2s;}
+.code-display:hover{background:rgba(255,215,0,0.16);}
+.code-input{width:100%;padding:12px;border-radius:50px;
+  border:2px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.06);
+  color:#fff;font-family:'Fredoka One',cursive;font-size:1.1rem;text-align:center;
+  outline:none;letter-spacing:4px;text-transform:uppercase;margin-bottom:8px;}
+.code-input:focus{border-color:#00cfff;}
+.lbl-status{color:rgba(255,255,255,0.45);font-size:0.8rem;min-height:18px;}
+
+/* ── HUD ── */
+#hud{position:fixed;inset:0;pointer-events:none;z-index:10;display:none;}
+#hud.show{display:block;}
+.hud-top{position:absolute;top:0;left:0;right:0;display:flex;
+  justify-content:space-between;align-items:flex-start;padding:12px 14px;gap:10px;flex-wrap:wrap;}
+.pp{background:rgba(0,0,0,0.72);border-radius:14px;padding:9px 14px;
+  border:2px solid;min-width:138px;}
+.pp-name{font-family:'Fredoka One',cursive;font-size:0.9rem;margin-bottom:3px;}
+.pp-coins{font-family:'Fredoka One',cursive;font-size:0.78rem;color:#ffd700;}
+.pp-held{font-size:0.7rem;color:rgba(255,255,255,0.42);margin-top:2px;}
+.timer-box{background:rgba(0,0,0,0.72);border-radius:14px;padding:9px 18px;
+  border:2px solid rgba(255,255,255,0.12);text-align:center;pointer-events:auto;}
+.timer-lbl{font-family:'Fredoka One',cursive;font-size:0.68rem;color:rgba(255,255,255,0.45);}
+.timer-val{font-family:'Fredoka One',cursive;font-size:1.35rem;color:#fff;}
+.timer-val.raid{color:#ff2d2d;animation:tFlash .5s ease-in-out infinite;}
+@keyframes tFlash{0%,100%{opacity:1;}50%{opacity:.3;}}
+.hud-bottom{position:absolute;bottom:0;left:0;right:0;
+  padding:12px 14px;display:flex;justify-content:center;gap:8px;flex-wrap:wrap;}
+.abtn{pointer-events:auto;padding:9px 18px;border-radius:50px;
+  border:2px solid rgba(255,255,255,0.18);background:rgba(0,0,0,0.72);
+  color:#fff;cursor:pointer;font-family:'Fredoka One',cursive;font-size:0.82rem;
+  transition:all .22s;white-space:nowrap;}
+.abtn:hover{transform:scale(1.06);}
+.abtn:disabled{opacity:.38;cursor:not-allowed;transform:none;}
+.abtn-fuse{border-color:#bf00ff;}.abtn-fuse:not(:disabled):hover{background:rgba(191,0,255,.2);}
+.abtn-rol{border-color:#ff006e;}.abtn-rol:hover{background:rgba(255,0,110,.15);}
+.abtn-back{border-color:#666;}
+.controls-hint{position:absolute;bottom:60px;right:14px;
+  background:rgba(0,0,0,0.65);border-radius:12px;padding:9px 13px;
+  font-size:0.7rem;color:rgba(255,255,255,0.4);line-height:1.9;
+  border:1px solid rgba(255,255,255,0.07);}
+kbd{background:rgba(255,255,255,0.12);border-radius:4px;padding:1px 5px;}
+
+/* ── TOAST ── */
+#toast{position:fixed;top:76px;left:50%;transform:translateX(-50%);
+  background:rgba(7,8,15,0.92);border-radius:50px;padding:9px 26px;
+  font-family:'Fredoka One',cursive;font-size:0.95rem;
+  border:2px solid rgba(255,255,255,0.15);z-index:200;
+  opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap;}
+#toast.show{opacity:1;}
+/* ── RAID BANNER ── */
+#raidBanner{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
+  font-family:'Fredoka One',cursive;font-size:3.5rem;color:#ff2d2d;
+  text-shadow:0 0 40px rgba(255,45,45,.8);z-index:150;pointer-events:none;
+  opacity:0;transition:opacity .4s;text-align:center;}
+#raidBanner.show{opacity:1;}
+/* ── FUSE POPUP ── */
+#fusePopup{position:fixed;inset:0;background:rgba(0,0,0,.84);
+  display:flex;align-items:center;justify-content:center;
+  z-index:300;opacity:0;pointer-events:none;transition:opacity .3s;}
+#fusePopup.show{opacity:1;pointer-events:auto;}
+.fuse-box{background:rgba(191,0,255,.1);border:3px solid #bf00ff;
+  border-radius:28px;padding:36px;text-align:center;max-width:340px;width:90%;
+  box-shadow:0 0 60px rgba(191,0,255,.4);animation:popIn .4s ease;}
+@keyframes popIn{0%{transform:scale(.5) rotate(-6deg);}100%{transform:scale(1);}}
+.fuse-emo{font-size:4rem;display:block;margin-bottom:8px;}
+.fuse-name{font-family:'Fredoka One',cursive;font-size:1.5rem;margin-bottom:5px;}
+.fuse-rar{font-family:'Fredoka One',cursive;font-size:.85rem;padding:3px 14px;border-radius:50px;display:inline-block;margin-bottom:12px;}
+.fuse-stats{font-size:.82rem;color:rgba(255,255,255,.55);margin-bottom:18px;line-height:1.65;}
+.fuse-close{padding:10px 26px;border-radius:50px;border:none;
+  background:linear-gradient(135deg,#bf00ff,#ff006e);color:#fff;
+  cursor:pointer;font-family:'Fredoka One',cursive;font-size:.95rem;transition:all .25s;}
+.fuse-close:hover{transform:scale(1.05);}
+/* ── MODE POPUP ── */
+#modeInfo{position:fixed;bottom:58px;left:50%;transform:translateX(-50%);
+  background:rgba(0,0,0,.82);border-radius:14px;padding:10px 18px;
+  font-family:'Fredoka One',cursive;font-size:.8rem;color:rgba(255,255,255,.65);
+  border:1px solid rgba(255,255,255,.1);z-index:10;pointer-events:none;text-align:center;}
+</style>
+</head>
+<body>
+
+<!-- ─────── LOBBY ─────── -->
+<div class="overlay" id="lobbyOverlay">
+  <div class="lobby-box">
+    <div class="lobby-title">🧠 STEAL A BRAINROT</div>
+    <div class="lobby-sub">3D Multiplayer — שתף קוד עם חבר ושחקו מכל מקום בעולם 🌍</div>
+
+    <div class="mode-tabs">
+      <button class="mode-tab active" style="--mc:#ff2d2d" onclick="setMode('basewars',this)">⚔️ מלחמת בסיסים</button>
+      <button class="mode-tab" style="--mc:#ffd700" onclick="setMode('trade',this)">🤝 חנות משותפת</button>
+      <button class="mode-tab" style="--mc:#ff006e" onclick="setMode('roulette',this)">🎲 רולטה של Fuse</button>
+    </div>
+
+    <button class="lbtn lbtn-create" onclick="createGame()">🎮 צור משחק חדש</button>
+
+    <div id="hostSection" style="display:none">
+      <div class="lbl-status">שתף קוד זה עם חברך (לחץ להעתקה):</div>
+      <div class="code-display" id="codeDisplay" onclick="copyCode()">------</div>
+      <div class="lbl-status" id="hostStatus">⏳ ממתין לחבר...</div>
+    </div>
+
+    <button class="lbtn lbtn-secondary" style="margin-top:4px" onclick="showJoinForm()">🔗 הצטרף לחדר קיים</button>
+    <div id="joinForm" style="display:none;margin-top:6px">
+      <input class="code-input" type="text" id="codeInput" placeholder="הכנס קוד חדר..." maxlength="6"
+        onkeydown="if(event.key==='Enter')joinGame()">
+      <button class="lbtn lbtn-join" onclick="joinGame()">🚀 הצטרף!</button>
+      <div class="lbl-status" id="joinStatus"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ─────── HUD ─────── -->
+<div id="hud">
+  <div class="hud-top">
+    <div class="pp" id="pp0" style="border-color:#39ff14">
+      <div class="pp-name" style="color:#39ff14" id="pname0">🟢 P1</div>
+      <div class="pp-coins" id="coins0">💰 0</div>
+      <div class="pp-held" id="held0">ידיים: ריקות</div>
+    </div>
+    <div class="timer-box">
+      <div class="timer-lbl" id="timerLbl">עד הפשיטה</div>
+      <div class="timer-val" id="timerVal">5:00</div>
+    </div>
+    <div class="pp" id="pp1" style="border-color:#00cfff">
+      <div class="pp-name" style="color:#00cfff" id="pname1">🔵 P2</div>
+      <div class="pp-coins" id="coins1">💰 0</div>
+      <div class="pp-held" id="held1">ידיים: ריקות</div>
+    </div>
+  </div>
+  <div class="hud-bottom">
+    <button class="abtn abtn-rol" onclick="triggerRoulette()">🎲 רולטה!</button>
+    <button class="abtn abtn-fuse" id="fuseBtn" onclick="tryFuse()" disabled>🔥 Fuse (0/5)</button>
+    <button class="abtn abtn-back" onclick="backToLobby()">🚪 צא</button>
+  </div>
+  <div class="controls-hint">
+    <kbd>W A S D</kbd> תזוזה<br>
+    <kbd>E</kbd> / קליק הרם או הנח דמות<br>
+    <kbd>F</kbd> Fuse Machine<br>
+    <kbd>לחץ</kbd> על דמות לאינטרקציה
+  </div>
+</div>
+
+<div id="modeInfo"></div>
+<div id="toast"></div>
+<div id="raidBanner">⚔️ RAID TIME! ⚔️<br><span style="font-size:1.2rem">גנוב דמות מהאויב!</span></div>
+
+<div id="fusePopup">
+  <div class="fuse-box">
+    <span class="fuse-emo" id="fuseEmo">🔥</span>
+    <div class="fuse-name" id="fuseName">???</div>
+    <span class="fuse-rar" id="fuseRar">???</span>
+    <div class="fuse-stats" id="fuseStats"></div>
+    <button class="fuse-close" onclick="closeFusePopup()">✨ מגניב!</button>
+  </div>
+</div>
+
+<!-- ─────── SCRIPTS ─────── -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+<script>
+'use strict';
+// ═══════════════════════════════════════════════
+//  DATA
+// ═══════════════════════════════════════════════
+const CHARS = [
+  {name:'Lirili Larila',       r:'Common',    em:'🦜', cps:12,    hx:0xaaaaaa},
+  {name:'Pipi Kiwi',           r:'Common',    em:'🥝', cps:11,    hx:0x999999},
+  {name:'Tartaragno',          r:'Common',    em:'🐢', cps:12,    hx:0x888888},
+  {name:'Trippi Troppi',       r:'Rare',      em:'🌈', cps:15,    hx:0x4db8ff},
+  {name:'Boneca Ambalabu',     r:'Rare',      em:'🪆', cps:40,    hx:0x33aaff},
+  {name:'Gangster Footera',    r:'Rare',      em:'👟', cps:30,    hx:0x55ccff},
+  {name:'Cappuccino Assassino',r:'Epic',      em:'☕', cps:75,    hx:0xbf00ff},
+  {name:'Brr Brr Patapim',     r:'Epic',      em:'🎺', cps:100,   hx:0xcc22ff},
+  {name:'Ballerina Cappuccina',r:'Legendary', em:'💃', cps:500,   hx:0xffd700},
+  {name:'Chimpanzini Bananini',r:'Legendary', em:'🐒', cps:320,   hx:0xffbb00},
+  {name:'Sigma Girl',          r:'Legendary', em:'💅', cps:1750,  hx:0xffcc44},
+  {name:'Bombardiro Crocodilo',r:'Mythic',    em:'🐊', cps:2500,  hx:0xff006e},
+  {name:'Tralalero Tralala',   r:'God',       em:'🎵', cps:42000, hx:0xff6b00},
+  {name:'Dragon Cannelloni',   r:'Secret',    em:'🐉', cps:1e8,   hx:0xff2d2d},
+  {name:'Strawberry Elephant', r:'OG',        em:'🍓', cps:7.5e8, hx:0x39ff14},
+];
+const RARITY_COLOR={Common:'#aaa',Rare:'#4db8ff',Epic:'#bf00ff',Legendary:'#ffd700',Mythic:'#ff006e',God:'#ff6b00',Secret:'#ff2d2d',OG:'#39ff14'};
+const RARITY_ORDER=['Common','Rare','Epic','Legendary','Mythic','God','Secret','OG'];
+const SLOTS = 6;
+function randChar(minR=0){const p=CHARS.filter(c=>RARITY_ORDER.indexOf(c.r)>=minR);return{...p[Math.floor(Math.random()*p.length)]};}
+function fuseResult(chars){
+  const mx=Math.max(...chars.map(c=>RARITY_ORDER.indexOf(c.r)));
+  const ri=Math.min(mx+1+Math.floor(Math.random()*2),RARITY_ORDER.length-1);
+  const p=CHARS.filter(c=>RARITY_ORDER.indexOf(c.r)===ri);
+  return{...(p.length?p[Math.floor(Math.random()*p.length)]:CHARS[CHARS.length-1])};
+}
+function fmtNum(n){if(n>=1e12)return(n/1e12).toFixed(1)+'T';if(n>=1e9)return(n/1e9).toFixed(1)+'B';if(n>=1e6)return(n/1e6).toFixed(1)+'M';if(n>=1e3)return(n/1e3).toFixed(0)+'K';return Math.floor(n)+''}
+
+// ═══════════════════════════════════════════════
+//  THREE.JS INIT
+// ═══════════════════════════════════════════════
+const cvs=document.createElement('canvas');document.body.appendChild(cvs);
+const renderer=new THREE.WebGLRenderer({canvas:cvs,antialias:true});
+renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+const scene=new THREE.Scene();scene.background=new THREE.Color(0x07080f);
+scene.fog=new THREE.FogExp2(0x07080f,0.025);
+const camera=new THREE.PerspectiveCamera(55,1,.1,200);
+camera.position.set(0,18,23);camera.lookAt(0,0,0);
+function onResize(){const w=innerWidth,h=innerHeight;renderer.setSize(w,h);camera.aspect=w/h;camera.updateProjectionMatrix();}
+window.addEventListener('resize',onResize);onResize();
+
+// Lighting
+scene.add(new THREE.AmbientLight(0x202840,5));
+const sun=new THREE.DirectionalLight(0xffffff,1.5);
+sun.position.set(8,16,8);sun.castShadow=true;
+sun.shadow.mapSize.set(2048,2048);
+['left','right','top','bottom'].forEach((k,i)=>sun.shadow.camera[k]=[-22,22,22,-22][i]);
+scene.add(sun);
+const pl1=new THREE.PointLight(0x39ff14,4,16);pl1.position.set(-9,4,0);scene.add(pl1);
+const pl2=new THREE.PointLight(0x00cfff,4,16);pl2.position.set(9,4,0);scene.add(pl2);
+const plF=new THREE.PointLight(0xbf00ff,5,9);plF.position.set(0,3,0);scene.add(plF);
+
+// Ground + grid
+const ground=new THREE.Mesh(new THREE.PlaneGeometry(80,80),
+  new THREE.MeshStandardMaterial({color:0x090b18,roughness:.9}));
+ground.rotation.x=-Math.PI/2;ground.receiveShadow=true;scene.add(ground);
+const grid=new THREE.GridHelper(44,44,0x151b38,0x151b38);grid.position.y=.01;scene.add(grid);
+
+// ═══════════════════════════════════════════════
+//  SCENE OBJECTS
+// ═══════════════════════════════════════════════
+const interactables=[];
+const slotSprites=[[],[]];  // sprite per slot per base
+const slotData   =[[],[]];  // char per slot per base
+const pMeshes    =[];
+const pLabels    =[];        // DOM divs for names
+
+// Base platforms
+function makePlatform(x,col){
+  const body=new THREE.Mesh(new THREE.BoxGeometry(13,.55,10),
+    new THREE.MeshStandardMaterial({color:col,roughness:.45,metalness:.35,emissive:col,emissiveIntensity:.07}));
+  body.position.set(x,-.27,0);body.receiveShadow=true;scene.add(body);
+  const edge=new THREE.Mesh(new THREE.BoxGeometry(13.2,.14,10.2),
+    new THREE.MeshStandardMaterial({color:col,emissive:col,emissiveIntensity:.7,transparent:true,opacity:.55}));
+  edge.position.set(x,-.49,0);scene.add(edge);
+  // Corner pillars
+  [[1,1],[-1,1],[1,-1],[-1,-1]].forEach(([dx,dz])=>{
+    const p=new THREE.Mesh(new THREE.BoxGeometry(.25,1.2,.25),
+      new THREE.MeshStandardMaterial({color:col,emissive:col,emissiveIntensity:.5,metalness:.7}));
+    p.position.set(x+dx*6.3,.35,dz*4.7);scene.add(p);
+  });
+}
+makePlatform(-9,0x0d1f0d);makePlatform(9,0x0d1628);
+
+// Fuse Machine platform
+const fusePlat=new THREE.Mesh(new THREE.CylinderGeometry(3.8,3.8,.4,32),
+  new THREE.MeshStandardMaterial({color:0x160a2e,emissive:0xbf00ff,emissiveIntensity:.3,roughness:.3,metalness:.6}));
+fusePlat.position.y=-.2;fusePlat.receiveShadow=true;scene.add(fusePlat);
+const fuseRing=new THREE.Mesh(new THREE.TorusGeometry(2,.28,12,48),
+  new THREE.MeshStandardMaterial({color:0xbf00ff,emissive:0xbf00ff,emissiveIntensity:1.4,metalness:.9}));
+fuseRing.position.y=1.6;scene.add(fuseRing);
+const fuseCore=new THREE.Mesh(new THREE.SphereGeometry(.95,20,20),
+  new THREE.MeshStandardMaterial({color:0xff006e,emissive:0xff006e,emissiveIntensity:1.8}));
+fuseCore.position.y=1.6;scene.add(fuseCore);
+fuseCore.userData={type:'fuse'};interactables.push(fuseCore);
+
+// Trade zone (central platform where players can exchange)
+const tradeZone=new THREE.Mesh(new THREE.BoxGeometry(3.5,.15,3.5),
+  new THREE.MeshStandardMaterial({color:0xffd700,emissive:0xffd700,emissiveIntensity:.25,transparent:true,opacity:.6}));
+tradeZone.position.set(0,-.42,0);scene.add(tradeZone);
+
+// Character pedestals
+function makePedestals(bx,bi){
+  const cols=3,rows=2;
+  const sx=bx-((cols-1)*3)/2,sz=-((rows-1)*2.8)/2;
+  for(let r=0;r<rows;r++){
+    for(let c=0;c<cols;c++){
+      const si=r*cols+c;if(si>=SLOTS)break;
+      const x=sx+c*3,z=sz+r*2.8;
+      // Pedestal column
+      const m=new THREE.Mesh(new THREE.CylinderGeometry(.58,.68,.85,8),
+        new THREE.MeshStandardMaterial({color:0x1a1a32,roughness:.6,metalness:.4}));
+      m.position.set(x,.42,z);m.castShadow=true;m.receiveShadow=true;scene.add(m);
+      // Top ring
+      const ring=new THREE.Mesh(new THREE.TorusGeometry(.66,.08,6,16),
+        new THREE.MeshStandardMaterial({color:0x333355,emissive:0x222244,emissiveIntensity:.5,metalness:.8}));
+      ring.position.set(x,.88,z);ring.rotation.x=Math.PI/2;scene.add(ring);
+      // Char sprite
+      const sp=new THREE.Sprite(new THREE.SpriteMaterial({transparent:true,opacity:0}));
+      sp.position.set(x,1.95,z);sp.scale.set(1.9,1.9,1);
+      sp.userData={type:'char',bi,si};scene.add(sp);interactables.push(sp);
+      slotSprites[bi].push(sp);slotData[bi].push(null);
+    }
+  }
+}
+makePedestals(-9,0);makePedestals(9,1);
+
+// Player avatars
+function makeAvatar(col,name){
+  const g=new THREE.Group();
+  const body=new THREE.Mesh(new THREE.CylinderGeometry(.36,.36,1.2,12),
+    new THREE.MeshStandardMaterial({color:col,emissive:col,emissiveIntensity:.45,roughness:.4}));
+  body.position.y=.6;body.castShadow=true;g.add(body);
+  const head=new THREE.Mesh(new THREE.SphereGeometry(.4,14,14),
+    new THREE.MeshStandardMaterial({color:col,emissive:col,emissiveIntensity:.55,roughness:.3}));
+  head.position.y=1.55;head.castShadow=true;g.add(head);
+  // Hold-ring (shown when carrying a char)
+  const hr=new THREE.Mesh(new THREE.TorusGeometry(.56,.07,6,16),
+    new THREE.MeshStandardMaterial({color:0xffd700,emissive:0xffd700,emissiveIntensity:1.8}));
+  hr.position.y=.6;hr.rotation.x=Math.PI/2;hr.visible=false;hr.name='hr';g.add(hr);
+  scene.add(g);
+  // CSS name label
+  const div=document.createElement('div');
+  div.style.cssText=`position:fixed;font-family:'Fredoka One',cursive;font-size:.78rem;
+    pointer-events:none;z-index:5;transform:translateX(-50%);
+    color:${col===0x39ff14?'#39ff14':'#00cfff'};
+    text-shadow:0 1px 4px #000,0 0 8px currentColor;
+    background:rgba(0,0,0,.55);padding:2px 8px;border-radius:50px;display:none;`;
+  div.textContent=name;document.body.appendChild(div);pLabels.push(div);
+  return g;
+}
+pMeshes.push(makeAvatar(0x39ff14,''));
+pMeshes.push(makeAvatar(0x00cfff,''));
+
+// Particles
+const pGeo=new THREE.BufferGeometry();const PC=80;
+const pPos=new Float32Array(PC*3),pCol=new Float32Array(PC*3);
+for(let i=0;i<PC;i++){
+  pPos[i*3]=(Math.random()-.5)*44;pPos[i*3+1]=Math.random()*6;pPos[i*3+2]=(Math.random()-.5)*22;
+  const c=new THREE.Color().setHSL(Math.random(),1,.7);
+  pCol[i*3]=c.r;pCol[i*3+1]=c.g;pCol[i*3+2]=c.b;
+}
+pGeo.setAttribute('position',new THREE.BufferAttribute(pPos,3));
+pGeo.setAttribute('color',new THREE.BufferAttribute(pCol,3));
+const pts=new THREE.Points(pGeo,new THREE.PointsMaterial({size:.07,vertexColors:true,transparent:true,opacity:.45}));
+scene.add(pts);
+
+// ═══════════════════════════════════════════════
+//  CHAR TEXTURE CACHE
+// ═══════════════════════════════════════════════
+const texCache={};
+function getCharTex(ch){
+  if(texCache[ch.name])return texCache[ch.name];
+  const c=document.createElement('canvas');c.width=128;c.height=128;
+  const ctx=c.getContext('2d');
+  const col=RARITY_COLOR[ch.r]||'#aaa';
+  ctx.beginPath();ctx.arc(64,64,58,0,Math.PI*2);
+  ctx.fillStyle=col+'2a';ctx.fill();
+  ctx.strokeStyle=col;ctx.lineWidth=5;ctx.stroke();
+  ctx.font='66px serif';ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.fillText(ch.em,64,62);
+  const t=new THREE.CanvasTexture(c);
+  return texCache[ch.name]=t;
+}
+function setSlotChar(bi,si,ch){
+  slotData[bi][si]=ch;
+  const sp=slotSprites[bi][si];
+  if(ch){sp.material=new THREE.SpriteMaterial({map:getCharTex(ch),transparent:true,opacity:1});}
+  else{sp.material=new THREE.SpriteMaterial({transparent:true,opacity:0});}
+}
+
+// ═══════════════════════════════════════════════
+//  GAME STATE
+// ═══════════════════════════════════════════════
+let gameMode='basewars';
+const G={
+  myId:-1,peer:null,conn:null,connected:false,
+  players:[
+    {x:-9,z:2,name:'Player 1',held:null,coins:0},
+    {x:9,z:-2,name:'Player 2',held:null,coins:0},
+  ],
+  bases:[Array(SLOTS).fill(null),Array(SLOTS).fill(null)],
+  raidT:300,raidActive:false,
+  tradeSlot:null, // char on the shared exchange pad
+};
+
+function setName(i,n){
+  G.players[i].name=n;
+  document.getElementById('pname'+i).textContent=(i===0?'🟢 ':'🔵 ')+n;
+  pLabels[i].textContent=n;pLabels[i].style.display='block';
+}
+function initBases(){
+  for(let i=0;i<3;i++){setSlotChar(0,i,randChar(0));setSlotChar(1,i,randChar(0));}
+}
+function updateHeld(i){
+  const h=G.players[i].held;
+  document.getElementById('held'+i).textContent=h?`🤚 ${h.em} ${h.name}`:'ידיים: ריקות';
+  pMeshes[i].getObjectByName('hr').visible=!!h;
+}
+function updateCoinsUI(i){document.getElementById('coins'+i).textContent='💰 '+fmtNum(G.players[i].coins);}
+function updateFuseBtn(){
+  if(G.myId<0)return;
+  const n=G.bases[G.myId].filter(Boolean).length;
+  const btn=document.getElementById('fuseBtn');
+  btn.textContent=`🔥 Fuse (${n}/5)`;btn.disabled=n<5;
+}
+
+// ═══════════════════════════════════════════════
+//  INPUT
+// ═══════════════════════════════════════════════
+const keys={};
+document.addEventListener('keydown',e=>{keys[e.code]=true;});
+document.addEventListener('keyup',e=>{keys[e.code]=false;});
+document.addEventListener('keydown',e=>{if(e.code==='KeyE')pickupNearest();if(e.code==='KeyF')tryFuse();});
+
+const rc=new THREE.Raycaster();const mo=new THREE.Vector2();
+function doRaycast(cx,cy){
+  if(G.myId<0||!G.connected)return;
+  const r=cvs.getBoundingClientRect();
+  mo.x=((cx-r.left)/r.width)*2-1;mo.y=-((cy-r.top)/r.height)*2+1;
+  rc.setFromCamera(mo,camera);
+  const hits=rc.intersectObjects(interactables,true);
+  if(hits.length)handleInteract(hits[0].object.userData);
+}
+cvs.addEventListener('click',e=>doRaycast(e.clientX,e.clientY));
+cvs.addEventListener('touchend',e=>{e.preventDefault();doRaycast(e.changedTouches[0].clientX,e.changedTouches[0].clientY);},{passive:false});
+
+function handleInteract(ud){
+  if(!ud)return;
+  const me=G.myId,p=G.players[me];
+  if(ud.type==='fuse'){tryFuse();return;}
+  if(ud.type==='char'){
+    const{bi,si}=ud;
+    const ch=G.bases[bi][si];
+    const isOwn=bi===me;
+    const canSteal=G.raidActive&&!isOwn&&gameMode==='basewars';
+    // Pick up from own base or steal during raid
+    if(!p.held&&ch&&(isOwn||canSteal)){
+      p.held=ch;G.bases[bi][si]=null;setSlotChar(bi,si,null);
+      updateHeld(me);send({type:'pickup',bi,si});
+      if(canSteal){
+        showToast(`🥷 גנבת! ${ch.em} ${ch.name}`);
+        G.raidActive=false;send({type:'raidEnd'});
+        // In trade mode, just steal freely
+      }
+    }
+    // Place on own empty slot
+    else if(p.held&&isOwn&&!ch){
+      G.bases[bi][si]=p.held;setSlotChar(bi,si,p.held);
+      send({type:'place',bi,si,ch:p.held});
+      p.held=null;updateHeld(me);
+    }
+    // Trade mode: interact with trade zone
+    else if(!isOwn&&!G.raidActive&&gameMode==='trade'&&!canSteal){
+      showToast('🤝 מצב מסחר — שחקנים יכולים להחליף דמויות במרכז');
+    }
+    updateFuseBtn();
+  }
+}
+
+function pickupNearest(){
+  if(G.myId<0||!G.connected)return;
+  const me=G.myId,p=G.players[me];
+  let best=null,bestD=3,bestBi=-1,bestSi=-1;
+  for(let bi=0;bi<2;bi++){
+    for(let si=0;si<SLOTS;si++){
+      const sp=slotSprites[bi][si];
+      const dx=sp.position.x-p.x,dz=sp.position.z-p.z;
+      const d=Math.sqrt(dx*dx+dz*dz);
+      if(d<bestD&&(G.bases[bi][si]||(!G.players[me].held&&!G.bases[bi][si]))){
+        if(G.bases[bi][si]){best=sp;bestD=d;bestBi=bi;bestSi=si;}
+      }
+    }
+  }
+  if(best)handleInteract({type:'char',bi:bestBi,si:bestSi});
+}
+
+// ═══════════════════════════════════════════════
+//  MOVEMENT
+// ═══════════════════════════════════════════════
+// Touch joystick state
+let touchStart=null,touchCurrent=null;
+cvs.addEventListener('touchstart',e=>{if(e.touches.length===1){const t=e.touches[0];touchStart={x:t.clientX,y:t.clientY};touchCurrent={x:t.clientX,y:t.clientY};}},{passive:true});
+cvs.addEventListener('touchmove',e=>{if(e.touches.length===1){const t=e.touches[0];touchCurrent={x:t.clientX,y:t.clientY};}},{passive:true});
+cvs.addEventListener('touchend',()=>{touchStart=null;touchCurrent=null;},{passive:true});
+
+function movePlayer(dt){
+  if(G.myId<0)return;
+  const sp=8,me=G.myId,p=G.players[me];let mv=false;
+  // Keyboard
+  if(keys['KeyW']||keys['ArrowUp']){p.z-=sp*dt;mv=true;}
+  if(keys['KeyS']||keys['ArrowDown']){p.z+=sp*dt;mv=true;}
+  if(keys['KeyA']||keys['ArrowLeft']){p.x-=sp*dt;mv=true;}
+  if(keys['KeyD']||keys['ArrowRight']){p.x+=sp*dt;mv=true;}
+  // Touch drag
+  if(touchStart&&touchCurrent){
+    const dx=(touchCurrent.x-touchStart.x),dz=(touchCurrent.y-touchStart.y);
+    const len=Math.sqrt(dx*dx+dz*dz);
+    if(len>8){p.x+=dx/len*sp*dt*1.5;p.z+=dz/len*sp*dt*1.5;mv=true;}
+  }
+  p.x=Math.max(-19,Math.min(19,p.x));p.z=Math.max(-6.5,Math.min(6.5,p.z));
+  pMeshes[me].position.set(p.x,0,p.z);
+  if(mv)send({type:'move',x:p.x,z:p.z});
+}
+
+// ═══════════════════════════════════════════════
+//  GAME TIMERS — host drives them
+// ═══════════════════════════════════════════════
+let lastCoin=0,lastTick=0;
+function gameUpdate(now){
+  if(!G.connected||G.myId<0)return;
+  const me=G.myId;
+  // Coins (both players earn independently)
+  if(now-lastCoin>=1000){
+    lastCoin=now;
+    let earned=0;G.bases[me].forEach(c=>{if(c)earned+=c.cps;});
+    G.players[me].coins+=earned;updateCoinsUI(me);
+    send({type:'coins',i:me,v:G.players[me].coins});
+  }
+  // Timer (host only)
+  if(me===0&&now-lastTick>=1000){
+    lastTick=now;
+    G.raidT--;
+    if(!G.raidActive&&G.raidT<=0){
+      G.raidActive=true;G.raidT=30;
+      triggerRaidUI();
+      send({type:'timerSync',t:G.raidT,raid:true});
+    } else if(G.raidActive&&G.raidT<=0){
+      G.raidActive=false;G.raidT=300;
+      endRaidUI();
+      send({type:'timerSync',t:G.raidT,raid:false});
+    } else {
+      send({type:'timerSync',t:G.raidT,raid:G.raidActive});
+    }
+    updateTimerUI();
+  }
+}
+function updateTimerUI(){
+  const m=Math.floor(G.raidT/60),s=G.raidT%60;
+  document.getElementById('timerVal').textContent=`${m}:${s.toString().padStart(2,'0')}`;
+  document.getElementById('timerVal').classList.toggle('raid',G.raidActive);
+}
+function triggerRaidUI(){
+  document.getElementById('timerLbl').textContent='⚔️ RAID!';
+  const rb=document.getElementById('raidBanner');rb.classList.add('show');
+  showToast('⚔️ זמן פשיטה! פלוש לבסיס האויב!',3500);
+  setTimeout(()=>rb.classList.remove('show'),3000);
+}
+function endRaidUI(){
+  document.getElementById('timerLbl').textContent='עד הפשיטה';
+  document.getElementById('raidBanner').classList.remove('show');
+}
+
+// ═══════════════════════════════════════════════
+//  FUSE
+// ═══════════════════════════════════════════════
+function tryFuse(){
+  if(!G.connected||G.myId<0)return;
+  const me=G.myId,chars=G.bases[me].map((c,i)=>c?{i,c}:null).filter(Boolean);
+  if(chars.length<5){showToast(`⚠️ צריך 5 דמויות (יש ${chars.length})`);return;}
+  const toFuse=chars.slice(0,5);
+  toFuse.forEach(({i})=>{G.bases[me][i]=null;setSlotChar(me,i,null);send({type:'pickup',bi:me,si:i});});
+  const res=fuseResult(toFuse.map(t=>t.c));
+  const ei=G.bases[me].indexOf(null);
+  if(ei>=0){G.bases[me][ei]=res;setSlotChar(me,ei,res);send({type:'place',bi:me,si:ei,ch:res});}
+  else{G.players[me].held=res;updateHeld(me);}
+  showFusePopup(res,toFuse.map(t=>t.c));
+  send({type:'fuseAnim',res,src:toFuse.map(t=>t.c)});
+  updateFuseBtn();
+}
+
+function triggerRoulette(){
+  if(!G.connected||G.myId<0)return;
+  const me=G.myId;
+  const roulChars=Array.from({length:5},()=>randChar(0));
+  const res=fuseResult(roulChars);
+  G.bases[me].forEach((_,i)=>{if(G.bases[me][i]){G.bases[me][i]=null;setSlotChar(me,i,null);send({type:'pickup',bi:me,si:i});}});
+  G.bases[me][0]=res;setSlotChar(me,0,res);send({type:'place',bi:me,si:0,ch:res});
+  showFusePopup(res,roulChars,true);
+  send({type:'fuseAnim',res,src:roulChars,roul:true});
+  showToast('🎲 רולטה של Fuse — ראה מה קיבלת!');
+  updateFuseBtn();
+}
+
+function showFusePopup(res,src=[],roul=false){
+  const col=RARITY_COLOR[res.r]||'#aaa';
+  document.getElementById('fuseEmo').textContent=res.em;
+  document.getElementById('fuseName').textContent=res.name;
+  document.getElementById('fuseRar').textContent=res.r;
+  document.getElementById('fuseRar').style.cssText=`background:${col}22;color:${col};border:1px solid ${col}55;`;
+  const cpsTxt=res.cps>=1e8?(res.cps/1e8).toFixed(0)+'M/שנ':res.cps>=1e3?(res.cps/1e3).toFixed(1)+'K/שנ':res.cps+'/שנ';
+  document.getElementById('fuseStats').innerHTML=
+    `הכנסה: <strong style="color:${col}">${cpsTxt}</strong><br>`+
+    (roul?'🎲 נבחר אקראית לחלוטין!':'מוזג מ-'+src.length+' דמויות')+
+    (src.length?`<br><span style="font-size:1.4rem;letter-spacing:3px">${src.map(c=>c.em).join('')}</span>`:'');
+  document.getElementById('fusePopup').classList.add('show');
+}
+function closeFusePopup(){document.getElementById('fusePopup').classList.remove('show');}
+
+// ═══════════════════════════════════════════════
+//  PEER.JS MULTIPLAYER
+// ═══════════════════════════════════════════════
+let peer=null,conn=null;
+const CODE_CHARS='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+function genCode(){let c='';for(let i=0;i<6;i++)c+=CODE_CHARS[Math.floor(Math.random()*CODE_CHARS.length)];return c;}
+
+function createGame(){
+  const code=genCode();
+  document.getElementById('hostSection').style.display='block';
+  document.getElementById('codeDisplay').textContent=code;
+  document.getElementById('hostStatus').textContent='⏳ ממתין לחבר...';
+  peer=new Peer('SAB'+code,{host:'0.peerjs.com',port:443,secure:true});
+  peer.on('error',e=>{
+    document.getElementById('hostStatus').textContent='⚠️ '+e.type+' — נסה שוב';
+  });
+  peer.on('connection',c=>{conn=c;setupConn(c,0);});
+}
+
+function showJoinForm(){document.getElementById('joinForm').style.display='block';document.getElementById('codeInput').focus();}
+
+function joinGame(){
+  const code=document.getElementById('codeInput').value.trim().toUpperCase();
+  if(code.length<4){document.getElementById('joinStatus').textContent='⚠️ קוד קצר מדי';return;}
+  document.getElementById('joinStatus').textContent='⏳ מתחבר...';
+  peer=new Peer({host:'0.peerjs.com',port:443,secure:true});
+  peer.on('open',()=>{const c=peer.connect('SAB'+code,{reliable:true});conn=c;setupConn(c,1);});
+  peer.on('error',e=>{document.getElementById('joinStatus').textContent='⚠️ '+e.type;});
+}
+
+function setupConn(c,myIdx){
+  G.myId=myIdx;
+  c.on('open',()=>{
+    G.connected=true;
+    const name=myIdx===0?'Host':'Guest';
+    setName(myIdx,name);
+    if(myIdx===0){
+      initBases();
+      setName(1,'Guest');
+      c.send(JSON.stringify({type:'init',bases:G.bases,mode:gameMode,p0name:'Host'}));
+      document.getElementById('hostStatus').textContent='✅ חובר! שחקו!';
+    } else {
+      setName(0,'Host');
+      document.getElementById('joinStatus').textContent='✅ חובר!';
+    }
+    document.getElementById('lobbyOverlay').classList.add('hidden');
+    document.getElementById('hud').classList.add('show');
+    setModeInfo();
+    showToast('✅ חובר! '+name+' מוכן!');
+    updateFuseBtn();
+  });
+  c.on('data',raw=>{try{handleMsg(JSON.parse(raw));}catch(e){console.warn(e);}});
+  c.on('close',()=>{G.connected=false;showToast('⚠️ החיבור נסגר');});
+  c.on('error',e=>showToast('⚠️ שגיאה: '+e));
+}
+
+function send(obj){if(conn&&conn.open)try{conn.send(JSON.stringify(obj));}catch(e){}}
+
+function handleMsg(msg){
+  const other=1-G.myId;
+  switch(msg.type){
+    case 'init':
+      gameMode=msg.mode||'basewars';
+      msg.bases.forEach((base,bi)=>base.forEach((ch,si)=>{if(ch){G.bases[bi][si]=ch;setSlotChar(bi,si,ch);}}));
+      if(msg.p0name)setName(0,msg.p0name);
+      setModeInfo();updateFuseBtn();break;
+    case 'move':
+      G.players[other].x=msg.x;G.players[other].z=msg.z;
+      pMeshes[other].position.set(msg.x,0,msg.z);break;
+    case 'pickup':
+      G.bases[msg.bi][msg.si]=null;setSlotChar(msg.bi,msg.si,null);updateFuseBtn();break;
+    case 'place':
+      G.bases[msg.bi][msg.si]=msg.ch;setSlotChar(msg.bi,msg.si,msg.ch);updateFuseBtn();break;
+    case 'coins':
+      G.players[msg.i].coins=msg.v;updateCoinsUI(msg.i);break;
+    case 'timerSync':
+      G.raidT=msg.t;
+      if(msg.raid&&!G.raidActive){G.raidActive=true;triggerRaidUI();}
+      else if(!msg.raid&&G.raidActive){G.raidActive=false;endRaidUI();}
+      G.raidActive=msg.raid;updateTimerUI();break;
+    case 'raidEnd':G.raidActive=false;endRaidUI();break;
+    case 'fuseAnim':showFusePopup(msg.res,msg.src||[],!!msg.roul);break;
+  }
+}
+
+function copyCode(){
+  const code=document.getElementById('codeDisplay').textContent;
+  navigator.clipboard.writeText(code).catch(()=>{});showToast('📋 קוד הועתק!');
+}
+function backToLobby(){
+  if(conn)try{conn.close();}catch(e){}
+  if(peer)try{peer.destroy();}catch(e){}
+  conn=null;peer=null;G.connected=false;G.myId=-1;
+  G.bases=[Array(SLOTS).fill(null),Array(SLOTS).fill(null)];G.raidT=300;G.raidActive=false;
+  for(let bi=0;bi<2;bi++)for(let si=0;si<SLOTS;si++)setSlotChar(bi,si,null);
+  pLabels.forEach(l=>l.style.display='none');
+  document.getElementById('hud').classList.remove('show');
+  document.getElementById('lobbyOverlay').classList.remove('hidden');
+  document.getElementById('hostSection').style.display='none';
+  document.getElementById('joinForm').style.display='none';
+  document.getElementById('codeInput').value='';
+  document.getElementById('joinStatus').textContent='';
+  endRaidUI();updateTimerUI();
+  G.players.forEach(p=>{p.held=null;p.coins=0;});
+}
+
+// ═══════════════════════════════════════════════
+//  MODE UI
+// ═══════════════════════════════════════════════
+let selMode='basewars';
+function setMode(m,btn){
+  selMode=m;gameMode=m;
+  document.querySelectorAll('.mode-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+function setModeInfo(){
+  const msgs={
+    basewars:'⚔️ כל 5 דקות — פשיטה! גנוב דמות אחת מהאויב. אסור מנעולים!',
+    trade:'🤝 אחד מייצר כסף, השני מבצע Fuse. החליפו דמויות במרכז!',
+    roulette:'🎲 רולטה — כל שחקן לוחץ "רולטה!" ומקבל Fuse אקראי לחלוטין!'
+  };
+  document.getElementById('modeInfo').textContent=msgs[gameMode]||'';
+}
+
+// ═══════════════════════════════════════════════
+//  TOAST
+// ═══════════════════════════════════════════════
+let toastTmr=null;
+function showToast(msg,dur=3000){
+  const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');
+  clearTimeout(toastTmr);toastTmr=setTimeout(()=>el.classList.remove('show'),dur);
+}
+
+// ═══════════════════════════════════════════════
+//  NAME TAGS (CSS projected)
+// ═══════════════════════════════════════════════
+const tmpV=new THREE.Vector3();
+function updateLabels(){
+  pMeshes.forEach((m,i)=>{
+    if(!G.connected){pLabels[i].style.display='none';return;}
+    m.getWorldPosition(tmpV);tmpV.y+=2.2;tmpV.project(camera);
+    pLabels[i].style.left=((tmpV.x*.5+.5)*innerWidth)+'px';
+    pLabels[i].style.top=((-.5*tmpV.y+.5)*innerHeight)+'px';
+  });
+}
+
+// ═══════════════════════════════════════════════
+//  RENDER LOOP
+// ═══════════════════════════════════════════════
+let prevT=performance.now();
+function animate(now){
+  requestAnimationFrame(animate);
+  const dt=Math.min((now-prevT)/1000,.1);prevT=now;
+  if(G.connected){movePlayer(dt);gameUpdate(now);updateFuseBtn();}
+  // Animate fuse machine
+  fuseRing.rotation.y+=dt*1.3;fuseCore.rotation.y+=dt*2.1;
+  plF.intensity=3.5+Math.sin(now*.003)*1.8;
+  // Pulse base lights
+  pl1.intensity=3+Math.sin(now*.0017)*.8;pl2.intensity=3+Math.sin(now*.0021)*.8;
+  // Particles
+  const pa=pts.geometry.attributes.position;
+  for(let i=0;i<PC;i++){pa.array[i*3+1]+=dt*.55;if(pa.array[i*3+1]>7)pa.array[i*3+1]=0;}
+  pa.needsUpdate=true;
+  // Gentle camera sway
+  camera.position.x=Math.sin(now*.00028)*.5;camera.lookAt(0,0,0);
+  updateLabels();renderer.render(scene,camera);
+}
+animate(performance.now());
+</script>
+</body>
+</html>
