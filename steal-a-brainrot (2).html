@@ -68,6 +68,8 @@ nav {
   border:1.5px solid rgba(255,255,255,0.1); transition:all 0.2s;
 }
 .nav-links a:hover { color:#000; background:var(--neon); border-color:var(--neon); transform:scale(1.08); }
+.btn-roblox { font-family:'Fredoka One',cursive; font-size:0.82rem; padding:6px 16px; border-radius:50px; border:2px solid var(--neon); background:rgba(57,255,20,0.12); color:var(--neon); cursor:pointer; text-decoration:none; transition:all 0.25s; white-space:nowrap; display:inline-flex; align-items:center; gap:6px; }
+.btn-roblox:hover { background:var(--neon); color:#000; transform:scale(1.08); box-shadow:0 0 18px rgba(57,255,20,0.4); }
 
 /* PARTICLES */
 .particles { position:fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden; }
@@ -277,6 +279,8 @@ section { position:relative; z-index:1; padding:70px 20px; }
 .rb-table td { padding:10px 16px; border-bottom:1px solid rgba(255,255,255,0.04); }
 .rb-table tr:last-child td { border-bottom:none; }
 .rb-table tr:hover td { background:rgba(191,0,255,0.04); }
+.rb-chars-wrap { display:flex; flex-wrap:wrap; gap:4px; }
+.rb-char-chip { font-family:'Fredoka One',cursive; font-size:0.66rem; padding:2px 8px; border-radius:50px; background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.15); color:rgba(255,255,255,0.78); white-space:nowrap; }
 .rb-num-badge { font-family:'Fredoka One',cursive; font-size:0.82rem; padding:2px 11px; border-radius:50px; background:rgba(191,0,255,0.12); color:var(--purple); border:1px solid rgba(191,0,255,0.3); }
 .rb-keep-lose { display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-top:24px; }
 .rb-box { border-radius:18px; padding:22px; border:1.5px solid; }
@@ -306,6 +310,17 @@ section { position:relative; z-index:1; padding:70px 20px; }
 .meta-arrow { color:rgba(255,255,255,0.3); font-size:1.2rem; }
 .meta-desc { font-size:0.83rem; color:rgba(255,255,255,0.55); line-height:1.7; }
 
+/* ===== LIVE LOG ===== */
+.live-status-bar { display:flex; align-items:center; gap:12px; margin-bottom:22px; background:rgba(0,0,0,0.45); border:1.5px solid rgba(57,255,20,0.2); border-radius:14px; padding:10px 18px; flex-wrap:wrap; }
+.live-pulse { width:10px; height:10px; border-radius:50%; background:var(--neon); box-shadow:0 0 10px var(--neon); animation:livePulse 1s ease-in-out infinite; flex-shrink:0; }
+@keyframes livePulse { 0%,100%{transform:scale(1);opacity:1;}50%{transform:scale(1.4);opacity:0.5;} }
+.live-label { font-family:'Fredoka One',cursive; font-size:0.85rem; color:var(--neon); }
+.live-ts { font-size:0.75rem; color:rgba(255,255,255,0.4); margin-right:auto; }
+.live-refresh-btn { font-family:'Fredoka One',cursive; font-size:0.74rem; padding:4px 12px; border-radius:50px; border:1px solid rgba(255,255,255,0.15); background:transparent; color:rgba(255,255,255,0.6); cursor:pointer; transition:all .2s; }
+.live-refresh-btn:hover { background:var(--blue); color:#000; border-color:var(--blue); }
+.live-spinner { width:14px; height:14px; border:2px solid rgba(255,255,255,0.15); border-top-color:var(--blue); border-radius:50%; animation:spin 0.7s linear infinite; display:none; flex-shrink:0; }
+.live-spinner.active { display:block; }
+@keyframes spin { to{transform:rotate(360deg);} }
 /* ===== UPDATE LOG ===== */
 #updatelog { background:linear-gradient(180deg,#09090f 0%,#0b0710 100%); }
 .log-wall { display:flex; flex-direction:column; gap:0; }
@@ -515,6 +530,7 @@ footer { position:relative;z-index:1;background:#040508;border-top:2px solid rgb
     <li><a href="#defense">🛡️ הגנה</a></li>
     <li><a href="#updatelog">📋 עדכונים</a></li>
     <li><a href="#protips">🚀 Pro Tips</a></li>
+    <li><a href="https://www.roblox.com/games/18472758924/Steal-a-Brainrot" target="_blank" rel="noopener noreferrer" class="btn-roblox">🎮 שחק עכשיו!</a></li>
   </ul>
 </nav>
 
@@ -925,14 +941,51 @@ footer { position:relative;z-index:1;background:#040508;border-top:2px solid rgb
           <th>עלות (Cash)</th>
           <th>בונוס מכפיל</th>
           <th>יתרונות נוספים</th>
+          <th>דמויות נדרשות</th>
         </tr></thead>
         <tbody>
-          <tr><td><span class="rb-num-badge">Rebirth 1</span></td><td style="color:var(--gold);font-family:'Fredoka One',cursive;">$10M</td><td style="color:var(--neon);">×1.5 הכנסה</td><td style="color:rgba(255,255,255,0.6);font-size:0.8rem;">פתח Rebirth Shop, שדרוג מסוע בסיסי</td></tr>
-          <tr><td><span class="rb-num-badge">Rebirth 2</span></td><td style="color:var(--gold);font-family:'Fredoka One',cursive;">$100M</td><td style="color:var(--neon);">×2 הכנסה</td><td style="color:rgba(255,255,255,0.6);font-size:0.8rem;">מהירות ריצה +10%, גישה לאזור Rebirth 2</td></tr>
-          <tr><td><span class="rb-num-badge">Rebirth 3</span></td><td style="color:var(--gold);font-family:'Fredoka One',cursive;">$1B</td><td style="color:var(--neon);">×3 הכנסה</td><td style="color:rgba(255,255,255,0.6);font-size:0.8rem;">עיצוב בסיס בלעדי, אפשרות לגנוב מהר יותר</td></tr>
-          <tr><td><span class="rb-num-badge">Rebirth 5</span></td><td style="color:var(--gold);font-family:'Fredoka One',cursive;">$10B</td><td style="color:var(--neon);">×5 הכנסה</td><td style="color:rgba(255,255,255,0.6);font-size:0.8rem;">מנעולים בחינם מדי 10 דקות, תג "Veteran"</td></tr>
-          <tr><td><span class="rb-num-badge">Rebirth 10</span></td><td style="color:var(--gold);font-family:'Fredoka One',cursive;">$1T</td><td style="color:var(--neon);">×10 הכנסה</td><td style="color:rgba(255,255,255,0.6);font-size:0.8rem;">Aura בלעדי, Fuse Machine x2 מהר יותר</td></tr>
-          <tr><td><span class="rb-num-badge">Rebirth 25</span></td><td style="color:var(--gold);font-family:'Fredoka One',cursive;">$1Q</td><td style="color:var(--neon);">×25 הכנסה</td><td style="color:rgba(255,255,255,0.6);font-size:0.8rem;">תואר "Sigma Reborn", גישה לאזור Secret בלעדי</td></tr>
+          <tr>
+            <td><span class="rb-num-badge">Rebirth 1</span></td>
+            <td style="color:var(--gold);font-family:'Fredoka One',cursive;">$10M</td>
+            <td style="color:var(--neon);">×1.5 הכנסה</td>
+            <td style="color:rgba(255,255,255,0.6);font-size:0.8rem;">פתח Rebirth Shop, שדרוג מסוע בסיסי</td>
+            <td><div class="rb-chars-wrap"><span class="rb-char-chip">🔴 Mythic ×1+</span><span class="rb-char-chip">🟡 Legendary ×3+</span></div></td>
+          </tr>
+          <tr>
+            <td><span class="rb-num-badge">Rebirth 2</span></td>
+            <td style="color:var(--gold);font-family:'Fredoka One',cursive;">$100M</td>
+            <td style="color:var(--neon);">×2 הכנסה</td>
+            <td style="color:rgba(255,255,255,0.6);font-size:0.8rem;">מהירות ריצה +10%, גישה לאזור Rebirth 2</td>
+            <td><div class="rb-chars-wrap"><span class="rb-char-chip">🔴 Mythic ×3+</span><span class="rb-char-chip">🟡 Legendary ×5+</span></div></td>
+          </tr>
+          <tr>
+            <td><span class="rb-num-badge">Rebirth 3</span></td>
+            <td style="color:var(--gold);font-family:'Fredoka One',cursive;">$1B</td>
+            <td style="color:var(--neon);">×3 הכנסה</td>
+            <td style="color:rgba(255,255,255,0.6);font-size:0.8rem;">עיצוב בסיס בלעדי, גניבה מהירה יותר</td>
+            <td><div class="rb-chars-wrap"><span class="rb-char-chip">🔱 God ×1+</span><span class="rb-char-chip">🔴 Mythic ×5+</span></div></td>
+          </tr>
+          <tr>
+            <td><span class="rb-num-badge">Rebirth 5</span></td>
+            <td style="color:var(--gold);font-family:'Fredoka One',cursive;">$10B</td>
+            <td style="color:var(--neon);">×5 הכנסה</td>
+            <td style="color:rgba(255,255,255,0.6);font-size:0.8rem;">מנעולים בחינם מדי 10 דקות, תג "Veteran"</td>
+            <td><div class="rb-chars-wrap"><span class="rb-char-chip">🔱 God ×2+</span><span class="rb-char-chip">🔮 Secret ×1</span></div></td>
+          </tr>
+          <tr>
+            <td><span class="rb-num-badge">Rebirth 10</span></td>
+            <td style="color:var(--gold);font-family:'Fredoka One',cursive;">$1T</td>
+            <td style="color:var(--neon);">×10 הכנסה</td>
+            <td style="color:rgba(255,255,255,0.6);font-size:0.8rem;">Aura בלעדי, Fuse Machine x2 מהר</td>
+            <td><div class="rb-chars-wrap"><span class="rb-char-chip">🔮 Secret ×2+</span><span class="rb-char-chip">👑 OG ×1</span></div></td>
+          </tr>
+          <tr>
+            <td><span class="rb-num-badge">Rebirth 25</span></td>
+            <td style="color:var(--gold);font-family:'Fredoka One',cursive;">$1Q</td>
+            <td style="color:var(--neon);">×25 הכנסה</td>
+            <td style="color:rgba(255,255,255,0.6);font-size:0.8rem;">תואר "Sigma Reborn", אזור Secret בלעדי</td>
+            <td><div class="rb-chars-wrap"><span class="rb-char-chip">👑 OG ×3+</span><span class="rb-char-chip">🔮 Secret ×5+</span></div></td>
+          </tr>
         </tbody>
       </table>
     </div>
@@ -988,7 +1041,14 @@ footer { position:relative;z-index:1;background:#040508;border-top:2px solid rgb
   <div class="container">
     <div class="sec-header">
       <div class="sec-title" style="background:linear-gradient(90deg,var(--neon),var(--blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">📋 לוח עדכונים — Update Log</div>
-      <p class="sec-sub">כל מה שנוסף ותוקן — מהעדכון האחרון לראשון</p>
+      <p class="sec-sub">מתעדכן אוטומטית מ-<code style="color:var(--neon);background:rgba(57,255,20,0.1);padding:1px 6px;border-radius:4px;">updates.json</code> — ערוך את הקובץ ב-GitHub ושנייה לאחר מכן הכל מתעדכן</p>
+    </div>
+    <div class="live-status-bar">
+      <div class="live-pulse"></div>
+      <span class="live-label">🔴 LIVE</span>
+      <span class="live-ts" id="logTsText">בודק...</span>
+      <div class="live-spinner" id="logSpinner"></div>
+      <button class="live-refresh-btn" onclick="fetchUpdates(true)">🔄 רענן עכשיו</button>
     </div>
     <div class="log-wall" id="logWall"></div>
   </div>
@@ -1632,20 +1692,13 @@ const DEF_DATA=[
     </div>`).join('');
 })();
 
-// ===== UPDATE LOG =====
-const UPDATES=[
-  {ver:'עדכון 7 (האחרון)',date:'מאי 2026',color:'#39ff14',tags:['new','balance','fix'],items:['נוספה דמות OG חדשה — Meowl','אוזנה הכנסת Toiletto Focaccino (ירדה מ-20K ל-16K CPS)','תוקן באג שגרם ל-Fuse Machine לא לעבוד בסרברים גדולים','נוסף אפקט חדש לגלגל המזל']},
-  {ver:'עדכון 6',date:'אפריל 2026',color:'#ffd700',tags:['new','event'],items:['אירוע "Italian Spring" — דמויות אירוע לזמן מוגבל','נוספו Rebirth 20–25 עם Aura בלעדי','שיפור ביצועי השרת ב-40%','נוסף לוח מובילים Rebirth']},
-  {ver:'עדכון 5',date:'מרץ 2026',color:'#00cfff',tags:['new','fix'],items:['נוספו 4 דמויות Mythic חדשות','תוקן באג המעלית שגרם לשחקנים להיתקע','נוסף Guardian Bot לקטלוג ההגנות','שיפורי UI בתפריט הבסיס']},
-  {ver:'עדכון 4',date:'פברואר 2026',color:'#bf00ff',tags:['new','balance'],items:['נוסף Craft Machine עם 12 מתכונים חדשים','God Tier — 4 דמויות חדשות','אוזנו עלויות ה-Lock וה-Sentry','נוסף תג "Rebirth Master" ל-Rebirth 10+']},
-  {ver:'עדכון 3',date:'ינואר 2026',color:'#ff006e',tags:['new','event'],items:['אירוע חורף — דמויות שלג לזמן מוגבל','נוספו קודים ציבוריים (Codes System)','תוקן באג גניבה שאפשר גניבה כפולה','שיפור מהירות טעינה של הבסיס']},
-  {ver:'עדכון 2',date:'דצמבר 2025',color:'#ff6b00',tags:['new'],items:['נוספו Secret Tier עם 5 דמויות','Fuse Machine עלתה לרמה 2','נוסף מצב Hardcore (ללא מנעולים)','נוסף אזור חדש למפה']},
-  {ver:'עדכון 1 (השקה)',date:'נובמבר 2025',color:'#aaa',tags:['new'],items:['השקת המשחק עם 40 דמויות','Common עד Legendary בהשקה','Fuse Machine בסיסית','מערכת גניבה בסיסית + Leaderboard']},
-];
+// ===== UPDATE LOG — LIVE FETCH =====
 const TAG_CFG={new:{cls:'log-new',label:'✨ חדש'},fix:{cls:'log-fix',label:'🔧 תיקון'},balance:{cls:'log-balance',label:'⚖️ איזון'},event:{cls:'log-event',label:'🎉 אירוע'}};
-(function buildLog(){
+let _logEtag='', _logCountdown=0, _logCountdownTimer=null;
+
+function renderLogWall(data){
   const wall=document.getElementById('logWall'); if(!wall) return;
-  wall.innerHTML=UPDATES.map(u=>`
+  wall.innerHTML=data.map(u=>`
     <div class="log-entry">
       <div class="log-dot-wrap">
         <div class="log-dot" style="background:${u.color};border-color:${u.color};box-shadow:0 0 9px ${u.color}88"></div>
@@ -1655,11 +1708,45 @@ const TAG_CFG={new:{cls:'log-new',label:'✨ חדש'},fix:{cls:'log-fix',label:'
           <span class="log-ver">${u.ver}</span>
           <span class="log-date">${u.date}</span>
         </div>
-        <div class="log-tags">${u.tags.map(t=>`<span class="log-tag ${TAG_CFG[t].cls}">${TAG_CFG[t].label}</span>`).join('')}</div>
-        <div class="log-items">${u.items.map(it=>`<div class="log-item">${it}</div>`).join('')}</div>
+        <div class="log-tags">${(u.tags||[]).map(t=>`<span class="log-tag ${(TAG_CFG[t]||{cls:'log-new'}).cls}">${(TAG_CFG[t]||{label:t}).label}</span>`).join('')}</div>
+        <div class="log-items">${(u.items||[]).map(it=>`<div class="log-item">${it}</div>`).join('')}</div>
       </div>
     </div>`).join('');
-})();
+}
+
+function setLogStatus(msg){ const el=document.getElementById('logTsText'); if(el) el.textContent=msg; }
+function setLogSpinner(on){ const el=document.getElementById('logSpinner'); if(el) el.classList.toggle('active',on); }
+
+function startLogCountdown(secs){
+  clearInterval(_logCountdownTimer);
+  _logCountdown=secs;
+  _logCountdownTimer=setInterval(()=>{
+    _logCountdown--;
+    if(_logCountdown<=0){ clearInterval(_logCountdownTimer); fetchUpdates(); }
+    else setLogStatus('עדכון אחרון: ' + new Date().toLocaleTimeString('he-IL') + ' | רענון בעוד ' + _logCountdown + ' שנ\'');
+  },1000);
+}
+
+async function fetchUpdates(manual=false){
+  clearInterval(_logCountdownTimer);
+  setLogSpinner(true);
+  setLogStatus('טוען...');
+  try{
+    const url='updates.json?v='+Date.now();
+    const res=await fetch(url,{cache:'no-store'});
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    const data=await res.json();
+    renderLogWall(data);
+    setLogStatus('עדכון אחרון: ' + new Date().toLocaleTimeString('he-IL'));
+    if(manual) setTimeout(()=>startLogCountdown(30),1000);
+    else startLogCountdown(30);
+  } catch(e){
+    setLogStatus('⚠️ שגיאה בטעינה — בודק שוב בעוד 30 שנ\'');
+    startLogCountdown(30);
+  } finally{ setLogSpinner(false); }
+}
+
+fetchUpdates();
 
 // ===== PRO TIPS =====
 const PT_DATA={
