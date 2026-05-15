@@ -480,9 +480,12 @@ function getCharTex(ch){
 }
 function setSlotChar(bi,si,ch){
   slotData[bi][si]=ch;
+  G.bases[bi][si]=ch;  // keep G.bases in sync so handleInteract can find chars
   const sp=slotSprites[bi][si];
   if(ch){sp.material=new THREE.SpriteMaterial({map:getCharTex(ch),transparent:true,opacity:1});}
   else{sp.material=new THREE.SpriteMaterial({transparent:true,opacity:0});}
+  // update rarity glow ring (defined later; safe because it guards against missing rings)
+  if(typeof updatePedestalRing==='function')updatePedestalRing(bi,si,ch);
 }
 
 // ═══════════════════════════════════════════════
@@ -889,12 +892,6 @@ function updatePedestalRing(bi,si,ch){
     ring.material.emissiveIntensity=.5;
   }
 }
-// Patch setSlotChar to also update rings
-const _origSetSlot=setSlotChar;
-function setSlotChar(bi,si,ch){
-  _origSetSlot(bi,si,ch);updatePedestalRing(bi,si,ch);
-}
-
 // ═══════════════════════════════════════════════
 //  SOLO AI MODE
 // ═══════════════════════════════════════════════
@@ -905,11 +902,11 @@ function startSolo(){
   soloMode=true;G.myId=0;G.connected=true;
   setName(0,name);setName(1,'🤖 AI');
   initBases();
-  // Fill AI base fully
+  // Fill AI base fully (setSlotChar now syncs G.bases automatically)
   for(let i=0;i<SLOTS;i++)setSlotChar(1,i,randChar(0));
-  G.bases[1]=slotData[1].map(c=>c?{...c}:null);
   document.getElementById('lobbyOverlay').classList.add('hidden');
   document.getElementById('hud').classList.add('show');
+  showJoy();
   gameMode='basewars';setModeInfo();
   showToast('🤖 מצב סולו — שחק נגד AI!');
   updateFuseBtn();
