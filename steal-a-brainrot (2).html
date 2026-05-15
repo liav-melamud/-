@@ -246,6 +246,104 @@ section { position:relative; z-index:1; padding:70px 20px; }
 .tip-beginner { background:rgba(57,255,20,0.15);color:var(--neon);border:1px solid rgba(57,255,20,0.3); }
 .tip-advanced { background:rgba(255,0,110,0.15);color:var(--pink);border:1px solid rgba(255,0,110,0.3); }
 
+/* ===== CHAR DATABASE ===== */
+#chardb { background:#07080f; }
+.cdb-table-wrap { overflow-x:auto; border-radius:16px; border:1.5px solid var(--border); }
+.cdb-table { width:100%; border-collapse:collapse; font-size:0.82rem; min-width:600px; }
+.cdb-table thead tr { background:rgba(255,255,255,0.06); }
+.cdb-table th { padding:11px 14px; text-align:right; font-family:'Fredoka One',cursive; font-size:0.8rem; color:rgba(255,255,255,0.55); letter-spacing:.5px; border-bottom:1.5px solid var(--border); white-space:nowrap; }
+.cdb-table td { padding:9px 14px; border-bottom:1px solid rgba(255,255,255,0.05); vertical-align:middle; }
+.cdb-table tr:last-child td { border-bottom:none; }
+.cdb-table tr:hover td { background:rgba(255,255,255,0.025); }
+.cdb-rarity-dot { width:9px;height:9px;border-radius:50%;display:inline-block;margin-left:5px;vertical-align:middle; }
+.eff-bar-wrap { display:flex; align-items:center; gap:7px; }
+.eff-bar { height:7px; border-radius:4px; background:var(--bc); flex:1; max-width:80px; }
+.eff-num { font-family:'Fredoka One',cursive; font-size:0.78rem; color:var(--bc); }
+.acq-badge { font-family:'Fredoka One',cursive; font-size:0.67rem; padding:2px 9px; border-radius:50px; white-space:nowrap; }
+.acq-conveyor { background:rgba(57,255,20,0.1); color:var(--neon); border:1px solid rgba(57,255,20,0.25); }
+.acq-craft    { background:rgba(0,207,255,0.1); color:var(--blue); border:1px solid rgba(0,207,255,0.25); }
+.acq-fuse     { background:rgba(255,107,0,0.12); color:var(--orange); border:1px solid rgba(255,107,0,0.3); }
+.acq-event    { background:rgba(255,0,110,0.12); color:var(--pink); border:1px solid rgba(255,0,110,0.3); }
+.cdb-search { flex:1; min-width:200px; max-width:340px; padding:9px 18px; border-radius:50px; border:2px solid rgba(255,255,255,0.12); background:rgba(255,255,255,0.05); color:white; font-family:'Rubik',sans-serif; font-size:0.88rem; outline:none; transition:all .3s; }
+.cdb-search:focus { border-color:var(--blue); box-shadow:0 0 16px rgba(0,207,255,0.2); }
+.cdb-search::placeholder { color:rgba(255,255,255,0.3); }
+
+/* ===== REBIRTHS ===== */
+#rebirths { background:linear-gradient(180deg,#07080f 0%,#0a0d18 100%); }
+.rb-table-wrap { overflow-x:auto; border-radius:16px; border:1.5px solid rgba(191,0,255,0.25); margin-bottom:28px; }
+.rb-table { width:100%; border-collapse:collapse; font-size:0.82rem; min-width:540px; }
+.rb-table thead tr { background:rgba(191,0,255,0.08); }
+.rb-table th { padding:12px 16px; text-align:right; font-family:'Fredoka One',cursive; font-size:0.82rem; color:var(--purple); border-bottom:1.5px solid rgba(191,0,255,0.2); }
+.rb-table td { padding:10px 16px; border-bottom:1px solid rgba(255,255,255,0.04); }
+.rb-table tr:last-child td { border-bottom:none; }
+.rb-table tr:hover td { background:rgba(191,0,255,0.04); }
+.rb-num-badge { font-family:'Fredoka One',cursive; font-size:0.82rem; padding:2px 11px; border-radius:50px; background:rgba(191,0,255,0.12); color:var(--purple); border:1px solid rgba(191,0,255,0.3); }
+.rb-keep-lose { display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-top:24px; }
+.rb-box { border-radius:18px; padding:22px; border:1.5px solid; }
+.rb-box-lose { background:rgba(255,45,45,0.05); border-color:rgba(255,45,45,0.25); }
+.rb-box-keep { background:rgba(57,255,20,0.04); border-color:rgba(57,255,20,0.2); }
+.rb-box-title { font-family:'Fredoka One',cursive; font-size:1rem; margin-bottom:12px; }
+.rb-list-item { display:flex; align-items:flex-start; gap:8px; margin-bottom:7px; font-size:0.84rem; color:rgba(255,255,255,0.72); line-height:1.5; }
+
+/* ===== DEFENSE ===== */
+#defense { background:#09090f; }
+.def-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:16px; margin-bottom:32px; }
+.def-card { background:var(--card-bg); border:1.5px solid var(--border); border-radius:18px; padding:18px; transition:all .3s; position:relative; overflow:hidden; }
+.def-card::before { content:''; position:absolute; top:0;left:0;right:0; height:3px; background:var(--dc); }
+.def-card:hover { transform:translateY(-5px); border-color:var(--dc); box-shadow:0 8px 28px rgba(0,0,0,0.45); }
+.def-icon { font-size:2.2rem; margin-bottom:8px; display:block; }
+.def-name { font-family:'Fredoka One',cursive; font-size:1rem; color:white; margin-bottom:10px; }
+.def-stats { display:flex; flex-direction:column; gap:5px; }
+.def-stat-row { display:flex; justify-content:space-between; font-size:0.76rem; }
+.def-stat-label { color:rgba(255,255,255,0.38); }
+.def-stat-val { font-family:'Fredoka One',cursive; font-size:0.76rem; }
+.meta-setup { background:linear-gradient(135deg,rgba(255,107,0,0.07),rgba(191,0,255,0.07)); border:2px solid rgba(255,107,0,0.3); border-radius:22px; padding:26px; }
+.meta-title { font-family:'Fredoka One',cursive; font-size:1.15rem; color:var(--orange); margin-bottom:18px; }
+.meta-flow { display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin-bottom:16px; }
+.meta-step { background:rgba(0,0,0,0.5); border-radius:12px; padding:10px 16px; text-align:center; border:1.5px solid rgba(255,255,255,0.1); min-width:80px; }
+.meta-step-icon { font-size:1.4rem; display:block; }
+.meta-step-name { font-family:'Fredoka One',cursive; font-size:0.72rem; color:rgba(255,255,255,0.8); margin-top:3px; }
+.meta-arrow { color:rgba(255,255,255,0.3); font-size:1.2rem; }
+.meta-desc { font-size:0.83rem; color:rgba(255,255,255,0.55); line-height:1.7; }
+
+/* ===== UPDATE LOG ===== */
+#updatelog { background:linear-gradient(180deg,#09090f 0%,#0b0710 100%); }
+.log-wall { display:flex; flex-direction:column; gap:0; }
+.log-entry { display:flex; gap:0; position:relative; }
+.log-entry:not(:last-child)::after { content:''; position:absolute; right:20px; top:42px; bottom:0; width:2px; background:rgba(255,255,255,0.07); }
+.log-dot-wrap { flex-shrink:0; width:42px; display:flex; flex-direction:column; align-items:center; padding-top:16px; }
+.log-dot { width:14px; height:14px; border-radius:50%; border:2px solid; flex-shrink:0; }
+.log-body { flex:1; background:var(--card-bg); border:1.5px solid var(--border); border-radius:18px; padding:18px 20px; margin-bottom:14px; margin-right:14px; transition:all .3s; }
+.log-body:hover { border-color:var(--lc); background:rgba(255,255,255,0.03); }
+.log-header { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; margin-bottom:10px; }
+.log-ver { font-family:'Fredoka One',cursive; font-size:1rem; color:var(--lc); }
+.log-date { font-size:0.72rem; color:rgba(255,255,255,0.3); font-family:'Fredoka One',cursive; }
+.log-tags { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:9px; }
+.log-tag { font-family:'Fredoka One',cursive; font-size:0.67rem; padding:2px 9px; border-radius:50px; }
+.log-new    { background:rgba(57,255,20,0.12); color:var(--neon); border:1px solid rgba(57,255,20,0.25); }
+.log-fix    { background:rgba(0,207,255,0.1); color:var(--blue); border:1px solid rgba(0,207,255,0.25); }
+.log-balance{ background:rgba(255,215,0,0.1); color:var(--gold); border:1px solid rgba(255,215,0,0.25); }
+.log-event  { background:rgba(255,0,110,0.1); color:var(--pink); border:1px solid rgba(255,0,110,0.25); }
+.log-items { display:flex; flex-direction:column; gap:4px; }
+.log-item { font-size:0.82rem; color:rgba(255,255,255,0.65); line-height:1.55; display:flex; gap:7px; }
+.log-item::before { content:'•'; color:var(--lc); flex-shrink:0; }
+
+/* ===== PRO TIPS ===== */
+#protips { background:#07080f; }
+.protips-tabs { display:flex; gap:8px; margin-bottom:24px; flex-wrap:wrap; justify-content:center; }
+.pt-tab { padding:8px 18px; border-radius:50px; border:2px solid rgba(255,255,255,0.1); background:rgba(255,255,255,0.04); color:rgba(255,255,255,0.6); cursor:pointer; font-family:'Fredoka One',cursive; font-size:0.82rem; transition:all .25s; }
+.pt-tab.active, .pt-tab:hover { color:#000; background:var(--orange); border-color:var(--orange); }
+.pt-panel { display:none; }
+.pt-panel.active { display:block; }
+.protips-list { display:flex; flex-direction:column; gap:10px; }
+.protip-row { display:flex; gap:14px; align-items:flex-start; background:rgba(255,255,255,0.03); border:1.5px solid rgba(255,255,255,0.07); border-radius:14px; padding:14px 18px; transition:all .25s; }
+.protip-row:hover { background:rgba(255,107,0,0.04); border-color:rgba(255,107,0,0.25); transform:translateX(-4px); }
+.protip-num { width:26px; height:26px; min-width:26px; border-radius:50%; background:linear-gradient(135deg,var(--orange),var(--red)); display:flex; align-items:center; justify-content:center; font-family:'Fredoka One',cursive; font-size:0.78rem; flex-shrink:0; }
+.protip-text { font-size:0.86rem; color:rgba(255,255,255,0.78); line-height:1.65; }
+.protip-text strong { color:white; }
+.protip-text .pt-dont { color:var(--red); }
+.protip-text .pt-do { color:var(--neon); }
+
 /* FOOTER */
 footer { position:relative;z-index:1;background:#040508;border-top:2px solid rgba(57,255,20,0.3);padding:36px 20px 20px;text-align:center; }
 .footer-logo { font-family:'Rubik Bubbles',cursive;font-size:1.8rem;background:linear-gradient(90deg,var(--neon),var(--blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent;display:block;margin-bottom:8px; }
@@ -412,6 +510,11 @@ footer { position:relative;z-index:1;background:#040508;border-top:2px solid rgb
     <li><a href="#strategy">🗺️ טקטיקות</a></li>
     <li><a href="#codes">🎟️ קודים</a></li>
     <li><a href="#activities">🎮 פעילויות</a></li>
+    <li><a href="#chardb">📊 מחירון</a></li>
+    <li><a href="#rebirths">🔄 Rebirth</a></li>
+    <li><a href="#defense">🛡️ הגנה</a></li>
+    <li><a href="#updatelog">📋 עדכונים</a></li>
+    <li><a href="#protips">🚀 Pro Tips</a></li>
   </ul>
 </nav>
 
@@ -779,6 +882,135 @@ footer { position:relative;z-index:1;background:#040508;border-top:2px solid rgb
       </div>
 
     </div>
+  </div>
+</section>
+
+<!-- ===== CHARDB ===== -->
+<section id="chardb">
+  <div class="container">
+    <div class="sec-header">
+      <div class="sec-title" style="background:linear-gradient(90deg,var(--blue),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">📊 מחירון ומאגר דמויות</div>
+      <p class="sec-sub">עלות, הכנסה, דירוג יעילות ושיטת השגה לכל דמות</p>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px;">
+      <input class="cdb-search" id="cdbSearch" placeholder="🔍 חפש שם דמות..." oninput="renderCDB()">
+    </div>
+    <div class="cdb-table-wrap">
+      <table class="cdb-table">
+        <thead><tr>
+          <th>דמות</th>
+          <th>נדירות</th>
+          <th>עלות קנייה</th>
+          <th>הכנסה /שנ'</th>
+          <th>יעילות</th>
+          <th>שיטת השגה</th>
+        </tr></thead>
+        <tbody id="cdbBody"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ===== REBIRTHS ===== -->
+<section id="rebirths">
+  <div class="container">
+    <div class="sec-header">
+      <div class="sec-title" style="background:linear-gradient(90deg,var(--purple),var(--blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">🔄 מחירון Rebirths</div>
+      <p class="sec-sub">כמה כסף צריך, מה מרוויחים, מה מאבדים — הכל כאן</p>
+    </div>
+    <div class="rb-table-wrap">
+      <table class="rb-table">
+        <thead><tr>
+          <th>שלב</th>
+          <th>עלות (Cash)</th>
+          <th>בונוס מכפיל</th>
+          <th>יתרונות נוספים</th>
+        </tr></thead>
+        <tbody>
+          <tr><td><span class="rb-num-badge">Rebirth 1</span></td><td style="color:var(--gold);font-family:'Fredoka One',cursive;">$10M</td><td style="color:var(--neon);">×1.5 הכנסה</td><td style="color:rgba(255,255,255,0.6);font-size:0.8rem;">פתח Rebirth Shop, שדרוג מסוע בסיסי</td></tr>
+          <tr><td><span class="rb-num-badge">Rebirth 2</span></td><td style="color:var(--gold);font-family:'Fredoka One',cursive;">$100M</td><td style="color:var(--neon);">×2 הכנסה</td><td style="color:rgba(255,255,255,0.6);font-size:0.8rem;">מהירות ריצה +10%, גישה לאזור Rebirth 2</td></tr>
+          <tr><td><span class="rb-num-badge">Rebirth 3</span></td><td style="color:var(--gold);font-family:'Fredoka One',cursive;">$1B</td><td style="color:var(--neon);">×3 הכנסה</td><td style="color:rgba(255,255,255,0.6);font-size:0.8rem;">עיצוב בסיס בלעדי, אפשרות לגנוב מהר יותר</td></tr>
+          <tr><td><span class="rb-num-badge">Rebirth 5</span></td><td style="color:var(--gold);font-family:'Fredoka One',cursive;">$10B</td><td style="color:var(--neon);">×5 הכנסה</td><td style="color:rgba(255,255,255,0.6);font-size:0.8rem;">מנעולים בחינם מדי 10 דקות, תג "Veteran"</td></tr>
+          <tr><td><span class="rb-num-badge">Rebirth 10</span></td><td style="color:var(--gold);font-family:'Fredoka One',cursive;">$1T</td><td style="color:var(--neon);">×10 הכנסה</td><td style="color:rgba(255,255,255,0.6);font-size:0.8rem;">Aura בלעדי, Fuse Machine x2 מהר יותר</td></tr>
+          <tr><td><span class="rb-num-badge">Rebirth 25</span></td><td style="color:var(--gold);font-family:'Fredoka One',cursive;">$1Q</td><td style="color:var(--neon);">×25 הכנסה</td><td style="color:rgba(255,255,255,0.6);font-size:0.8rem;">תואר "Sigma Reborn", גישה לאזור Secret בלעדי</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="rb-keep-lose">
+      <div class="rb-box rb-box-lose">
+        <div class="rb-box-title" style="color:var(--red);">❌ מה מאבדים</div>
+        <div class="rb-list-item"><span style="color:var(--red);">❌</span> כל הכסף (Cash) מתאפס לאפס</div>
+        <div class="rb-list-item"><span style="color:var(--red);">❌</span> כל הדמויות בבסיס מוחזרות</div>
+        <div class="rb-list-item"><span style="color:var(--red);">❌</span> שדרוגי חנות רגילים מתאפסים</div>
+        <div class="rb-list-item"><span style="color:var(--red);">❌</span> מיקום בבסיס מתאפס</div>
+      </div>
+      <div class="rb-box rb-box-keep">
+        <div class="rb-box-title" style="color:var(--neon);">✅ מה נשאר</div>
+        <div class="rb-list-item"><span style="color:var(--neon);">✅</span> בובות מיוחדות (Plushie items)</div>
+        <div class="rb-list-item"><span style="color:var(--neon);">✅</span> תגים ותארים שהשגת</div>
+        <div class="rb-list-item"><span style="color:var(--neon);">✅</span> מכפיל ה-Rebirth לנצח</div>
+        <div class="rb-list-item"><span style="color:var(--neon);">✅</span> פריטים מ-Rebirth Shop</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== DEFENSE ===== -->
+<section id="defense">
+  <div class="container">
+    <div class="sec-header">
+      <div class="sec-title" style="background:linear-gradient(90deg,var(--orange),var(--red));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">🛡️ קטלוג הגנות ומלכודות</div>
+      <p class="sec-sub">נזק, Cool Down, ועלות — ובנוסף ה-Meta Setup הכי חזק</p>
+    </div>
+    <div class="def-grid" id="defGrid"></div>
+    <div class="meta-setup">
+      <div class="meta-title">🏆 Meta Setup — השילוב הכי חזק</div>
+      <div class="meta-flow">
+        <div class="meta-step"><span class="meta-step-icon">🔒</span><div class="meta-step-name">Lock ×3</div></div>
+        <span class="meta-arrow">▶</span>
+        <div class="meta-step"><span class="meta-step-icon">🔫</span><div class="meta-step-name">Sentries ×4</div></div>
+        <span class="meta-arrow">▶</span>
+        <div class="meta-step"><span class="meta-step-icon">💣</span><div class="meta-step-name">Traps ×6</div></div>
+        <span class="meta-arrow">▶</span>
+        <div class="meta-step"><span class="meta-step-icon">⚡</span><div class="meta-step-name">Laser ×2</div></div>
+        <span class="meta-arrow">▶</span>
+        <div class="meta-step"><span class="meta-step-icon">🌟</span><div class="meta-step-name">דמויות במרכז</div></div>
+      </div>
+      <div class="meta-desc">
+        <strong style="color:white;">איך זה עובד:</strong> מנעולים מאטים גנב בכניסה → Sentries יורים מיד ומורידים HP → Traps מתפוצצות בקרב → לייזרים מכסים את האזור הפנימי. דמות OG/Secret שמה במרכז מוקפת בכל שכבות ההגנה. <strong style="color:var(--orange);">הגנב יזדקק לציוד Level 50+ כדי אפילו להתקרב.</strong>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== UPDATE LOG ===== -->
+<section id="updatelog">
+  <div class="container">
+    <div class="sec-header">
+      <div class="sec-title" style="background:linear-gradient(90deg,var(--neon),var(--blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">📋 לוח עדכונים — Update Log</div>
+      <p class="sec-sub">כל מה שנוסף ותוקן — מהעדכון האחרון לראשון</p>
+    </div>
+    <div class="log-wall" id="logWall"></div>
+  </div>
+</section>
+
+<!-- ===== PRO TIPS ===== -->
+<section id="protips">
+  <div class="container">
+    <div class="sec-header">
+      <div class="sec-title" style="background:linear-gradient(90deg,var(--orange),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">🚀 Pro Tips — מדריך המתחיל</div>
+      <p class="sec-sub">טיפים קטנים שעושים הבדל גדול — sigma knowledge בלבד</p>
+    </div>
+    <div class="protips-tabs">
+      <button class="pt-tab active" onclick="switchPT('early',this)">🌱 תחילת המשחק</button>
+      <button class="pt-tab" onclick="switchPT('steal',this)">🥷 גניבה</button>
+      <button class="pt-tab" onclick="switchPT('money',this)">💰 כסף מהיר</button>
+      <button class="pt-tab" onclick="switchPT('advanced',this)">🔥 Level מתקדם</button>
+    </div>
+    <div class="pt-panel active" id="pt-early"></div>
+    <div class="pt-panel" id="pt-steal"></div>
+    <div class="pt-panel" id="pt-money"></div>
+    <div class="pt-panel" id="pt-advanced"></div>
   </div>
 </section>
 
@@ -1275,6 +1507,201 @@ function updateLbScore(){
 }
 renderLB();
 if(localStorage.getItem('myLbName')) document.getElementById('lbJoinRow').style.display='none';
+
+// ===== CHAR DATABASE =====
+const CDB_DATA = [
+  // Common
+  {name:'Noobini Santanini',   r:'Common',   cost:'$1,000',    cps:5,       eff:2, acq:'conveyor'},
+  {name:'Noobini Pizzanini',   r:'Common',   cost:'$1,100',    cps:6,       eff:2, acq:'conveyor'},
+  {name:'Svinina Bombardino',  r:'Common',   cost:'$1,200',    cps:7,       eff:2, acq:'conveyor'},
+  {name:'Raccooni Jandelini',  r:'Common',   cost:'$1,300',    cps:10,      eff:3, acq:'conveyor'},
+  {name:'Pipi Kiwi',           r:'Common',   cost:'$1,500',    cps:11,      eff:3, acq:'conveyor'},
+  {name:'Lirili Larila',       r:'Common',   cost:'$1,600',    cps:12,      eff:3, acq:'conveyor'},
+  {name:'Pipi Corni',          r:'Common',   cost:'$1,700',    cps:12,      eff:3, acq:'conveyor'},
+  {name:'Tartaragno',          r:'Common',   cost:'$1,900',    cps:12,      eff:3, acq:'conveyor'},
+  // Rare
+  {name:'Trippi Troppi',       r:'Rare',     cost:'$2,000',    cps:15,      eff:4, acq:'conveyor'},
+  {name:'Gangster Footera',    r:'Rare',     cost:'$4,000',    cps:30,      eff:4, acq:'conveyor'},
+  {name:'Boneca Ambalabu',     r:'Rare',     cost:'$5,000',    cps:40,      eff:4, acq:'conveyor'},
+  {name:'Cacto Hipopotamo',    r:'Rare',     cost:'$6,500',    cps:50,      eff:4, acq:'conveyor'},
+  {name:'Ta Ta Ta Ta Sahur',   r:'Rare',     cost:'$7,500',    cps:55,      eff:4, acq:'conveyor'},
+  {name:'Tric Trac Baraboom',  r:'Rare',     cost:'$8,000',    cps:60,      eff:4, acq:'conveyor'},
+  {name:'Frogo Elfo',          r:'Rare',     cost:'$9,200',    cps:67,      eff:4, acq:'conveyor'},
+  {name:'Pipi Avocado',        r:'Rare',     cost:'$9,500',    cps:70,      eff:4, acq:'conveyor'},
+  // Epic
+  {name:'Cappuccino Assassino',           r:'Epic', cost:'$10,000',  cps:75,      eff:5, acq:'conveyor'},
+  {name:'Brr Brr Patapim',                r:'Epic', cost:'$15,000',  cps:100,     eff:5, acq:'conveyor'},
+  {name:'Avocadini Antilopini',           r:'Epic', cost:'$17,500',  cps:120,     eff:5, acq:'conveyor'},
+  {name:'Trulimero Trulicina',            r:'Epic', cost:'$20,000',  cps:150,     eff:5, acq:'conveyor'},
+  {name:'Perochello Lemonchello',         r:'Epic', cost:'$25,000',  cps:160,     eff:5, acq:'conveyor'},
+  {name:'Brri Brri Bicus Dicus Bombicus', r:'Epic', cost:'$30,000',  cps:175,     eff:5, acq:'conveyor'},
+  {name:'Avocadini Guffo',                r:'Epic', cost:'$35,000',  cps:225,     eff:6, acq:'conveyor'},
+  {name:'Salamino Penguino',              r:'Epic', cost:'$42,000',  cps:280,     eff:6, acq:'conveyor'},
+  // Legendary
+  {name:'Burbaloni Loliloli',         r:'Legendary', cost:'$45,000',   cps:300,  eff:6, acq:'conveyor'},
+  {name:'Chimpanzini Bananini',       r:'Legendary', cost:'$50,000',   cps:320,  eff:6, acq:'conveyor'},
+  {name:'Ballerina Cappuccina',       r:'Legendary', cost:'$100,000',  cps:500,  eff:7, acq:'conveyor'},
+  {name:'Chef Crabracadabra',         r:'Legendary', cost:'$150,000',  cps:600,  eff:7, acq:'conveyor'},
+  {name:'Glorbo Fruttodrillo',        r:'Legendary', cost:'$200,000',  cps:750,  eff:7, acq:'conveyor'},
+  {name:'Blueberrini Octopusini',     r:'Legendary', cost:'$250,000',  cps:1000, eff:7, acq:'conveyor'},
+  {name:'Sigma Girl',                 r:'Legendary', cost:'$340,000',  cps:1750, eff:8, acq:'conveyor'},
+  // Mythic
+  {name:'Frigo Camelo',                      r:'Mythic', cost:'$350,000',   cps:2000,   eff:7, acq:'fuse'},
+  {name:'Bombardiro Crocodilo',              r:'Mythic', cost:'$500,000',   cps:2500,   eff:7, acq:'fuse'},
+  {name:'Bombombini Gusini',                 r:'Mythic', cost:'$1,000,000', cps:5000,   eff:8, acq:'fuse'},
+  {name:'Cavallo Virtuoso',                  r:'Mythic', cost:'$2,500,000', cps:7500,   eff:8, acq:'fuse'},
+  {name:'Lerulerulerule',                    r:'Mythic', cost:'$3,500,000', cps:8700,   eff:8, acq:'fuse'},
+  {name:'Te Te Te Sahur',                    r:'Mythic', cost:'$4,000,000', cps:9500,   eff:8, acq:'fuse'},
+  {name:'Toiletto Focaccino',                r:'Mythic', cost:'$4,850,000', cps:16000,  eff:9, acq:'fuse'},
+  // God
+  {name:'Tralalero Tralala',       r:'God', cost:'מיוחד',   cps:42000,  eff:9, acq:'craft'},
+  {name:'Cocofanto / Elefanto',    r:'God', cost:'מיוחד',   cps:95000,  eff:9, acq:'craft'},
+  {name:'Girafa Celestre',         r:'God', cost:'מיוחד',   cps:280000, eff:9, acq:'craft'},
+  {name:'Trenostruzzo Turbo 3000', r:'God', cost:'מיוחד',   cps:315000, eff:9, acq:'craft'},
+  // Secret
+  {name:'Spaghetti Tualetti',   r:'Secret', cost:'$15B',   cps:6e7,  eff:10, acq:'conveyor'},
+  {name:'Dragon Cannelloni',    r:'Secret', cost:'$100B',  cps:1e8,  eff:10, acq:'conveyor'},
+  {name:'Griffin',              r:'Secret', cost:'$400B',  cps:4e8,  eff:10, acq:'conveyor'},
+  // OG
+  {name:'Skibidi Toilet',      r:'OG', cost:'$450B',  cps:4.5e8, eff:10, acq:'event'},
+  {name:'John Pork',           r:'OG', cost:'$500B',  cps:5e8,   eff:10, acq:'event'},
+  {name:'Strawberry Elephant', r:'OG', cost:'$750B',  cps:7.5e8, eff:10, acq:'event'},
+];
+const ACQ_CFG = {
+  conveyor:{label:'מסוע רגיל', cls:'acq-conveyor'},
+  craft:   {label:'Craft Machine', cls:'acq-craft'},
+  fuse:    {label:'Fuse Machine', cls:'acq-fuse'},
+  event:   {label:'אירוע / OG', cls:'acq-event'},
+};
+function fmtCps(n){
+  if(n>=1e8) return '$'+(n/1e8).toFixed(0)+'M/שנ';
+  if(n>=1e6) return '$'+(n/1e6).toFixed(1)+'M/שנ';
+  if(n>=1e3) return '$'+(n/1e3).toFixed(0)+'K/שנ';
+  return '$'+n+'/שנ';
+}
+function effColor(e){ return e>=9?'#39ff14':e>=7?'#ffd700':e>=5?'#00cfff':'#aaa'; }
+function renderCDB(){
+  const q=(document.getElementById('cdbSearch')||{value:''}).value.toLowerCase().trim();
+  const rows=CDB_DATA.filter(c=>!q||c.name.toLowerCase().includes(q));
+  const body=document.getElementById('cdbBody');
+  if(!body) return;
+  const cfg=CFG;
+  body.innerHTML=rows.map(c=>{
+    const rc=cfg[c.r]||{color:'#aaa',icon:'⚪'};
+    const ec=effColor(c.eff);
+    const acq=ACQ_CFG[c.acq]||ACQ_CFG.conveyor;
+    return `<tr>
+      <td style="font-family:'Fredoka One',cursive;color:white;font-size:0.84rem;">${c.name}</td>
+      <td><span class="cdb-rarity-dot" style="background:${rc.color}"></span><span style="font-family:'Fredoka One',cursive;font-size:0.78rem;color:${rc.color}">${c.r}</span></td>
+      <td style="font-family:'Fredoka One',cursive;color:#7dff7d;font-size:0.82rem;">${c.cost}</td>
+      <td style="font-family:'Fredoka One',cursive;color:${rc.color};font-size:0.82rem;">${fmtCps(c.cps)}</td>
+      <td>
+        <div class="eff-bar-wrap" style="--bc:${ec}">
+          <div class="eff-bar" style="background:linear-gradient(90deg,${ec},${ec}88);width:${c.eff*10}%"></div>
+          <span class="eff-num">${c.eff}/10</span>
+        </div>
+      </td>
+      <td><span class="acq-badge ${acq.cls}">${acq.label}</span></td>
+    </tr>`;
+  }).join('');
+  if(!rows.length) body.innerHTML='<tr><td colspan="6" style="text-align:center;padding:30px;color:rgba(255,255,255,0.3);font-family:\'Fredoka One\',cursive;">😭 לא נמצאו דמויות</td></tr>';
+}
+renderCDB();
+
+// ===== DEFENSE CATALOG =====
+const DEF_DATA=[
+  {icon:'🔒',name:'מנעול בסיס (Lock)',  dmg:'—',       cd:'—',        cost:'$5,000',   color:'#00cfff', desc:'חוסם כניסה לזמן קצר, מאלץ גנב לבזבז זמן בפריצה'},
+  {icon:'🔫',name:'Sentry (רובוט שמירה)',dmg:'15 HP/shot',cd:'0.5 שנ',  cost:'$25,000',  color:'#ff6b00', desc:'יורה אוטומטית בכל גנב שנכנס לטווח'},
+  {icon:'💣',name:'מלכודת פיצוץ (Trap)',dmg:'35 HP',    cd:'30 שנ',    cost:'$50,000',  color:'#ff2d2d', desc:'מתפוצצת עם מגע — נזק גדול, צריך לטעון מחדש'},
+  {icon:'⚡',name:'לייזר (Laser Wall)', dmg:'8 HP/שנ',  cd:'אין',      cost:'$100,000', color:'#bf00ff', desc:'קיר אנרגיה שפועל כל הזמן ומוריד HP לאט'},
+  {icon:'🌀',name:'Vortex Trap',         dmg:'25 HP',    cd:'45 שנ',   cost:'$200,000', color:'#ff006e', desc:'מושך גנב ומקפיא אותו לכמה שניות'},
+  {icon:'🤖',name:'Guardian Bot',        dmg:'20 HP/hit',cd:'1 שנ',    cost:'$500,000', color:'#ffd700', desc:'בוט שרודף אחרי גנב כשנכנס לאזור הפנימי'},
+];
+(function buildDefGrid(){
+  const grid=document.getElementById('defGrid'); if(!grid) return;
+  grid.innerHTML=DEF_DATA.map(d=>`
+    <div class="def-card" style="--dc:${d.color}">
+      <span class="def-icon">${d.icon}</span>
+      <div class="def-name">${d.name}</div>
+      <div class="def-stats">
+        <div class="def-stat-row"><span class="def-stat-label">💥 נזק</span><span class="def-stat-val" style="color:var(--red)">${d.dmg}</span></div>
+        <div class="def-stat-row"><span class="def-stat-label">⏱️ Cool Down</span><span class="def-stat-val" style="color:var(--blue)">${d.cd}</span></div>
+        <div class="def-stat-row"><span class="def-stat-label">💰 עלות</span><span class="def-stat-val" style="color:var(--gold)">${d.cost}</span></div>
+      </div>
+      <p style="font-size:0.75rem;color:rgba(255,255,255,0.45);margin-top:10px;line-height:1.55;">${d.desc}</p>
+    </div>`).join('');
+})();
+
+// ===== UPDATE LOG =====
+const UPDATES=[
+  {ver:'עדכון 7 (האחרון)',date:'מאי 2026',color:'#39ff14',tags:['new','balance','fix'],items:['נוספה דמות OG חדשה — Meowl','אוזנה הכנסת Toiletto Focaccino (ירדה מ-20K ל-16K CPS)','תוקן באג שגרם ל-Fuse Machine לא לעבוד בסרברים גדולים','נוסף אפקט חדש לגלגל המזל']},
+  {ver:'עדכון 6',date:'אפריל 2026',color:'#ffd700',tags:['new','event'],items:['אירוע "Italian Spring" — דמויות אירוע לזמן מוגבל','נוספו Rebirth 20–25 עם Aura בלעדי','שיפור ביצועי השרת ב-40%','נוסף לוח מובילים Rebirth']},
+  {ver:'עדכון 5',date:'מרץ 2026',color:'#00cfff',tags:['new','fix'],items:['נוספו 4 דמויות Mythic חדשות','תוקן באג המעלית שגרם לשחקנים להיתקע','נוסף Guardian Bot לקטלוג ההגנות','שיפורי UI בתפריט הבסיס']},
+  {ver:'עדכון 4',date:'פברואר 2026',color:'#bf00ff',tags:['new','balance'],items:['נוסף Craft Machine עם 12 מתכונים חדשים','God Tier — 4 דמויות חדשות','אוזנו עלויות ה-Lock וה-Sentry','נוסף תג "Rebirth Master" ל-Rebirth 10+']},
+  {ver:'עדכון 3',date:'ינואר 2026',color:'#ff006e',tags:['new','event'],items:['אירוע חורף — דמויות שלג לזמן מוגבל','נוספו קודים ציבוריים (Codes System)','תוקן באג גניבה שאפשר גניבה כפולה','שיפור מהירות טעינה של הבסיס']},
+  {ver:'עדכון 2',date:'דצמבר 2025',color:'#ff6b00',tags:['new'],items:['נוספו Secret Tier עם 5 דמויות','Fuse Machine עלתה לרמה 2','נוסף מצב Hardcore (ללא מנעולים)','נוסף אזור חדש למפה']},
+  {ver:'עדכון 1 (השקה)',date:'נובמבר 2025',color:'#aaa',tags:['new'],items:['השקת המשחק עם 40 דמויות','Common עד Legendary בהשקה','Fuse Machine בסיסית','מערכת גניבה בסיסית + Leaderboard']},
+];
+const TAG_CFG={new:{cls:'log-new',label:'✨ חדש'},fix:{cls:'log-fix',label:'🔧 תיקון'},balance:{cls:'log-balance',label:'⚖️ איזון'},event:{cls:'log-event',label:'🎉 אירוע'}};
+(function buildLog(){
+  const wall=document.getElementById('logWall'); if(!wall) return;
+  wall.innerHTML=UPDATES.map(u=>`
+    <div class="log-entry">
+      <div class="log-dot-wrap">
+        <div class="log-dot" style="background:${u.color};border-color:${u.color};box-shadow:0 0 9px ${u.color}88"></div>
+      </div>
+      <div class="log-body" style="--lc:${u.color}">
+        <div class="log-header">
+          <span class="log-ver">${u.ver}</span>
+          <span class="log-date">${u.date}</span>
+        </div>
+        <div class="log-tags">${u.tags.map(t=>`<span class="log-tag ${TAG_CFG[t].cls}">${TAG_CFG[t].label}</span>`).join('')}</div>
+        <div class="log-items">${u.items.map(it=>`<div class="log-item">${it}</div>`).join('')}</div>
+      </div>
+    </div>`).join('');
+})();
+
+// ===== PRO TIPS =====
+const PT_DATA={
+  early:[
+    {t:'אל תקנה דמויות Common רבות — לא משתלם!',d:'<span class="pt-dont">❌ אל:</span> לבזבז $50K על 30 Common. <span class="pt-do">✅ כן:</span> חסוך עד Rare/Epic — ROI הרבה יותר טוב.'},
+    {t:'תתמקד ב-Trippi Troppi קודם',d:'הדמות הראשונה שבאמת שווה — <strong>Rare בעלות $2,000</strong>. קנה אותה לפני כל שדרוג אחר בתחילת המשחק.'},
+    {t:'אל תשים הגנות לפני שיש לך Legendary+',d:'הוצאה על הגנות מוקדם מדי רק מאטה אותך. <strong>קודם צבור דמויות חזקות</strong>, אחר כך בנה הגנה.'},
+    {t:'אחסן כסף לפני קניית מנעול',d:'מנעולים עולים $5,000 — בתחילת המשחק זה הרבה. <strong>קנה רק אחרי שיש לך כסף יציב.</strong>'},
+  ],
+  steal:[
+    {t:'כנס תמיד מהצד — לא מהפנים',d:'<strong>90% מהמלכודות נמצאות בכניסה הראשית</strong>. מסלול צידי = פחות נזק, יותר סיכוי להגיע לדמויות.'},
+    {t:'גנוב כשהשחקן אופליין',d:'<span class="pt-do">✅ טיפ:</span> המתן שהשחקן יצא מהשרת. אין לו Sentry מנוהל → קל יותר להיכנס.'},
+    {t:'קח קודם את הדמות הכי יקרה',d:'אם נתפסים — לפחות הצלנו את ה-OG. <strong>תמיד גנוב לפי סדר עלות — מהיקר לזול.</strong>'},
+    {t:'השתמש ב-Invisibility Cloak',d:'הציוד הכי חשוב לגניבה. <strong>חוסך 80% מהנזק של Sentries</strong>. קנה לפני כל פשיטה.'},
+    {t:'לחץ F בדיוק כשנכנסת לטווח',d:'<span class="qt-key">F</span> מתחיל גניבה — <strong>כל שנייה שמחכים = יותר נזק מהלייזרים</strong>. לחץ מיד.'},
+  ],
+  money:[
+    {t:'מלא בסיס לפני אופליין',d:'הכסף <strong>מצטבר גם כשאתה לא שם</strong>. לפני כל יציאה — מלא את כל משבצות הבסיס.'},
+    {t:'Fuse Machine = ROI הכי טוב',d:'הקרב 4 Legendary → קבל Mythic. <strong>פי 3-5 יותר CPS</strong> מהשקעת 4 דמויות בנפרד.'},
+    {t:'שמור 10% מהכסף תמיד כרזרבה',d:'תמיד שמור רזרבה לקנות מנעולים חדשים אם הישנים נשברו. <strong>אחרת תאבד הכל.</strong>'},
+    {t:'כסף × Rebirth Multiplier = הכל',d:'ה-Multiplier נשאר לנצח! Rebirth 3 = <strong>כל מה שתרוויח × 3 לנצח</strong>. מאוד משתלם.'},
+  ],
+  advanced:[
+    {t:'Craft Machine — קרא את המתכונים',d:'כמה דמויות God ניתן להשיג <strong>רק דרך Craft Machine</strong>. ללא ידיעת המתכונים תפספס אותן.'},
+    {t:'כמה Sentries מספיק?',d:'<strong>4 Sentries מינימום</strong> לבסיס Mythic+. פחות מזה — גנבים יעברו בקלות.'},
+    {t:'Rebirth בזמן הנכון × 2',d:'Rebirth 1 ב-$10M הוא ה-ROI הכי קצר. אחרי Rebirth 2 — כבר קשה הרבה יותר. <strong>עשה Rebirth 1 מוקדם ככל האפשר.</strong>'},
+    {t:'לייזר + Trap = קומבו קטלני',d:'Laser מוריד HP → Trap מסיים. <strong>שים Laser לפני כל Trap</strong> כדי שהגנב יגיע חלש למלכודת.'},
+  ],
+};
+function switchPT(key,btn){
+  document.querySelectorAll('.pt-tab').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.pt-panel').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  const panel=document.getElementById('pt-'+key); if(!panel) return;
+  panel.classList.add('active');
+  panel.innerHTML=`<div class="protips-list">${(PT_DATA[key]||[]).map((tip,i)=>`
+    <div class="protip-row">
+      <div class="protip-num">${i+1}</div>
+      <div class="protip-text"><strong>${tip.t}</strong><br><span style="font-weight:400;">${tip.d}</span></div>
+    </div>`).join('')}</div>`;
+}
+switchPT('early',document.querySelector('.pt-tab'));
 </script>
 </body>
 </html>
