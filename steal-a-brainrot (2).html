@@ -262,6 +262,139 @@ footer { position:relative;z-index:1;background:#040508;border-top:2px solid rgb
 
 .reveal { opacity:0; transform:translateY(28px); transition:opacity 0.55s,transform 0.55s; }
 .reveal.vis { opacity:1; transform:none; }
+
+/* ===== SHOWCASE ===== */
+#showcase { background:linear-gradient(180deg,#090a12 0%,#0d0820 100%); }
+.showcase-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(190px,1fr)); gap:18px; }
+.showcase-stage { background:rgba(255,255,255,0.04); border:1.5px solid var(--border); border-radius:20px; padding:18px; text-align:center; transition:all 0.35s; position:relative; overflow:hidden; }
+.showcase-stage::before { content:''; position:absolute; top:0;left:0;right:0; height:3px; background:var(--sc); }
+.showcase-stage:hover { transform:translateY(-8px) scale(1.02); border-color:var(--sc); box-shadow:0 12px 40px rgba(0,0,0,0.5); }
+.stage-3d { width:88px; height:88px; margin:0 auto 8px; display:flex; align-items:center; justify-content:center; }
+.stage-emoji { font-size:3.2rem; display:block; animation:stageFloat 3s ease-in-out infinite; filter:drop-shadow(0 6px 18px var(--sc)); }
+.stage-shadow { width:58px; height:8px; margin:-4px auto 8px; background:var(--sc); border-radius:50%; opacity:0.3; filter:blur(4px); animation:stageShadow 3s ease-in-out infinite; }
+.stage-name { font-family:'Fredoka One',cursive; font-size:0.88rem; color:white; margin-bottom:4px; line-height:1.3; }
+.stage-rarity { font-family:'Fredoka One',cursive; font-size:0.7rem; padding:2px 10px; border-radius:50px; border:1px solid var(--sc); color:var(--sc); background:rgba(0,0,0,0.4); display:inline-block; margin-bottom:9px; }
+.stage-stats-board { background:rgba(0,0,0,0.45); border-radius:10px; padding:9px; margin-bottom:10px; border:1px solid rgba(255,255,255,0.07); text-align:right; }
+.ssb-row { display:flex; justify-content:space-between; font-size:0.73rem; margin-bottom:4px; }
+.ssb-row:last-child { margin-bottom:0; }
+.ssb-label { color:rgba(255,255,255,0.4); }
+.ssb-val { font-family:'Fredoka One',cursive; color:var(--sc); }
+.btn-try-sound { width:100%; padding:8px; border-radius:50px; border:1px solid rgba(255,255,255,0.15); background:rgba(255,255,255,0.05); color:rgba(255,255,255,0.8); cursor:pointer; font-family:'Fredoka One',cursive; font-size:0.8rem; transition:all 0.25s; }
+.btn-try-sound:hover { background:var(--sc); color:#000; border-color:var(--sc); }
+.btn-try-sound:active { transform:scale(0.95); }
+@keyframes stageFloat { 0%,100%{transform:translateY(0);}50%{transform:translateY(-9px);} }
+@keyframes stageShadow { 0%,100%{transform:scaleX(1);opacity:0.3;}50%{transform:scaleX(0.7);opacity:0.15;} }
+
+/* ===== STRATEGY ===== */
+#strategy { background:#07080f; }
+.strategy-tabs { display:flex; gap:8px; margin-bottom:28px; flex-wrap:wrap; justify-content:center; }
+.strat-tab { padding:9px 20px; border-radius:50px; border:2px solid rgba(255,255,255,0.12); background:rgba(255,255,255,0.04); color:rgba(255,255,255,0.65); cursor:pointer; font-family:'Fredoka One',cursive; font-size:0.85rem; transition:all 0.25s; }
+.strat-tab.active,.strat-tab:hover { color:#000; background:var(--blue); border-color:var(--blue); }
+.strat-panel { display:none; }
+.strat-panel.active { display:block; }
+.strat-content { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:24px; }
+.strat-card { background:var(--card-bg); border:1.5px solid var(--border); border-radius:20px; padding:24px; }
+.strat-card-title { font-family:'Fredoka One',cursive; font-size:1.1rem; color:white; margin-bottom:14px; display:flex; align-items:center; gap:8px; }
+.mock-base-wrap { background:rgba(0,0,0,0.45); border-radius:16px; padding:18px; border:1px solid rgba(57,255,20,0.2); }
+.mock-base-label { font-family:'Fredoka One',cursive; font-size:0.9rem; color:var(--neon); margin-bottom:12px; }
+.base-grid { display:grid; grid-template-columns:repeat(6,1fr); gap:6px; margin-bottom:14px; }
+.base-cell { aspect-ratio:1; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:1.2rem; transition:all 0.2s; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.07); }
+.base-cell.sentry { background:rgba(255,107,0,0.1); border-color:rgba(255,107,0,0.4); }
+.base-cell.trap { background:rgba(255,45,45,0.1); border-color:rgba(255,45,45,0.35); }
+.base-cell.lock { background:rgba(0,207,255,0.08); border-color:rgba(0,207,255,0.3); }
+.base-cell.char-cell { background:rgba(57,255,20,0.06); border-color:rgba(57,255,20,0.25); }
+.base-cell:hover { transform:scale(1.12); z-index:2; }
+.base-legend { display:flex; gap:12px; flex-wrap:wrap; }
+.bl-item { display:flex; align-items:center; gap:5px; font-size:0.73rem; color:rgba(255,255,255,0.55); }
+.rb-slider-wrap { margin:14px 0; }
+.rb-lbl { font-size:0.82rem; color:rgba(255,255,255,0.6); margin-bottom:6px; display:flex; justify-content:space-between; }
+.rb-slider { -webkit-appearance:none; width:100%; height:6px; border-radius:3px; background:rgba(255,255,255,0.1); outline:none; cursor:pointer; }
+.rb-slider::-webkit-slider-thumb { -webkit-appearance:none; width:18px; height:18px; border-radius:50%; background:var(--purple); cursor:pointer; box-shadow:0 0 10px rgba(191,0,255,0.5); }
+.rb-result { margin-top:16px; background:rgba(0,0,0,0.45); border-radius:14px; padding:16px; text-align:center; border:1.5px solid rgba(255,255,255,0.08); min-height:72px; display:flex; flex-direction:column; justify-content:center; }
+.rb-verdict { font-family:'Fredoka One',cursive; font-size:1.25rem; margin-bottom:5px; }
+.rb-detail { font-size:0.78rem; color:rgba(255,255,255,0.5); line-height:1.6; }
+.quick-tips { display:flex; flex-direction:column; gap:9px; }
+.qt-item { display:flex; align-items:flex-start; gap:12px; background:rgba(0,0,0,0.35); border-radius:12px; padding:12px 14px; border-right:3px solid var(--neon); font-size:0.84rem; color:rgba(255,255,255,0.78); line-height:1.55; transition:all 0.2s; }
+.qt-item:hover { background:rgba(57,255,20,0.05); transform:translateX(-4px); }
+.qt-icon { font-size:1.2rem; flex-shrink:0; margin-top:2px; }
+.qt-key { display:inline-block; background:rgba(255,255,255,0.12); font-family:'Fredoka One',cursive; font-size:0.68rem; padding:1px 7px; border-radius:5px; border:1px solid rgba(255,255,255,0.2); color:rgba(255,255,255,0.9); margin:0 2px; }
+
+/* ===== CODES ===== */
+#codes { background:linear-gradient(180deg,#07080f 0%,#0e0817 100%); }
+.codes-layout { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:28px; }
+.codes-card { background:var(--card-bg); border:1.5px solid var(--border); border-radius:22px; padding:24px; }
+.codes-card-title { font-family:'Fredoka One',cursive; font-size:1.15rem; margin-bottom:16px; display:flex; align-items:center; gap:9px; }
+.plushies-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(105px,1fr)); gap:10px; margin-bottom:18px; }
+.plushie-card { background:rgba(255,255,255,0.04); border-radius:13px; padding:12px 8px; text-align:center; border:1.5px solid rgba(255,255,255,0.09); transition:all 0.3s; }
+.plushie-card:hover { transform:translateY(-5px) rotate(-2deg); border-color:var(--gold); background:rgba(255,215,0,0.05); }
+.plushie-emoji { font-size:2.2rem; display:block; margin-bottom:5px; }
+.plushie-name { font-family:'Fredoka One',cursive; font-size:0.7rem; color:rgba(255,255,255,0.85); margin-bottom:3px; }
+.plushie-price { font-size:0.67rem; color:var(--gold); }
+.redeem-step { display:flex; gap:10px; padding:8px 4px; border-bottom:1px solid rgba(255,255,255,0.05); align-items:flex-start; }
+.redeem-step:last-child { border-bottom:none; }
+.rs-num { width:22px; height:22px; min-width:22px; border-radius:50%; background:linear-gradient(135deg,var(--purple),var(--pink)); display:flex; align-items:center; justify-content:center; font-family:'Fredoka One',cursive; font-size:0.72rem; }
+.rs-text { font-size:0.82rem; color:rgba(255,255,255,0.7); line-height:1.55; }
+.live-dot { width:8px; height:8px; border-radius:50%; background:var(--neon); animation:blink 1.2s ease-in-out infinite; display:inline-block; margin-right:5px; }
+.code-row { display:flex; justify-content:space-between; align-items:center; gap:8px; padding:10px 12px; border-radius:10px; margin-bottom:7px; border:1px solid rgba(255,255,255,0.07); background:rgba(255,255,255,0.03); transition:all 0.25s; flex-wrap:wrap; }
+.code-row:hover { background:rgba(255,255,255,0.06); }
+.code-row.active-code { border-color:rgba(57,255,20,0.3); background:rgba(57,255,20,0.04); }
+.code-row.expired-code { opacity:0.42; }
+.cr-code { font-family:'Fredoka One',cursive; color:var(--gold); font-size:0.88rem; letter-spacing:1px; }
+.cr-reward { font-size:0.72rem; color:rgba(255,255,255,0.5); flex:1; padding:0 6px; }
+.cr-status { font-family:'Fredoka One',cursive; font-size:0.68rem; padding:2px 8px; border-radius:50px; white-space:nowrap; }
+.cr-status.active-tag { background:rgba(57,255,20,0.15); color:var(--neon); border:1px solid rgba(57,255,20,0.3); }
+.cr-status.expired-tag { background:rgba(255,45,45,0.12); color:var(--red); border:1px solid rgba(255,45,45,0.25); }
+.copy-code-btn { font-family:'Fredoka One',cursive; font-size:0.68rem; padding:3px 8px; border-radius:50px; border:1px solid rgba(255,255,255,0.15); background:transparent; color:rgba(255,255,255,0.65); cursor:pointer; transition:all 0.2s; white-space:nowrap; }
+.copy-code-btn:hover { background:var(--blue); border-color:var(--blue); color:#000; }
+@keyframes blink { 0%,100%{opacity:1;}50%{opacity:0.15;} }
+
+/* ===== ACTIVITIES ===== */
+#activities { background:#090a12; }
+.activities-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(290px,1fr)); gap:24px; }
+.act-card { background:var(--card-bg); border:1.5px solid var(--border); border-radius:22px; padding:24px; }
+.act-title { font-family:'Fredoka One',cursive; font-size:1.2rem; margin-bottom:16px; display:flex; align-items:center; gap:9px; }
+.quiz-progress { display:flex; gap:4px; margin-bottom:14px; }
+.quiz-pip { flex:1; height:4px; border-radius:2px; background:rgba(255,255,255,0.1); transition:background 0.3s; }
+.quiz-pip.done { background:var(--neon); }
+.quiz-pip.current { background:var(--blue); }
+.quiz-q { font-size:0.91rem; color:rgba(255,255,255,0.9); font-weight:700; margin-bottom:14px; line-height:1.65; min-height:50px; }
+.quiz-opts { display:flex; flex-direction:column; gap:7px; }
+.quiz-opt { padding:9px 14px; border-radius:11px; background:rgba(255,255,255,0.04); border:1.5px solid rgba(255,255,255,0.1); color:rgba(255,255,255,0.78); cursor:pointer; font-family:'Rubik',sans-serif; font-size:0.83rem; transition:all 0.22s; text-align:right; }
+.quiz-opt:hover:not(.opt-locked) { background:rgba(0,207,255,0.08); border-color:var(--blue); color:white; }
+.quiz-opt.opt-correct { background:rgba(57,255,20,0.12); border-color:var(--neon); color:var(--neon); }
+.quiz-opt.opt-wrong { background:rgba(255,45,45,0.12); border-color:var(--red); color:var(--red); }
+.quiz-opt.opt-locked { opacity:0.65; cursor:default; }
+.quiz-fb { text-align:center; font-family:'Fredoka One',cursive; font-size:0.95rem; margin:10px 0 4px; min-height:24px; }
+.quiz-next-btn { width:100%; padding:9px; margin-top:8px; border-radius:50px; border:none; cursor:pointer; font-family:'Fredoka One',cursive; font-size:0.88rem; background:linear-gradient(135deg,var(--purple),var(--pink)); color:white; display:none; transition:all 0.25s; }
+.quiz-next-btn:hover { transform:scale(1.04); }
+.quiz-end { text-align:center; padding:10px 0; display:none; }
+.quiz-end-badge { font-size:3.5rem; display:block; animation:badgePop 0.4s ease; }
+.quiz-end-title { font-family:'Fredoka One',cursive; font-size:1.3rem; margin:8px 0 4px; }
+.quiz-end-sub { font-size:0.82rem; color:rgba(255,255,255,0.55); margin-bottom:14px; }
+.quiz-restart-btn { padding:9px 22px; border-radius:50px; border:none; cursor:pointer; font-family:'Fredoka One',cursive; font-size:0.88rem; background:linear-gradient(135deg,var(--neon),var(--blue)); color:#000; transition:all 0.25s; }
+.quiz-restart-btn:hover { transform:scale(1.05); }
+@keyframes badgePop { 0%{transform:scale(0) rotate(-10deg);}70%{transform:scale(1.2) rotate(5deg);}100%{transform:scale(1) rotate(0);} }
+.spin-wrap { text-align:center; }
+.wheel-outer { position:relative; width:200px; height:200px; margin:0 auto 14px; }
+.wheel-cvs { border-radius:50%; border:3px solid rgba(255,255,255,0.12); box-shadow:0 0 30px rgba(191,0,255,0.3); }
+.wheel-ptr { position:absolute; top:-10px; left:50%; transform:translateX(-50%); font-size:1.4rem; filter:drop-shadow(0 0 8px rgba(255,215,0,0.7)); }
+.btn-spin { padding:10px 26px; border-radius:50px; border:none; cursor:pointer; font-family:'Fredoka One',cursive; font-size:0.95rem; background:linear-gradient(135deg,var(--gold),var(--orange)); color:#000; transition:all 0.3s; margin-bottom:8px; }
+.btn-spin:disabled { opacity:0.45; cursor:not-allowed; }
+.btn-spin:not(:disabled):hover { transform:scale(1.06); box-shadow:0 0 22px rgba(255,215,0,0.45); }
+.spin-prize-msg { font-family:'Fredoka One',cursive; font-size:0.95rem; min-height:26px; color:var(--gold); }
+.spin-cd-msg { font-size:0.75rem; color:rgba(255,255,255,0.38); margin-top:5px; }
+.lb-join-row { display:flex; gap:8px; margin-bottom:14px; }
+.lb-name-input { flex:1; padding:9px 14px; border-radius:50px; border:1.5px solid rgba(255,255,255,0.12); background:rgba(255,255,255,0.05); color:white; font-family:'Rubik',sans-serif; font-size:0.85rem; outline:none; transition:all 0.3s; }
+.lb-name-input:focus { border-color:var(--neon); }
+.lb-join-btn { padding:9px 16px; border-radius:50px; border:none; cursor:pointer; font-family:'Fredoka One',cursive; font-size:0.82rem; background:linear-gradient(135deg,var(--neon),var(--blue)); color:#000; transition:all 0.25s; white-space:nowrap; }
+.lb-join-btn:hover { transform:scale(1.05); }
+.lb-row { display:flex; align-items:center; gap:10px; padding:9px 12px; border-radius:10px; border-bottom:1px solid rgba(255,255,255,0.05); transition:all 0.22s; }
+.lb-row:hover { background:rgba(255,255,255,0.03); }
+.lb-row.lb-you { background:rgba(57,255,20,0.05); border:1px solid rgba(57,255,20,0.15); border-radius:10px; margin-bottom:3px; }
+.lb-pos { font-family:'Fredoka One',cursive; font-size:1.05rem; width:28px; text-align:center; flex-shrink:0; }
+.lb-badge-icon { font-size:1rem; }
+.lb-uname { flex:1; font-family:'Fredoka One',cursive; font-size:0.88rem; color:white; }
+.lb-pts { font-family:'Fredoka One',cursive; font-size:0.88rem; color:var(--neon); }
 </style>
 </head>
 <body>
@@ -275,6 +408,10 @@ footer { position:relative;z-index:1;background:#040508;border-top:2px solid rgb
     <li><a href="#characters">דמויות</a></li>
     <li><a href="#mechanics">מכניקות</a></li>
     <li><a href="#tips">טיפים</a></li>
+    <li><a href="#showcase">🎭 תצוגה</a></li>
+    <li><a href="#strategy">🗺️ טקטיקות</a></li>
+    <li><a href="#codes">🎟️ קודים</a></li>
+    <li><a href="#activities">🎮 פעילויות</a></li>
   </ul>
 </nav>
 
@@ -441,6 +578,206 @@ footer { position:relative;z-index:1;background:#040508;border-top:2px solid rgb
         <div class="tip-title">Rebirth בזמן הנכון</div>
         <p class="tip-desc">Rebirth פותח <strong style="color:white">שדרוגים קבועים</strong> שמשפרים ייצור כסף לנצח. עשה אותו כשיש לך מספיק דמויות חזקות — לא מוקדם מדי.</p>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SHOWCASE ===== -->
+<section id="showcase">
+  <div class="container">
+    <div class="sec-header">
+      <div class="sec-title" style="background:linear-gradient(90deg,var(--purple),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">🎭 תצוגת דמויות</div>
+      <p class="sec-sub">הכר את הדמויות מקרוב — לחץ "נסה אותי" לשמוע את הצליל האופייני</p>
+    </div>
+    <div class="showcase-grid" id="showcaseGrid"></div>
+  </div>
+</section>
+
+<!-- ===== STRATEGY ===== -->
+<section id="strategy">
+  <div class="container">
+    <div class="sec-header">
+      <div class="sec-title" style="background:linear-gradient(90deg,var(--blue),var(--neon));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">🗺️ זון הטקטיקות</div>
+      <p class="sec-sub">בסיס הגנה לדוגמה, מחשבון Rebirth וטיפים מהירים</p>
+    </div>
+    <div class="strategy-tabs">
+      <button class="strat-tab active" onclick="switchStrat('mockbase',this)">🏰 בסיס הגנה</button>
+      <button class="strat-tab" onclick="switchStrat('rebirth',this)">🔄 מחשבון Rebirth</button>
+      <button class="strat-tab" onclick="switchStrat('quicktips',this)">⚡ טיפים מהירים</button>
+    </div>
+
+    <div class="strat-panel active" id="panel-mockbase">
+      <div class="strat-content">
+        <div class="strat-card">
+          <div class="strat-card-title">🏰 סימולטור בסיס הגנה</div>
+          <p style="font-size:0.83rem;color:rgba(255,255,255,0.55);margin-bottom:14px;line-height:1.6;">בנה בסיס חסין כמו בתמונה — שים דמויות יקרות במרכז מוקף בהגנות מכל עבר.</p>
+          <div class="mock-base-wrap">
+            <div class="mock-base-label">📐 תצורת 6×5 אופטימלית:</div>
+            <div class="base-grid" id="mockBaseGrid"></div>
+            <div class="base-legend">
+              <div class="bl-item">🔫 Sentry</div>
+              <div class="bl-item">💣 Trap</div>
+              <div class="bl-item">🔒 Lock</div>
+              <div class="bl-item">🌟 דמות חזקה</div>
+            </div>
+          </div>
+        </div>
+        <div class="strat-card">
+          <div class="strat-card-title">📋 כללי הגנה מרכזיים</div>
+          <div class="quick-tips">
+            <div class="qt-item"><span class="qt-icon">🔒</span>תמיד שמור <strong style="color:white">2-3 מנעולים</strong> פעילים סביב דמויות Legendary+</div>
+            <div class="qt-item"><span class="qt-icon">🔫</span>Sentries שמים <strong style="color:white">בכניסות</strong> — עוצרים גנבים לפני שמגיעים לדמויות</div>
+            <div class="qt-item"><span class="qt-icon">💣</span>מלכודות שמים <strong style="color:white">מסביב לדמויות OG/Secret</strong> — גנב שנכנס לאזור יותקף מיד</div>
+            <div class="qt-item"><span class="qt-icon">👁️</span>לפני כל אופליין — <strong style="color:white">ודא שכל ההגנות פעילות</strong> ב-100%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="strat-panel" id="panel-rebirth">
+      <div class="strat-content">
+        <div class="strat-card">
+          <div class="strat-card-title">🔄 מחשבון Rebirth</div>
+          <p style="font-size:0.83rem;color:rgba(255,255,255,0.55);margin-bottom:16px;line-height:1.6;">הזז את הסליידר לפי סך כל הכסף שיש לך כרגע, וקבל המלצה אם כדאי לעשות Rebirth.</p>
+          <div class="rb-slider-wrap">
+            <div class="rb-lbl">
+              <span>💰 סך הכסף שלך</span>
+              <span id="rbValLabel" style="color:var(--gold);font-family:'Fredoka One',cursive;">$100K</span>
+            </div>
+            <input type="range" class="rb-slider" id="rbSlider" min="0" max="100" value="10" oninput="calcRebirth(this.value)">
+            <div style="display:flex;justify-content:space-between;font-size:0.7rem;color:rgba(255,255,255,0.3);margin-top:4px;">
+              <span>$0</span><span>$1M</span><span>$1B</span><span>$1T</span><span>MAX</span>
+            </div>
+          </div>
+          <div class="rb-result">
+            <div class="rb-verdict" id="rbVerdict">🤔 הזז את הסליידר...</div>
+            <div class="rb-detail" id="rbDetail"> </div>
+          </div>
+        </div>
+        <div class="strat-card">
+          <div class="strat-card-title">📖 מה זה Rebirth?</div>
+          <div class="quick-tips">
+            <div class="qt-item"><span class="qt-icon">🔄</span><strong style="color:white">Rebirth</strong> מאפס את הדמויות שלך תמורת בונוסים <strong style="color:var(--gold)">קבועים לנצח</strong></div>
+            <div class="qt-item"><span class="qt-icon">💎</span>אחרי Rebirth תייצר כסף <strong style="color:white">מהר יותר</strong> בכל סבב — השקעה לטווח ארוך</div>
+            <div class="qt-item"><span class="qt-icon">⚠️</span>אל תעשה Rebirth מוקדם מדי — המתן עד שיש לך לפחות <strong style="color:var(--pink)">כמה Mythic+</strong></div>
+            <div class="qt-item"><span class="qt-icon">🏆</span>כל Rebirth נוסף מגדיל את ה<strong style="color:white">Multiplier</strong> — ככל שחוזרים יותר הבונוס גדל</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="strat-panel" id="panel-quicktips">
+      <div class="strat-content">
+        <div class="strat-card">
+          <div class="strat-card-title">⌨️ קיצורי מקלדת</div>
+          <div class="quick-tips">
+            <div class="qt-item"><span class="qt-icon">⌨️</span><span class="qt-key">E</span> — לקחת / להניח דמות בבסיס</div>
+            <div class="qt-item"><span class="qt-icon">⌨️</span><span class="qt-key">Q</span> — לפתוח / לסגור את תפריט החנות</div>
+            <div class="qt-item"><span class="qt-icon">⌨️</span><span class="qt-key">F</span> — לפלוש לבסיס של שחקן ולנסות לגנוב</div>
+            <div class="qt-item"><span class="qt-icon">⌨️</span><span class="qt-key">R</span> — להפעיל Rebirth (בזהירות!)</div>
+            <div class="qt-item"><span class="qt-icon">⌨️</span><span class="qt-key">G</span> — לפדות קוד מתנה</div>
+          </div>
+        </div>
+        <div class="strat-card">
+          <div class="strat-card-title">🥷 שיטות גניבה מהירה</div>
+          <div class="quick-tips">
+            <div class="qt-item"><span class="qt-icon">👻</span>השתמש ב<strong style="color:white">גלימת היעלמות</strong> כדי לחמוק מ-Sentries בכניסה לבסיס</div>
+            <div class="qt-item"><span class="qt-icon">💨</span>מסלול עוקף: <strong style="color:white">הכנס מהצד</strong> ולא מהכניסה הראשית — פחות מלכודות</div>
+            <div class="qt-item"><span class="qt-icon">🎯</span>המתן שאחרים ייכנסו קודם — <strong style="color:white">בוא לגנוב ממי שנחלש</strong></div>
+            <div class="qt-item"><span class="qt-icon">⚡</span>תמיד גנוב <strong style="color:white">את הדמות הכי יקרה קודם</strong> — אם נתפסת לפחות הצלת את הטוב ביותר</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CODES ===== -->
+<section id="codes">
+  <div class="container">
+    <div class="sec-header">
+      <div class="sec-title" style="background:linear-gradient(90deg,var(--gold),var(--orange));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">🎟️ מרכז קודים ומרצ'נדייז</div>
+      <p class="sec-sub">קודים פעילים, בובות רשמיות ואיך לממש</p>
+    </div>
+    <div class="codes-layout">
+      <div class="codes-card">
+        <div class="codes-card-title" style="color:var(--gold);">🧸 בובות רשמיות (Plushies)</div>
+        <div class="plushies-grid">
+          <div class="plushie-card"><span class="plushie-emoji">🧠</span><div class="plushie-name">Skibidi Toilet</div><div class="plushie-price">~$25</div></div>
+          <div class="plushie-card"><span class="plushie-emoji">🍓</span><div class="plushie-name">Strawberry Elephant</div><div class="plushie-price">~$30</div></div>
+          <div class="plushie-card"><span class="plushie-emoji">🐊</span><div class="plushie-name">Bombardiro Crocodilo</div><div class="plushie-price">~$22</div></div>
+          <div class="plushie-card"><span class="plushie-emoji">🐉</span><div class="plushie-name">Dragon Cannelloni</div><div class="plushie-price">~$28</div></div>
+          <div class="plushie-card"><span class="plushie-emoji">🐷</span><div class="plushie-name">John Pork</div><div class="plushie-price">~$25</div></div>
+          <div class="plushie-card"><span class="plushie-emoji">🎭</span><div class="plushie-name">Tralalero Tralala</div><div class="plushie-price">~$20</div></div>
+        </div>
+        <div style="font-family:'Fredoka One',cursive;font-size:0.9rem;color:var(--purple);margin-bottom:10px;">📲 איך לממש קוד בובה:</div>
+        <div class="redeem-step"><div class="rs-num">1</div><div class="rs-text">קנה בובה רשמית (Plushie) — בפנים יש קלף עם <strong style="color:var(--gold)">קוד אישי ייחודי</strong></div></div>
+        <div class="redeem-step"><div class="rs-num">2</div><div class="rs-text">פתח את המשחק Steal a Brainrot ב-Roblox</div></div>
+        <div class="redeem-step"><div class="rs-num">3</div><div class="rs-text">לחץ על <span class="qt-key">G</span> או על כפתור "Codes" בתפריט הראשי</div></div>
+        <div class="redeem-step"><div class="rs-num">4</div><div class="rs-text">הקלד את הקוד מהקלף ולחץ Redeem — קבל דמות בלעדית! 🎉</div></div>
+      </div>
+      <div class="codes-card">
+        <div class="codes-card-title" style="color:var(--neon);">
+          📋 קודים ציבוריים פעילים &nbsp;<span class="live-dot"></span>
+        </div>
+        <div id="codesBoard"></div>
+        <p style="font-size:0.75rem;color:rgba(255,255,255,0.3);margin-top:12px;line-height:1.6;">⚠️ קודי בובות הם אישיים ועובדים רק פעם אחת. קודים ציבוריים לפעמים מוגבלים לאירועים מיוחדים.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== ACTIVITIES ===== -->
+<section id="activities">
+  <div class="container">
+    <div class="sec-header">
+      <div class="sec-title" style="background:linear-gradient(90deg,var(--pink),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">🎮 פעילויות לשחקנים</div>
+      <p class="sec-sub">חידון, גלגל מזל יומי ולוח מובילים — רוויח תארים ובאדג'ים</p>
+    </div>
+    <div class="activities-grid">
+
+      <!-- QUIZ -->
+      <div class="act-card">
+        <div class="act-title" style="color:var(--blue);">🧠 חידון Brainrot</div>
+        <div id="quizBody">
+          <div class="quiz-progress" id="quizProgress"></div>
+          <div class="quiz-q" id="quizQ"></div>
+          <div class="quiz-opts" id="quizOpts"></div>
+          <div class="quiz-fb" id="quizFb"></div>
+          <button class="quiz-next-btn" id="quizNextBtn" onclick="nextQuestion()">הבא ▶</button>
+        </div>
+        <div class="quiz-end" id="quizEnd">
+          <span class="quiz-end-badge" id="quizEndBadge">🏆</span>
+          <div class="quiz-end-title" id="quizEndTitle">כל הכבוד!</div>
+          <div class="quiz-end-sub" id="quizEndSub"></div>
+          <button class="quiz-restart-btn" onclick="initQuiz()">🔄 שחק שוב</button>
+        </div>
+      </div>
+
+      <!-- DAILY SPIN -->
+      <div class="act-card">
+        <div class="act-title" style="color:var(--gold);">🎡 גלגל מזל יומי</div>
+        <div class="spin-wrap">
+          <div class="wheel-outer">
+            <div class="wheel-ptr">▼</div>
+            <canvas class="wheel-cvs" id="wheelCanvas" width="200" height="200"></canvas>
+          </div>
+          <button class="btn-spin" id="spinBtn" onclick="spinWheel()">🎰 סובב!</button>
+          <div class="spin-prize-msg" id="spinPrize"></div>
+          <div class="spin-cd-msg" id="spinCd"></div>
+        </div>
+      </div>
+
+      <!-- LEADERBOARD -->
+      <div class="act-card">
+        <div class="act-title" style="color:var(--pink);">🏆 לוח מובילים</div>
+        <div class="lb-join-row" id="lbJoinRow">
+          <input class="lb-name-input" id="lbNameInput" placeholder="השם שלך בשרת..." maxlength="18">
+          <button class="lb-join-btn" onclick="joinLeaderboard()">הצטרף! 🚀</button>
+        </div>
+        <div id="lbList"></div>
+      </div>
+
     </div>
   </div>
 </section>
@@ -625,6 +962,319 @@ for(let i=0;i<28;i++){
 // Reveal
 const obs=new IntersectionObserver(entries=>entries.forEach((e,i)=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('vis'),i*60);}),{threshold:0.08});
 document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+// ===== SHOWCASE =====
+const SHOWCASE_CHARS = [
+  {name:'Lirili Larila',         r:'Common',    emoji:'🦜', cost:'$1,600',  cps:'12/שנ',     how:'מסוע רגיל'},
+  {name:'Boneca Ambalabu',       r:'Rare',      emoji:'🪆', cost:'$5,000',  cps:'40/שנ',     how:'מסוע רגיל'},
+  {name:'Cappuccino Assassino',  r:'Epic',      emoji:'☕', cost:'$10,000', cps:'75/שנ',     how:'מסוע רגיל'},
+  {name:'Ballerina Cappuccina',  r:'Legendary', emoji:'💃', cost:'$100K',   cps:'500/שנ',    how:'מסוע רגיל'},
+  {name:'Bombardiro Crocodilo',  r:'Mythic',    emoji:'🐊', cost:'$500K',   cps:'2,500/שנ',  how:'מסוע רגיל'},
+  {name:'Tralalero Tralala',     r:'God',       emoji:'🎵', cost:'מיוחד',   cps:'42,000/שנ', how:'מכונות מיוחדות'},
+  {name:'Dragon Cannelloni',     r:'Secret',    emoji:'🐉', cost:'$100B',   cps:'100M/שנ',   how:'מסוע $100B+'},
+  {name:'Strawberry Elephant',   r:'OG',        emoji:'🍓', cost:'$750B',   cps:'750M/שנ',   how:'מסוע $750B+'},
+];
+
+(function buildShowcase(){
+  const grid=document.getElementById('showcaseGrid');
+  if(!grid) return;
+  grid.innerHTML=SHOWCASE_CHARS.map(c=>{
+    const cfg=CFG[c.r];
+    return `<div class="showcase-stage" style="--sc:${cfg.color}">
+      <div class="stage-3d"><span class="stage-emoji">${c.emoji}</span></div>
+      <div class="stage-shadow"></div>
+      <div class="stage-name">${c.name}</div>
+      <div class="stage-rarity">${cfg.icon} ${c.r}</div>
+      <div class="stage-stats-board">
+        <div class="ssb-row"><span class="ssb-label">💰 עלות</span><span class="ssb-val">${c.cost}</span></div>
+        <div class="ssb-row"><span class="ssb-label">⚡ הכנסה</span><span class="ssb-val">${c.cps}</span></div>
+        <div class="ssb-row"><span class="ssb-label">🗺️ איך להשיג</span><span class="ssb-val" style="font-size:0.65rem">${c.how}</span></div>
+      </div>
+      <button class="btn-try-sound" onclick="playCharSound('${c.r}',this)">🔊 נסה אותי</button>
+    </div>`;
+  }).join('');
+})();
+
+// ===== SOUND ENGINE =====
+let _audioCtx=null;
+function getACtx(){
+  if(!_audioCtx||_audioCtx.state==='closed') _audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+  if(_audioCtx.state==='suspended') _audioCtx.resume();
+  return _audioCtx;
+}
+function playTone(freq,type,startTime,dur,vol){
+  vol=vol||0.28;
+  const ctx=getACtx();
+  const osc=ctx.createOscillator(),gain=ctx.createGain();
+  osc.connect(gain); gain.connect(ctx.destination);
+  osc.type=type; osc.frequency.setValueAtTime(freq,ctx.currentTime+startTime);
+  gain.gain.setValueAtTime(vol,ctx.currentTime+startTime);
+  gain.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+startTime+dur);
+  osc.start(ctx.currentTime+startTime); osc.stop(ctx.currentTime+startTime+dur+0.05);
+}
+const SOUND_PATTERNS={
+  Common:   ()=>{playTone(220,'sine',0,0.4);},
+  Rare:     ()=>{playTone(330,'triangle',0,0.3);playTone(440,'triangle',0.18,0.3);},
+  Epic:     ()=>{[440,550,660].forEach((f,i)=>playTone(f,'sine',i*0.18,0.4));},
+  Legendary:()=>{[440,550,660,880].forEach((f,i)=>playTone(f,'sine',i*0.1,0.6-i*0.05));},
+  Mythic:   ()=>{playTone(110,'sawtooth',0,0.35,0.22);playTone(220,'sine',0.12,0.5,0.18);playTone(440,'square',0.32,0.4,0.14);},
+  God:      ()=>{[261,329,392,523].forEach((f,i)=>playTone(f,'sine',i*0.09,0.7,0.18));},
+  Secret:   ()=>{for(let i=0;i<8;i++)playTone(200+i*90,'sawtooth',i*0.07,0.18,0.14);playTone(1200,'sine',0.65,0.5,0.18);},
+  OG:       ()=>{[523,659,784,1047].forEach((f,i)=>playTone(f,'sine',i*0.1,0.9,0.22));playTone(1568,'sine',0.5,1.1,0.18);},
+};
+function playCharSound(rarity,btn){
+  try{ (SOUND_PATTERNS[rarity]||SOUND_PATTERNS.Common)(); const o=btn.textContent; btn.textContent='🎵 מופעל!'; setTimeout(()=>btn.textContent=o,1100); }
+  catch(e){ console.warn('Audio:',e); }
+}
+
+// ===== STRATEGY TABS =====
+function switchStrat(id,btn){
+  document.querySelectorAll('.strat-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.strat-tab').forEach(b=>b.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ===== MOCK BASE =====
+(function buildMockBase(){
+  const layout=[
+    ['sentry','sentry','lock','sentry','sentry','sentry'],
+    ['trap','char-cell','char-cell','char-cell','char-cell','trap'],
+    ['lock','char-cell','char-cell','char-cell','char-cell','lock'],
+    ['trap','char-cell','char-cell','char-cell','char-cell','trap'],
+    ['sentry','sentry','lock','sentry','sentry','sentry'],
+  ];
+  const icons={sentry:'🔫',trap:'💣',lock:'🔒','char-cell':'🌟'};
+  const grid=document.getElementById('mockBaseGrid');
+  if(!grid) return;
+  grid.innerHTML=layout.flat().map(t=>`<div class="base-cell ${t}">${icons[t]||'⬜'}</div>`).join('');
+})();
+
+// ===== REBIRTH CALCULATOR =====
+const RB_VALS=[0,1e5,5e5,1e6,5e6,1e7,5e7,1e8,5e8,1e9,5e9,1e10,5e10,1e11,5e11,1e12,5e12,1e13,5e13,1e14,1e15];
+const RB_TIERS=[
+  {max:10,verdict:'❌ מוקדם מדי!',    color:'#ff2d2d', detail:'צבור לפחות כמה דמויות Legendary לפני Rebirth.'},
+  {max:25,verdict:'⚠️ עדיין מוקדם',  color:'#ff6b00', detail:'יש לך קצת אבל עדיין לא כדאי—חכה קצת יותר.'},
+  {max:45,verdict:'🤔 אולי...',       color:'#ffd700', detail:'אפשרי, אבל תרוויח יותר אם תחכה קצת עוד.'},
+  {max:65,verdict:'✅ הגיע הזמן!',    color:'#39ff14', detail:'כדאי מאוד! יש לך מספיק לקבל Multiplier משמעותי.'},
+  {max:85,verdict:'🚀 עשה עכשיו!',   color:'#00cfff', detail:'מצוין! Rebirth עכשיו ייתן לך בוסט עצום לסבב הבא.'},
+  {max:100,verdict:'🔱 SIGMA REBIRTH!',color:'#bf00ff',detail:'הגעת לשיא! זהו הרגע הכי משתלם—GO!'},
+];
+function fmtRB(v){
+  if(v>=1e15)return '$'+(v/1e15).toFixed(0)+'Q';
+  if(v>=1e12)return '$'+(v/1e12).toFixed(0)+'T';
+  if(v>=1e9) return '$'+(v/1e9).toFixed(1)+'B';
+  if(v>=1e6) return '$'+(v/1e6).toFixed(1)+'M';
+  if(v>=1e3) return '$'+(v/1e3).toFixed(0)+'K';
+  return '$'+v;
+}
+function calcRebirth(val){
+  val=parseInt(val);
+  const idx=Math.min(Math.round(val*(RB_VALS.length-1)/100),RB_VALS.length-1);
+  document.getElementById('rbValLabel').textContent=fmtRB(RB_VALS[idx]);
+  const t=RB_TIERS.find(t=>val<=t.max)||RB_TIERS[RB_TIERS.length-1];
+  const el=document.getElementById('rbVerdict');
+  el.textContent=t.verdict; el.style.color=t.color;
+  document.getElementById('rbDetail').textContent=t.detail;
+}
+calcRebirth(10);
+
+// ===== CODES BOARD =====
+const CODES_DATA=[
+  {code:'BRAINROT2025',  reward:'+100 מטבעות + דמות Common', active:true},
+  {code:'SKIBIDIRISING', reward:'דמות Rare חינם',             active:true},
+  {code:'SIGMAGO',       reward:'+50 מטבעות',                 active:true},
+  {code:'NOCAPFR',       reward:'סקין מיוחד',                 active:false},
+  {code:'RELEASE1K',     reward:'+200 מטבעות',                active:false},
+  {code:'BETACODE',      reward:'תואר Beta Tester',           active:false},
+];
+(function buildCodesBoard(){
+  const b=document.getElementById('codesBoard');
+  if(!b) return;
+  b.innerHTML=CODES_DATA.map(c=>`
+    <div class="code-row ${c.active?'active-code':'expired-code'}">
+      <span class="cr-code">${c.code}</span>
+      <span class="cr-reward">${c.reward}</span>
+      <span class="cr-status ${c.active?'active-tag':'expired-tag'}">${c.active?'✅ פעיל':'❌ פג'}</span>
+      ${c.active?`<button class="copy-code-btn" onclick="copyCode('${c.code}',this)">📋 העתק</button>`:''}
+    </div>`).join('');
+})();
+function copyCode(code,btn){
+  navigator.clipboard.writeText(code).then(()=>{btn.textContent='✓ הועתק!';setTimeout(()=>btn.textContent='📋 העתק',2000);}).catch(()=>{
+    const el=document.createElement('textarea'); el.value=code; el.style.position='fixed'; el.style.opacity='0';
+    document.body.appendChild(el); el.select(); document.execCommand('copy'); document.body.removeChild(el);
+    btn.textContent='✓ הועתק!'; setTimeout(()=>btn.textContent='📋 העתק',2000);
+  });
+}
+
+// ===== QUIZ =====
+const QUIZ_QS=[
+  {q:'איזו דמות מייצרת הכי הרבה כסף בשנייה?',        opts:['Dragon Cannelloni','Strawberry Elephant','Skibidi Toilet','Griffin'],ans:1},
+  {q:'מה עושה ה-Fuse Machine?',                        opts:['מחלקת דמויות','ממזגת 4 דמויות לדמות נדירה','מייצרת כסף אוטומטי','מגנה על הבסיס'],ans:1},
+  {q:'מה הנדירות של Bombardiro Crocodilo?',             opts:['Legendary','God','Mythic','Secret'],ans:2},
+  {q:'כמה דמויות צריך להכניס ל-Fuse Machine?',         opts:['2','3','4','5'],ans:2},
+  {q:'מה הנדירות של Skibidi Toilet?',                  opts:['Mythic','Secret','God','OG'],ans:3},
+  {q:'מה עלות הדמות Strawberry Elephant?',             opts:['$100B','$500B','$750B','$1T'],ans:2},
+  {q:'איזו יכולת מאפשרת פלישה לבסיסים בלי להיתפס?',  opts:['Quantum Cloner','Fuse Machine','Invisibility Cloak','Sentry'],ans:2},
+  {q:'מה קורה אחרי Rebirth?',                          opts:['מאבדים הכל בלי כלום','מקבלים בונוסים קבועים ומתחילים מחדש','נהיים Mythic אוטומטית','מקבלים $1B'],ans:1},
+];
+let qIdx=0, qScore=0, qAnswered=false;
+function initQuiz(){
+  qIdx=0; qScore=0; qAnswered=false;
+  document.getElementById('quizEnd').style.display='none';
+  document.getElementById('quizBody').style.display='block';
+  renderQ();
+}
+function renderQ(){
+  const total=QUIZ_QS.length;
+  document.getElementById('quizProgress').innerHTML=QUIZ_QS.map((_,i)=>
+    `<div class="quiz-pip ${i<qIdx?'done':i===qIdx?'current':''}"></div>`).join('');
+  const q=QUIZ_QS[qIdx];
+  document.getElementById('quizQ').textContent=(qIdx+1)+'. '+q.q;
+  document.getElementById('quizOpts').innerHTML=q.opts.map((o,i)=>
+    `<button class="quiz-opt" onclick="answerQ(${i})">${o}</button>`).join('');
+  document.getElementById('quizFb').textContent='';
+  document.getElementById('quizNextBtn').style.display='none';
+  qAnswered=false;
+}
+function answerQ(chosen){
+  if(qAnswered) return; qAnswered=true;
+  const q=QUIZ_QS[qIdx];
+  document.querySelectorAll('.quiz-opt').forEach((b,i)=>{
+    b.classList.add('opt-locked');
+    if(i===q.ans) b.classList.add('opt-correct');
+    else if(i===chosen) b.classList.add('opt-wrong');
+  });
+  const ok=chosen===q.ans;
+  if(ok){ qScore++; document.getElementById('quizFb').style.color='var(--neon)'; document.getElementById('quizFb').textContent='✅ נכון! גאון מוחלט 🧠'; }
+  else { document.getElementById('quizFb').style.color='var(--red)'; document.getElementById('quizFb').textContent='❌ טעות... התשובה הנכונה סומנה'; }
+  updateLbScore();
+  document.getElementById('quizNextBtn').style.display='block';
+}
+function nextQuestion(){
+  qIdx++;
+  if(qIdx>=QUIZ_QS.length) endQuiz();
+  else renderQ();
+}
+function endQuiz(){
+  document.getElementById('quizBody').style.display='none';
+  document.getElementById('quizEnd').style.display='block';
+  const pct=qScore/QUIZ_QS.length;
+  let badge='😅',title='כמעט!',sub=`ענית ${qScore} מתוך ${QUIZ_QS.length} נכון. נסה שוב!`;
+  if(pct===1){badge='🏆';title='מושלם! SIGMA MASTER';sub='כל הכבוד — תג "Brainrot Expert" לך!☑';}
+  else if(pct>=0.75){badge='🥇';title='מעולה!';sub=`${qScore}/${QUIZ_QS.length} נכון — תג "Brainrot Pro" לך!`;}
+  else if(pct>=0.5){badge='🥈';title='לא רע!';sub=`${qScore}/${QUIZ_QS.length} נכון — כמעט שם!`;}
+  document.getElementById('quizEndBadge').textContent=badge;
+  document.getElementById('quizEndTitle').textContent=title;
+  document.getElementById('quizEndSub').textContent=sub;
+}
+initQuiz();
+
+// ===== SPIN WHEEL =====
+const SPIN_PRIZES=[
+  {label:'💰 +5%\nBoost',         color:'#ffd700'},
+  {label:'🎖️ Badge\n"Early Bird"',color:'#ff006e'},
+  {label:'👑 Title:\n"Sigma"',     color:'#bf00ff'},
+  {label:'🔥 Title:\n"No Cap"',    color:'#ff6b00'},
+  {label:'⭐ Badge\n"Quiz Master"',color:'#00cfff'},
+  {label:'💎 Visitor\nToken',      color:'#39ff14'},
+  {label:'🎰 Spin\nAgain!',        color:'#ff2d2d'},
+  {label:'🗿 Title:\n"Grindset"',  color:'#4db8ff'},
+];
+let wAngle=0, wSpinning=false;
+function drawWheel(angle){
+  const cv=document.getElementById('wheelCanvas'); if(!cv) return;
+  const ctx=cv.getContext('2d'), cx=100, cy=100, r=96, slices=SPIN_PRIZES.length, arc=(2*Math.PI)/slices;
+  ctx.clearRect(0,0,200,200);
+  SPIN_PRIZES.forEach((p,i)=>{
+    const s=angle+i*arc, e=s+arc;
+    ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,r,s,e);
+    ctx.fillStyle=p.color+'bb'; ctx.fill();
+    ctx.strokeStyle='rgba(255,255,255,0.15)'; ctx.lineWidth=2; ctx.stroke();
+    ctx.save(); ctx.translate(cx,cy); ctx.rotate(s+arc/2); ctx.textAlign='right';
+    ctx.fillStyle='rgba(0,0,0,0.85)'; ctx.font='bold 9.5px Rubik,sans-serif';
+    p.label.split('\n').forEach((ln,li)=>ctx.fillText(ln,r-7,li*12-(p.label.split('\n').length-1)*5));
+    ctx.restore();
+  });
+  ctx.beginPath(); ctx.arc(cx,cy,17,0,Math.PI*2);
+  ctx.fillStyle='#07080f'; ctx.fill();
+  ctx.strokeStyle='rgba(255,255,255,0.25)'; ctx.lineWidth=2; ctx.stroke();
+  ctx.fillStyle='white'; ctx.font='13px sans-serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
+  ctx.fillText('🧠',cx,cy);
+}
+drawWheel(0);
+function spinWheel(){
+  if(wSpinning) return;
+  const lastSpin=localStorage.getItem('lastSpin'),now=Date.now();
+  if(lastSpin&&now-parseInt(lastSpin)<86400000){
+    const rem=Math.ceil((86400000-(now-parseInt(lastSpin)))/3600000);
+    document.getElementById('spinCd').textContent='⏳ הסיבוב הבא: עוד '+rem+' שעות';
+    return;
+  }
+  wSpinning=true;
+  document.getElementById('spinBtn').disabled=true;
+  document.getElementById('spinPrize').textContent='';
+  document.getElementById('spinCd').textContent='';
+  const prize=Math.floor(Math.random()*SPIN_PRIZES.length);
+  const arc=(2*Math.PI)/SPIN_PRIZES.length;
+  const target=wAngle+(6+Math.random()*4)*2*Math.PI+(Math.PI*2-prize*arc-arc/2)-(3*Math.PI/2);
+  const start=wAngle,delta=target-start,dur=4200,t0=performance.now();
+  function anim(now){
+    const t=Math.min((now-t0)/dur,1),ease=1-Math.pow(1-t,4);
+    wAngle=start+delta*ease; drawWheel(wAngle);
+    if(t<1){requestAnimationFrame(anim);}
+    else{
+      wSpinning=false;
+      document.getElementById('spinBtn').disabled=false;
+      document.getElementById('spinPrize').textContent='🎉 זכית: '+SPIN_PRIZES[prize].label.replace('\n',' ');
+      localStorage.setItem('lastSpin',Date.now());
+      document.getElementById('spinCd').textContent='⏳ הסיבוב הבא: עוד 24 שעות';
+    }
+  }
+  requestAnimationFrame(anim);
+}
+(function checkSpinCD(){
+  const ls=localStorage.getItem('lastSpin');
+  if(ls){const rem=86400000-(Date.now()-parseInt(ls));if(rem>0)document.getElementById('spinCd').textContent='⏳ הסיבוב הבא: עוד '+Math.ceil(rem/3600000)+' שעות';}
+})();
+
+// ===== LEADERBOARD =====
+const LB_DEFAULT=[
+  {name:'SigmaKing99', pts:42,badge:'🏆'},
+  {name:'NoCapFR',     pts:38,badge:'🥇'},
+  {name:'BrainrotGod', pts:35,badge:'🥈'},
+  {name:'ItalianBrain',pts:29,badge:'🥉'},
+  {name:'SkibidiMast', pts:22,badge:'🎖️'},
+];
+function getLB(){try{return JSON.parse(localStorage.getItem('lbData'))||LB_DEFAULT.map(x=>({...x}));}catch{return LB_DEFAULT.map(x=>({...x}));}}
+function saveLB(d){localStorage.setItem('lbData',JSON.stringify(d));}
+function renderLB(){
+  const data=getLB().sort((a,b)=>b.pts-a.pts);
+  const me=localStorage.getItem('myLbName');
+  document.getElementById('lbList').innerHTML=data.slice(0,8).map((row,i)=>`
+    <div class="lb-row ${row.name===me?'lb-you':''}">
+      <span class="lb-pos">${['🥇','🥈','🥉'][i]||'#'+(i+1)}</span>
+      <span class="lb-badge-icon">${row.badge||'🎮'}</span>
+      <span class="lb-uname">${row.name}${row.name===me?' (אתה)':''}</span>
+      <span class="lb-pts">${row.pts} נק'</span>
+    </div>`).join('');
+}
+function joinLeaderboard(){
+  const name=document.getElementById('lbNameInput').value.trim();
+  if(!name) return;
+  const data=getLB();
+  if(!data.find(r=>r.name===name)){data.push({name,pts:1+Math.floor(Math.random()*5),badge:'🆕'});saveLB(data);}
+  localStorage.setItem('myLbName',name);
+  document.getElementById('lbJoinRow').style.display='none';
+  renderLB();
+}
+function updateLbScore(){
+  const me=localStorage.getItem('myLbName'); if(!me) return;
+  const data=getLB(),row=data.find(r=>r.name===me);
+  if(row){row.pts+=2;if(qScore>=7)row.badge='🏆';else if(qScore>=5)row.badge='🥇';saveLB(data);renderLB();}
+}
+renderLB();
+if(localStorage.getItem('myLbName')) document.getElementById('lbJoinRow').style.display='none';
 </script>
 </body>
 </html>
