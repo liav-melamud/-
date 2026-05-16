@@ -238,8 +238,7 @@ kbd{background:rgba(255,255,255,0.12);border-radius:4px;padding:1px 5px;}
       <button class="lbtn lbtn-join" onclick="joinGame()">🚀 הצטרף!</button>
       <div class="lbl-status" id="joinStatus"></div>
     </div>
-  </div>
-</div>
+    <a href="./steal-a-brainrot%20(2).html" style="display:block;margin-top:16px;font-family:'Fredoka One',cursive;font-size:.9rem;color:rgba(255,255,255,.55);text-decoration:none;text-align:center;transition:color .2s;" onmouseover="this.style.color='#ffd700'" onmouseout="this.style.color='rgba(255,255,255,.55)'">⬅️ חזרה לאתר ולטיפים</a>
 
 <!-- ─────── HUD ─────── -->
 <div id="hud">
@@ -1158,6 +1157,7 @@ function setMarketChar(si,ch){
   if(ch){sp.material=new THREE.SpriteMaterial({map:getCharTex(ch),transparent:true,opacity:1});}
   else{sp.material=new THREE.SpriteMaterial({transparent:true,opacity:0});}
 }
+let soloMode=false,aiT=0;
 function startSolo(){
   const raw=document.getElementById('playerNameInput').value.trim();
   const name=raw||'שחקן';
