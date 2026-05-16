@@ -550,7 +550,7 @@ const G={
     {x:12,z:-2,name:'Player 2',held:null,coins:0},
   ],
   bases:[Array(SLOTS).fill(null),Array(SLOTS).fill(null)],
-  raidT:300,raidActive:false,
+  raidT:120,raidActive:false,
   tradeSlot:null,
   spawnCountdown:15,
 };
@@ -1162,14 +1162,12 @@ function startSolo(){
   const raw=document.getElementById('playerNameInput').value.trim();
   const name=raw||'שחקן';
   soloMode=true;G.myId=0;G.connected=true;
+  gameMode=selMode;
   setName(0,name);setName(1,'🤖 AI');
-  initBases();
-  // Fill AI base fully (setSlotChar now syncs G.bases automatically)
-  for(let i=0;i<SLOTS;i++)setSlotChar(1,i,randChar(0));
+  initGame();
   document.getElementById('lobbyOverlay').classList.add('hidden');
   document.getElementById('hud').classList.add('show');
-  showJoy();
-  gameMode='basewars';setModeInfo();
+  showJoy();setModeInfo();
   showToast('🤖 מצב סולו — שחק נגד AI!');
   updateFuseBtn();
 }
