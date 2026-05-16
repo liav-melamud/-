@@ -231,10 +231,17 @@ kbd{background:rgba(255,255,255,0.12);border-radius:4px;padding:1px 5px;}
     <button class="abtn" style="border-color:#ffd700" onclick="openShop()">🛒 חנות</button>
     <button class="abtn abtn-back" onclick="backToLobby()">🚪 צא</button>
   </div>
+  <div id="stealHUD" style="display:none;position:absolute;top:74px;left:50%;transform:translateX(-50%);
+    background:rgba(0,24,48,.92);border:2px solid #00ffff;border-radius:50px;padding:7px 22px;
+    font-family:'Fredoka One',cursive;font-size:.95rem;z-index:20;pointer-events:none;white-space:nowrap;
+    box-shadow:0 0 18px rgba(0,255,255,.5);color:#00ffff;">
+    🥷 STEAL MODE: <span id="stealTimer">8</span>s
+  </div>
   <div class="controls-hint">
     <kbd>W A S D</kbd> תזוזה<br>
     <kbd>E</kbd> / קליק הרם או הנח דמות<br>
     <kbd>F</kbd> Fuse Machine<br>
+    <kbd>⚡ לחץ</kbd> על הפורטל לגנוב<br>
     <kbd>לחץ</kbd> על דמות לאינטרקציה
   </div>
 </div>
@@ -311,7 +318,7 @@ const CHARS = [
 ];
 const RARITY_COLOR={Common:'#aaa',Rare:'#4db8ff',Epic:'#bf00ff',Legendary:'#ffd700',Mythic:'#ff006e',God:'#ff6b00',Secret:'#ff2d2d',OG:'#39ff14'};
 const RARITY_ORDER=['Common','Rare','Epic','Legendary','Mythic','God','Secret','OG'];
-const SLOTS = 6;
+const SLOTS = 10;
 function randChar(minR=0){const p=CHARS.filter(c=>RARITY_ORDER.indexOf(c.r)>=minR);return{...p[Math.floor(Math.random()*p.length)]};}
 function fuseResult(chars){
   const mx=Math.max(...chars.map(c=>RARITY_ORDER.indexOf(c.r)));
@@ -342,8 +349,8 @@ sun.position.set(8,16,8);sun.castShadow=true;
 sun.shadow.mapSize.set(2048,2048);
 ['left','right','top','bottom'].forEach((k,i)=>sun.shadow.camera[k]=[-22,22,22,-22][i]);
 scene.add(sun);
-const pl1=new THREE.PointLight(0x39ff14,4,16);pl1.position.set(-9,4,0);scene.add(pl1);
-const pl2=new THREE.PointLight(0x00cfff,4,16);pl2.position.set(9,4,0);scene.add(pl2);
+const pl1=new THREE.PointLight(0x39ff14,5,22);pl1.position.set(-12,4,0);scene.add(pl1);
+const pl2=new THREE.PointLight(0x00cfff,5,22);pl2.position.set(12,4,0);scene.add(pl2);
 const plF=new THREE.PointLight(0xbf00ff,5,9);plF.position.set(0,3,0);scene.add(plF);
 
 // Ground + grid
@@ -363,20 +370,20 @@ const pLabels    =[];        // DOM divs for names
 
 // Base platforms
 function makePlatform(x,col){
-  const body=new THREE.Mesh(new THREE.BoxGeometry(13,.55,10),
+  const body=new THREE.Mesh(new THREE.BoxGeometry(20,.55,11),
     new THREE.MeshStandardMaterial({color:col,roughness:.45,metalness:.35,emissive:col,emissiveIntensity:.07}));
   body.position.set(x,-.27,0);body.receiveShadow=true;scene.add(body);
-  const edge=new THREE.Mesh(new THREE.BoxGeometry(13.2,.14,10.2),
+  const edge=new THREE.Mesh(new THREE.BoxGeometry(20.2,.14,11.2),
     new THREE.MeshStandardMaterial({color:col,emissive:col,emissiveIntensity:.7,transparent:true,opacity:.55}));
   edge.position.set(x,-.49,0);scene.add(edge);
   // Corner pillars
   [[1,1],[-1,1],[1,-1],[-1,-1]].forEach(([dx,dz])=>{
     const p=new THREE.Mesh(new THREE.BoxGeometry(.25,1.2,.25),
       new THREE.MeshStandardMaterial({color:col,emissive:col,emissiveIntensity:.5,metalness:.7}));
-    p.position.set(x+dx*6.3,.35,dz*4.7);scene.add(p);
+    p.position.set(x+dx*9.7,.35,dz*5.0);scene.add(p);
   });
 }
-makePlatform(-9,0x0d1f0d);makePlatform(9,0x0d1628);
+makePlatform(-12,0x0d1f0d);makePlatform(12,0x0d1628);
 
 // Fuse Machine platform
 const fusePlat=new THREE.Mesh(new THREE.CylinderGeometry(3.8,3.8,.4,32),
@@ -397,12 +404,12 @@ tradeZone.position.set(0,-.42,0);scene.add(tradeZone);
 
 // Character pedestals
 function makePedestals(bx,bi){
-  const cols=3,rows=2;
-  const sx=bx-((cols-1)*3)/2,sz=-((rows-1)*2.8)/2;
+  const cols=5,rows=2;
+  const sx=bx-((cols-1)*2.6)/2,sz=-((rows-1)*3.2)/2;
   for(let r=0;r<rows;r++){
     for(let c=0;c<cols;c++){
       const si=r*cols+c;if(si>=SLOTS)break;
-      const x=sx+c*3,z=sz+r*2.8;
+      const x=sx+c*2.6,z=sz+r*3.2;
       // Pedestal column
       const m=new THREE.Mesh(new THREE.CylinderGeometry(.58,.68,.85,8),
         new THREE.MeshStandardMaterial({color:0x1a1a32,roughness:.6,metalness:.4}));
@@ -419,7 +426,7 @@ function makePedestals(bx,bi){
     }
   }
 }
-makePedestals(-9,0);makePedestals(9,1);
+makePedestals(-12,0);makePedestals(12,1);
 
 // Player avatars
 function makeAvatar(col,name){
@@ -495,12 +502,13 @@ let gameMode='basewars';
 const G={
   myId:-1,peer:null,conn:null,connected:false,
   players:[
-    {x:-9,z:2,name:'Player 1',held:null,coins:0},
-    {x:9,z:-2,name:'Player 2',held:null,coins:0},
+    {x:-12,z:2,name:'Player 1',held:null,coins:0},
+    {x:12,z:-2,name:'Player 2',held:null,coins:0},
   ],
   bases:[Array(SLOTS).fill(null),Array(SLOTS).fill(null)],
   raidT:300,raidActive:false,
-  tradeSlot:null, // char on the shared exchange pad
+  tradeSlot:null,
+  spawnCountdown:15,
 };
 
 function setName(i,n){
@@ -509,7 +517,7 @@ function setName(i,n){
   pLabels[i].textContent=n;pLabels[i].style.display='block';
 }
 function initBases(){
-  for(let i=0;i<3;i++){setSlotChar(0,i,randChar(0));setSlotChar(1,i,randChar(0));}
+  for(let i=0;i<4;i++){setSlotChar(0,i,randChar(0));setSlotChar(1,i,randChar(0));}
 }
 function updateHeld(i){
   const h=G.players[i].held;
@@ -617,7 +625,7 @@ function movePlayer(dt){
     const len=Math.sqrt(dx*dx+dz*dz);
     if(len>8){p.x+=dx/len*sp*dt*1.5;p.z+=dz/len*sp*dt*1.5;mv=true;}
   }
-  p.x=Math.max(-19,Math.min(19,p.x));p.z=Math.max(-6.5,Math.min(6.5,p.z));
+  p.x=Math.max(-23,Math.min(23,p.x));p.z=Math.max(-7,Math.min(7,p.z));
   pMeshes[me].position.set(p.x,0,p.z);
   if(mv)send({type:'move',x:p.x,z:p.z});
 }
@@ -640,6 +648,20 @@ function gameUpdate(now){
   if(me===0&&now-lastTick>=1000){
     lastTick=now;
     G.raidT--;
+    // Auto-spawn every 15s
+    G.spawnCountdown--;
+    if(G.spawnCountdown<=0){
+      G.spawnCountdown=15;
+      for(let bi=0;bi<2;bi++){
+        const ei=G.bases[bi].indexOf(null);
+        if(ei>=0){
+          const nc=randChar(0);
+          G.bases[bi][ei]=nc;setSlotChar(bi,ei,nc);
+          send({type:'spawn',bi,si:ei,ch:nc});
+        }
+      }
+      showToast('✨ דמות חדשה נוספה!',2200);
+    }
     if(!G.raidActive&&G.raidT<=0){
       G.raidActive=true;G.raidT=30;
       triggerRaidUI();
@@ -798,6 +820,7 @@ function handleMsg(msg){
       G.raidActive=msg.raid;updateTimerUI();break;
     case 'raidEnd':G.raidActive=false;endRaidUI();break;
     case 'fuseAnim':showFusePopup(msg.res,msg.src||[],!!msg.roul);break;
+    case 'spawn':G.bases[msg.bi][msg.si]=msg.ch;setSlotChar(msg.bi,msg.si,msg.ch);updateFuseBtn();break;
   }
 }
 
@@ -819,6 +842,12 @@ function backToLobby(){
   document.getElementById('codeInput').value='';
   document.getElementById('joinStatus').textContent='';
   endRaidUI();updateTimerUI();
+  stealMode=false;stealModeT=0;stealModeOwner=-1;
+  steals[0]=0;steals[1]=0;soloMode=false;
+  G.spawnCountdown=15;
+  document.getElementById('stealHUD').style.display='none';
+  G.players[0].x=-12;G.players[0].z=2;pMeshes[0].position.set(-12,0,2);
+  G.players[1].x=12;G.players[1].z=-2;pMeshes[1].position.set(12,0,-2);
   G.players.forEach(p=>{p.held=null;p.coins=0;});
 }
 
@@ -892,8 +921,71 @@ function updatePedestalRing(bi,si,ch){
     ring.material.emissiveIntensity=.5;
   }
 }
+
 // ═══════════════════════════════════════════════
-//  SOLO AI MODE
+//  LASER BEAMS (passive income visualisation)
+// ═══════════════════════════════════════════════
+const laserBeams=[[],[]];
+function buildLasers(){
+  for(let bi=0;bi<2;bi++){
+    for(let si=0;si<SLOTS;si++){
+      const sp=slotSprites[bi][si];
+      const beam=new THREE.Mesh(new THREE.CylinderGeometry(.035,.035,4.5,6),
+        new THREE.MeshStandardMaterial({transparent:true,opacity:0,emissiveIntensity:3,depthWrite:false}));
+      beam.position.set(sp.position.x,3.3,sp.position.z);
+      beam.visible=false;scene.add(beam);laserBeams[bi].push(beam);
+    }
+  }
+}
+buildLasers();
+function updateLasers(now){
+  for(let bi=0;bi<2;bi++){
+    for(let si=0;si<laserBeams[bi].length;si++){
+      const beam=laserBeams[bi][si];const ch=G.bases[bi][si];
+      if(ch){
+        const hex=parseInt((RARITY_COLOR[ch.r]||'#666').replace('#',''),16);
+        const col=new THREE.Color(hex);
+        beam.material.color.copy(col);beam.material.emissive.copy(col);
+        beam.material.opacity=.25+Math.abs(Math.sin(now*.004+si*.9))*.3;
+        beam.material.transparent=true;beam.visible=true;
+      } else {beam.visible=false;}
+    }
+  }
+}
+
+// ═══════════════════════════════════════════════
+//  DUPLICATOR PORTALS (⚡ teleport to steal)
+// ═══════════════════════════════════════════════
+const dupRings=[];
+let stealMode=false,stealModeT=0,stealModeOwner=-1;
+function buildDuplicators(){
+  [[-12,5.5],[12,-5.5]].forEach(([bx,bz],bi)=>{
+    // Pad
+    const pad=new THREE.Mesh(new THREE.CylinderGeometry(1.7,1.7,.12,20),
+      new THREE.MeshStandardMaterial({color:0x001a33,emissive:0x00ffff,emissiveIntensity:.4,transparent:true,opacity:.88}));
+    pad.position.set(bx,.07,bz);scene.add(pad);
+    // Rotating portal ring
+    const ring=new THREE.Mesh(new THREE.TorusGeometry(1.55,.22,10,36),
+      new THREE.MeshStandardMaterial({color:0x00ffff,emissive:0x00ffff,emissiveIntensity:2.2,metalness:.8}));
+    ring.position.set(bx,1.8,bz);ring.rotation.x=Math.PI*.35;scene.add(ring);
+    dupRings.push(ring);
+    // Inner glow sphere
+    const glow=new THREE.Mesh(new THREE.SphereGeometry(.6,14,14),
+      new THREE.MeshStandardMaterial({color:0x00ffff,emissive:0x00ffff,emissiveIntensity:1.6,transparent:true,opacity:.45}));
+    glow.position.set(bx,1.8,bz);scene.add(glow);
+    // ⚡ emoji sprite label
+    const lc=document.createElement('canvas');lc.width=80;lc.height=80;
+    const lctx=lc.getContext('2d');lctx.font='56px serif';
+    lctx.textAlign='center';lctx.textBaseline='middle';lctx.fillText('⚡',40,42);
+    const ls=new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(lc),transparent:true}));
+    ls.position.set(bx,3.5,bz);ls.scale.set(1.5,1.5,1);scene.add(ls);
+    // Transparent hitbox for raycast
+    const hb=new THREE.Mesh(new THREE.CylinderGeometry(1.7,1.7,3.6,8),
+      new THREE.MeshBasicMaterial({transparent:true,opacity:0,depthWrite:false}));
+    hb.position.set(bx,1.8,bz);hb.userData={type:'duplicator',bi};scene.add(hb);interactables.push(hb);
+  });
+}
+buildDuplicators();
 // ═══════════════════════════════════════════════
 let soloMode=false,aiT=0;
 function startSolo(){
@@ -951,7 +1043,7 @@ function aiTick(now,dt){
     G.players[1].coins+=earned*2;updateCoinsUI(1);
   }
   // Drift AI avatar near its base
-  ai.x+=(9-ai.x)*.7*dt;ai.z+=(0.0-ai.z)*.7*dt;
+  ai.x+=(12-ai.x)*.7*dt;ai.z+=(0.0-ai.z)*.7*dt;
   pMeshes[1].position.set(ai.x,0,ai.z);
 }
 
@@ -1055,43 +1147,63 @@ function movePlayer(dt){
   if(joyActive&&(Math.abs(joyDX)>.05||Math.abs(joyDY)>.05)){
     p.x+=joyDX*sp*dt*1.4;p.z+=joyDY*sp*dt*1.4;mv=true;
   }
-  p.x=Math.max(-19,Math.min(19,p.x));p.z=Math.max(-6.5,Math.min(6.5,p.z));
+  p.x=Math.max(-23,Math.min(23,p.x));p.z=Math.max(-7,Math.min(7,p.z));
   pMeshes[me].position.set(p.x,0,p.z);
   if(mv)send({type:'move',x:p.x,z:p.z});
 }
 
 // ═══════════════════════════════════════════════
-//  PATCH handleInteract for steal + win tracking
+//  PATCH handleInteract for steal + win tracking + duplicator
 // ═══════════════════════════════════════════════
-const _origHandleInteract=handleInteract;
 function handleInteract(ud){
   if(!ud)return;
   const me=G.myId,p=G.players[me];
   if(ud.type==='fuse'){tryFuse();return;}
+  // ═ Duplicator portal ═
+  if(ud.type==='duplicator'){
+    if(G.myId<0)return;
+    if(ud.bi!==me){showToast('⚠️ זה לא המשכפל שלך!');return;}
+    if(stealMode&&stealModeOwner===me){showToast('⚠️ כבר בסטיל מוד!');return;}
+    stealMode=true;stealModeT=8;stealModeOwner=me;
+    const ex=1-me;
+    G.players[me].x=(ex===0?-12:12);G.players[me].z=0;
+    pMeshes[me].position.set(G.players[me].x,0,0);
+    send({type:'move',x:G.players[me].x,z:0});
+    showToast('🥷 STEAL MODE! 8 שניות לגנוב!',8000);
+    return;
+  }
+  // ═ Character pedestals ═
   if(ud.type==='char'){
     const{bi,si}=ud;
     const ch=G.bases[bi][si];
     const isOwn=bi===me;
-    const canSteal=G.raidActive&&!isOwn&&gameMode==='basewars';
+    const canSteal=(G.raidActive||(stealMode&&stealModeOwner===me))&&!isOwn;
     if(!p.held&&ch&&(isOwn||canSteal)){
       p.held=ch;G.bases[bi][si]=null;setSlotChar(bi,si,null);
       updateHeld(me);send({type:'pickup',bi,si});
       if(canSteal){
         showToast(`🥷 גנבת! ${ch.em} ${ch.name}`);
         checkWin(me);
-        G.raidActive=false;send({type:'raidEnd'});
+        if(stealMode&&stealModeOwner===me){
+          stealMode=false;stealModeOwner=-1;stealModeT=0;
+          G.players[me].x=(me===0?-12:12);G.players[me].z=0;
+          pMeshes[me].position.set(G.players[me].x,0,0);
+          send({type:'move',x:G.players[me].x,z:0});
+          showToast('🏠 חזרת לבסיס!',2000);
+        } else {
+          G.raidActive=false;send({type:'raidEnd'});
+        }
       }
     } else if(p.held&&isOwn&&!ch){
       G.bases[bi][si]=p.held;setSlotChar(bi,si,p.held);
       send({type:'place',bi,si,ch:p.held});
       p.held=null;updateHeld(me);
-    } else if(!isOwn&&!G.raidActive&&gameMode==='trade'&&!canSteal){
+    } else if(!isOwn&&!G.raidActive&&!stealMode&&gameMode==='trade'){
       showToast('🤝 מצב מסחר — שחקנים יכולים להחליף דמויות במרכז');
     }
     updateFuseBtn();
   }
 }
-
 // Patch setupConn to use player name input
 const _origSetupConn=setupConn;
 function setupConn(c,myIdx){
@@ -1128,11 +1240,30 @@ function animate(now){
   requestAnimationFrame(animate);
   const dt=Math.min((now-prevT)/1000,.1);prevT=now;
   if(G.connected){movePlayer(dt);gameUpdate(now);if(soloMode)aiTick(now,dt);}
+  // Steal mode countdown
+  if(stealMode&&stealModeOwner===G.myId){
+    stealModeT-=dt;
+    const el=document.getElementById('stealHUD');
+    el.style.display='block';
+    document.getElementById('stealTimer').textContent=Math.max(0,Math.ceil(stealModeT));
+    if(stealModeT<=0){
+      stealMode=false;stealModeOwner=-1;
+      el.style.display='none';
+      showToast('⏰ זמן גניבה נגמר!');
+      if(G.myId>=0){G.players[G.myId].x=(G.myId===0?-12:12);G.players[G.myId].z=0;
+        pMeshes[G.myId].position.set(G.players[G.myId].x,0,0);
+        send({type:'move',x:G.players[G.myId].x,z:0});}
+    }
+  }
   // Animate fuse machine
   fuseRing.rotation.y+=dt*1.3;fuseCore.rotation.y+=dt*2.1;
   plF.intensity=3.5+Math.sin(now*.003)*1.8;
   // Pulse base lights
   pl1.intensity=3+Math.sin(now*.0017)*.8;pl2.intensity=3+Math.sin(now*.0021)*.8;
+  // Animate duplicator portals
+  dupRings.forEach((r,i)=>{r.rotation.z+=dt*(i===0?1.0:-1.0);r.rotation.y+=dt*.4;});
+  // Update laser beams
+  updateLasers(now);
   // Particles
   const pa=pts.geometry.attributes.position;
   for(let i=0;i<PC;i++){pa.array[i*3+1]+=dt*.55;if(pa.array[i*3+1]>7)pa.array[i*3+1]=0;}
