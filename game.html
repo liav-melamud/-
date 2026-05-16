@@ -107,8 +107,24 @@ kbd{background:rgba(255,255,255,0.12);border-radius:4px;padding:1px 5px;}
   background:linear-gradient(135deg,#bf00ff,#ff006e);color:#fff;
   cursor:pointer;font-family:'Fredoka One',cursive;font-size:.95rem;transition:all .25s;}
 .fuse-close:hover{transform:scale(1.05);}
-/* ── MODE POPUP ── */
-#modeInfo{position:fixed;bottom:58px;left:50%;transform:translateX(-50%);
+/* ── MODE INDICATOR ── */
+#modeBanner{position:fixed;top:0;left:0;right:0;height:5px;z-index:200;
+  transition:background .6s;background:#ff2d2d;}
+/* ── STEAL BAR ── */
+#stealBar{position:fixed;bottom:116px;left:50%;transform:translateX(-50%);
+  width:220px;height:12px;background:rgba(0,0,0,.7);border-radius:50px;
+  border:2px solid rgba(255,100,0,.4);overflow:hidden;display:none;z-index:25;}
+#stealBarFill{height:100%;width:0%;background:linear-gradient(90deg,#ff4400,#ffd700);
+  border-radius:50px;transition:width .08s linear;}
+#stealBarLabel{position:fixed;bottom:134px;left:50%;transform:translateX(-50%);
+  font-family:'Fredoka One',cursive;font-size:.75rem;color:#ff8800;
+  z-index:25;display:none;white-space:nowrap;text-shadow:0 0 8px rgba(255,136,0,.8);}
+/* ── MARKET DROP ── */
+#marketAnnounce{position:fixed;top:68px;left:50%;transform:translateX(-50%);
+  font-family:'Fredoka One',cursive;font-size:1.1rem;color:#ffd700;
+  background:rgba(0,0,0,.8);border:2px solid #ffd700;border-radius:50px;
+  padding:6px 22px;z-index:25;opacity:0;transition:opacity .3s;
+  pointer-events:none;white-space:nowrap;}
   background:rgba(0,0,0,.82);border-radius:14px;padding:10px 18px;
   font-family:'Fredoka One',cursive;font-size:.8rem;color:rgba(255,255,255,.65);
   border:1px solid rgba(255,255,255,.1);z-index:10;pointer-events:none;text-align:center;}
@@ -169,6 +185,24 @@ kbd{background:rgba(255,255,255,0.12);border-radius:4px;padding:1px 5px;}
 /* ── JOYSTICK ── */
 #joystick{position:fixed;bottom:72px;left:14px;width:96px;height:96px;
   z-index:12;opacity:.6;touch-action:none;display:none;}
+/* ── MODE INDICATOR ── */
+#modeBanner{position:fixed;top:0;left:0;right:0;height:5px;z-index:200;
+  transition:background .6s;background:#ff2d2d;}
+/* ── STEAL PROGRESS BAR ── */
+#stealBar{position:fixed;bottom:116px;left:50%;transform:translateX(-50%);
+  width:220px;height:12px;background:rgba(0,0,0,.7);border-radius:50px;
+  border:2px solid rgba(255,100,0,.4);overflow:hidden;display:none;z-index:25;}
+#stealBarFill{height:100%;width:0%;background:linear-gradient(90deg,#ff4400,#ffd700);
+  border-radius:50px;transition:width .08s linear;}
+#stealBarLabel{position:fixed;bottom:134px;left:50%;transform:translateX(-50%);
+  font-family:'Fredoka One',cursive;font-size:.75rem;color:#ff8800;
+  z-index:25;display:none;white-space:nowrap;text-shadow:0 0 8px rgba(255,136,0,.8);}
+/* ── MARKET ANNOUNCE ── */
+#marketAnnounce{position:fixed;top:68px;left:50%;transform:translateX(-50%);
+  font-family:'Fredoka One',cursive;font-size:1.05rem;color:#ffd700;
+  background:rgba(0,0,0,.85);border:2px solid #ffd700;border-radius:50px;
+  padding:6px 22px;z-index:25;opacity:0;transition:opacity .3s;
+  pointer-events:none;white-space:nowrap;}
 </style>
 </head>
 <body>
@@ -184,8 +218,8 @@ kbd{background:rgba(255,255,255,0.12);border-radius:4px;padding:1px 5px;}
 
     <div class="mode-tabs">
       <button class="mode-tab active" style="--mc:#ff2d2d" onclick="setMode('basewars',this)">⚔️ מלחמת בסיסים</button>
-      <button class="mode-tab" style="--mc:#ffd700" onclick="setMode('trade',this)">🤝 חנות משותפת</button>
-      <button class="mode-tab" style="--mc:#ff006e" onclick="setMode('roulette',this)">🎲 רולטה של Fuse</button>
+      <button class="mode-tab" style="--mc:#ffd700" onclick="setMode('fuserace',this)">🏆 מירוץ Fuse</button>
+      <button class="mode-tab" style="--mc:#00ffcc" onclick="setMode('coinsrush',this)">💰 מרוץ מטבעות</button>
     </div>
 
     <button class="lbtn lbtn-create" onclick="createGame()">🎮 צור משחק חדש</button>
@@ -247,6 +281,10 @@ kbd{background:rgba(255,255,255,0.12);border-radius:4px;padding:1px 5px;}
 </div>
 
 <div id="modeInfo"></div>
+<div id="modeBanner"></div>
+<div id="stealBar"><div id="stealBarFill"></div></div>
+<div id="stealBarLabel">🟠 עצור ליד הדמות...</div>
+<div id="marketAnnounce"></div>
 <canvas id="joystick"></canvas>
 <div id="toast"></div>
 <div id="raidBanner">⚔️ RAID TIME! ⚔️<br><span style="font-size:1.2rem">גנוב דמות מהאויב!</span></div>
@@ -499,6 +537,12 @@ function setSlotChar(bi,si,ch){
 //  GAME STATE
 // ═══════════════════════════════════════════════
 let gameMode='basewars';
+// Mode-specific state
+let bestFusedRar=[-1,-1];      // FuseRace: best rarity index per player
+const FUSE_WIN_RI=3;            // Legendary = RARITY_ORDER[3]
+const COINS_RUSH_TARGET=50000;  // CoinsRush win threshold
+const marketChars=[null,null];  // CoinsRush: char on each market pedestal
+const marketSprites=[];         // CoinsRush: sprite objects
 const G={
   myId:-1,peer:null,conn:null,connected:false,
   players:[
@@ -516,9 +560,42 @@ function setName(i,n){
   document.getElementById('pname'+i).textContent=(i===0?'🟢 ':'🔵 ')+n;
   pLabels[i].textContent=n;pLabels[i].style.display='block';
 }
-function initBases(){
-  for(let i=0;i<4;i++){setSlotChar(0,i,randChar(0));setSlotChar(1,i,randChar(0));}
+function initGame(){
+  // Clear all slots
+  for(let bi=0;bi<2;bi++)for(let si=0;si<SLOTS;si++)setSlotChar(bi,si,null);
+  // Reset mode-specific state
+  bestFusedRar=[-1,-1];
+  marketChars[0]=null;marketChars[1]=null;
+  if(marketSprites.length)marketSprites.forEach(s=>{s.material=new THREE.SpriteMaterial({transparent:true,opacity:0});});
+  G.raidActive=false;holdStealT=0;holdStealSrc=null;
+  if(gameMode==='basewars'){
+    G.raidT=120;G.spawnCountdown=15;
+    for(let i=0;i<3;i++){setSlotChar(0,i,randChar(0));setSlotChar(1,i,randChar(0));}
+    fuseCore.material.color.setHex(0xff006e);fuseCore.material.emissive.setHex(0xff006e);
+    fuseRing.material.color.setHex(0xbf00ff);fuseRing.material.emissive.setHex(0xbf00ff);
+    document.getElementById('modeBanner').style.background='#ff2d2d';
+  } else if(gameMode==='fuserace'){
+    G.raidT=0;G.spawnCountdown=4;
+    for(let i=0;i<2;i++){setSlotChar(0,i,randChar(0));setSlotChar(1,i,randChar(0));}
+    fuseCore.material.color.setHex(0xffd700);fuseCore.material.emissive.setHex(0xffd700);
+    fuseRing.material.color.setHex(0xffaa00);fuseRing.material.emissive.setHex(0xffaa00);
+    document.getElementById('modeBanner').style.background='linear-gradient(90deg,#ffd700,#ffaa00)';
+  } else if(gameMode==='coinsrush'){
+    G.raidT=0;G.spawnCountdown=8;
+    for(let i=0;i<2;i++){setSlotChar(0,i,randChar(0));setSlotChar(1,i,randChar(0));}
+    fuseCore.material.color.setHex(0x00ffcc);fuseCore.material.emissive.setHex(0x00ffcc);
+    fuseRing.material.color.setHex(0xffd700);fuseRing.material.emissive.setHex(0xffd700);
+    document.getElementById('modeBanner').style.background='linear-gradient(90deg,#00ffcc,#ffd700)';
+    // Drop initial market chars
+    if(marketSprites.length){setMarketChar(0,randChar(0));setMarketChar(1,randChar(0));}
+  }
+  updateTimerUI();
+  updateFuseBtn();
 }
+// Compat alias
+function initBases(){initGame();}
+// Hold-steal state (BaseWars)
+let holdStealT=0,holdStealSrc=null;
 function updateHeld(i){
   const h=G.players[i].held;
   document.getElementById('held'+i).textContent=h?`🤚 ${h.em} ${h.name}`:'ידיים: ריקות';
@@ -637,49 +714,89 @@ let lastCoin=0,lastTick=0;
 function gameUpdate(now){
   if(!G.connected||G.myId<0)return;
   const me=G.myId;
-  // Coins (both players earn independently)
+  // Coins
   if(now-lastCoin>=1000){
     lastCoin=now;
     let earned=0;G.bases[me].forEach(c=>{if(c)earned+=c.cps;});
     G.players[me].coins+=earned;updateCoinsUI(me);
     send({type:'coins',i:me,v:G.players[me].coins});
+    if(gameMode==='coinsrush'){checkCoinsWin();updateTimerUI();}
   }
   // Timer (host only)
   if(me===0&&now-lastTick>=1000){
     lastTick=now;
-    G.raidT--;
-    // Auto-spawn every 15s
     G.spawnCountdown--;
-    if(G.spawnCountdown<=0){
-      G.spawnCountdown=15;
-      for(let bi=0;bi<2;bi++){
-        const ei=G.bases[bi].indexOf(null);
-        if(ei>=0){
+    if(gameMode==='basewars'){
+      G.raidT--;
+      if(G.spawnCountdown<=0){G.spawnCountdown=15;doSpawn();}
+      if(!G.raidActive&&G.raidT<=0){
+        G.raidActive=true;G.raidT=30;
+        triggerRaidUI();send({type:'timerSync',t:G.raidT,raid:true});
+      } else if(G.raidActive&&G.raidT<=0){
+        G.raidActive=false;G.raidT=120;
+        holdStealT=0;holdStealSrc=null;
+        endRaidUI();send({type:'timerSync',t:G.raidT,raid:false});
+      } else {
+        send({type:'timerSync',t:G.raidT,raid:G.raidActive});
+      }
+      updateTimerUI();
+    } else if(gameMode==='fuserace'){
+      if(G.spawnCountdown<=0){G.spawnCountdown=4;doSpawn();}
+      G.raidT++;
+      updateTimerUI();
+      send({type:'timerSync',t:G.raidT,raid:false});
+    } else if(gameMode==='coinsrush'){
+      if(G.spawnCountdown<=0){
+        G.spawnCountdown=8;
+        const si=marketChars[0]?(!marketChars[1]?1:-1):0;
+        if(si>=0){
           const nc=randChar(0);
-          G.bases[bi][ei]=nc;setSlotChar(bi,ei,nc);
-          send({type:'spawn',bi,si:ei,ch:nc});
+          setMarketChar(si,nc);
+          send({type:'marketDrop',si,ch:nc});
+          flashMarket(`🎁 ${nc.em} נפל לשוק!`);
         }
       }
-      showToast('✨ דמות חדשה נוספה!',2200);
-    }
-    if(!G.raidActive&&G.raidT<=0){
-      G.raidActive=true;G.raidT=30;
-      triggerRaidUI();
-      send({type:'timerSync',t:G.raidT,raid:true});
-    } else if(G.raidActive&&G.raidT<=0){
-      G.raidActive=false;G.raidT=300;
-      endRaidUI();
+      G.raidT++;
+      updateTimerUI();
       send({type:'timerSync',t:G.raidT,raid:false});
-    } else {
-      send({type:'timerSync',t:G.raidT,raid:G.raidActive});
     }
-    updateTimerUI();
   }
 }
+function doSpawn(){
+  for(let bi=0;bi<2;bi++){
+    const ei=G.bases[bi].indexOf(null);
+    if(ei>=0){
+      const nc=randChar(0);
+      G.bases[bi][ei]=nc;setSlotChar(bi,ei,nc);
+      send({type:'spawn',bi,si:ei,ch:nc});
+    }
+  }
+  if(gameMode==='fuserace')showToast('✨ דמות חדשות! בצע Fuse!',1800);
+  else showToast('✨ דמות חדשה נוספה!',2200);
+}
+function flashMarket(msg){
+  const el=document.getElementById('marketAnnounce');
+  el.textContent=msg;el.style.opacity='1';
+  clearTimeout(el._t);el._t=setTimeout(()=>el.style.opacity='0',2500);
+}
 function updateTimerUI(){
-  const m=Math.floor(G.raidT/60),s=G.raidT%60;
-  document.getElementById('timerVal').textContent=`${m}:${s.toString().padStart(2,'0')}`;
-  document.getElementById('timerVal').classList.toggle('raid',G.raidActive);
+  if(gameMode==='basewars'){
+    const m=Math.floor(G.raidT/60),s=G.raidT%60;
+    document.getElementById('timerVal').textContent=`${m}:${s.toString().padStart(2,'0')}`;
+    document.getElementById('timerVal').classList.toggle('raid',G.raidActive);
+    document.getElementById('timerLbl').textContent=G.raidActive?'⚔️ RAID!':'⏳ עד הפשיטה';
+  } else if(gameMode==='fuserace'){
+    const m=Math.floor(G.raidT/60),s=G.raidT%60;
+    document.getElementById('timerVal').textContent=`${m}:${s.toString().padStart(2,'0')}`;
+    document.getElementById('timerVal').classList.remove('raid');
+    const ri=G.myId>=0?bestFusedRar[G.myId]:-1;
+    document.getElementById('timerLbl').textContent='🏆 '+(ri>=0?RARITY_ORDER[ri]:'Fuse לא בוצע!');
+  } else if(gameMode==='coinsrush'){
+    const coins=G.myId>=0?G.players[G.myId].coins:0;
+    document.getElementById('timerVal').textContent=fmtNum(coins)+' / 50K';
+    document.getElementById('timerVal').classList.remove('raid');
+    document.getElementById('timerLbl').textContent='💰 מטרה: 50K';
+  }
 }
 function triggerRaidUI(){
   document.getElementById('timerLbl').textContent='⚔️ RAID!';
@@ -707,6 +824,16 @@ function tryFuse(){
   else{G.players[me].held=res;updateHeld(me);}
   showFusePopup(res,toFuse.map(t=>t.c));
   send({type:'fuseAnim',res,src:toFuse.map(t=>t.c)});
+  // Track best rarity (FuseRace win check)
+  const ri=RARITY_ORDER.indexOf(res.r);
+  if(ri>bestFusedRar[me]){
+    bestFusedRar[me]=ri;
+    send({type:'fuseRarUpdate',pi:me,ri});
+    if(gameMode==='fuserace'){
+      updateTimerUI();
+      if(ri>=FUSE_WIN_RI){showWin(me);return;}
+    }
+  }
   updateFuseBtn();
 }
 
@@ -801,9 +928,20 @@ function handleMsg(msg){
   switch(msg.type){
     case 'init':
       gameMode=msg.mode||'basewars';
+      initGame();
       msg.bases.forEach((base,bi)=>base.forEach((ch,si)=>{if(ch){G.bases[bi][si]=ch;setSlotChar(bi,si,ch);}}));
       if(msg.p0name)setName(0,msg.p0name);
       setModeInfo();updateFuseBtn();break;
+    case 'marketDrop':setMarketChar(msg.si,msg.ch);break;
+    case 'marketTake':
+      marketChars[msg.msi]=null;
+      if(marketSprites[msg.msi])marketSprites[msg.msi].material=new THREE.SpriteMaterial({transparent:true,opacity:0});
+      G.bases[msg.bi][msg.si]=msg.ch;setSlotChar(msg.bi,msg.si,msg.ch);updateFuseBtn();break;
+    case 'fuseRarUpdate':
+      bestFusedRar[msg.pi]=msg.ri;
+      if(gameMode==='fuserace'&&G.myId!==msg.pi)
+        showToast(`🏆 ${G.players[msg.pi].name} הגיע ל-${RARITY_ORDER[msg.ri]}!`);
+      updateTimerUI();break;
     case 'move':
       G.players[other].x=msg.x;G.players[other].z=msg.z;
       pMeshes[other].position.set(msg.x,0,msg.z);break;
@@ -845,6 +983,12 @@ function backToLobby(){
   stealMode=false;stealModeT=0;stealModeOwner=-1;
   steals[0]=0;steals[1]=0;soloMode=false;
   G.spawnCountdown=15;
+  bestFusedRar=[-1,-1];
+  marketChars[0]=null;marketChars[1]=null;
+  if(marketSprites.length)marketSprites.forEach(s=>{if(s)s.material=new THREE.SpriteMaterial({transparent:true,opacity:0});});
+  fuseCore.material.color.setHex(0xff006e);fuseCore.material.emissive.setHex(0xff006e);
+  fuseRing.material.color.setHex(0xbf00ff);fuseRing.material.emissive.setHex(0xbf00ff);
+  document.getElementById('modeBanner').style.background='#ff2d2d';
   document.getElementById('stealHUD').style.display='none';
   G.players[0].x=-12;G.players[0].z=2;pMeshes[0].position.set(-12,0,2);
   G.players[1].x=12;G.players[1].z=-2;pMeshes[1].position.set(12,0,-2);
@@ -859,6 +1003,7 @@ function setMode(m,btn){
   selMode=m;gameMode=m;
   document.querySelectorAll('.mode-tab').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
+  setModeInfo(); // update banner + description immediately
 }
 function setModeInfo(){
   const msgs={
@@ -986,8 +1131,33 @@ function buildDuplicators(){
   });
 }
 buildDuplicators();
+
 // ═══════════════════════════════════════════════
-let soloMode=false,aiT=0;
+//  MARKET PEDESTALS (CoinsRush mode)
+// ═══════════════════════════════════════════════
+const mktPeds=[];
+function buildMarket(){
+  [-2,2].forEach((z,si)=>{
+    const ped=new THREE.Mesh(new THREE.CylinderGeometry(.6,.72,.7,8),
+      new THREE.MeshStandardMaterial({color:0x1a140a,emissive:0xffd700,emissiveIntensity:.2,roughness:.6,metalness:.4}));
+    ped.position.set(0,.35,z);scene.add(ped);
+    const ring=new THREE.Mesh(new THREE.TorusGeometry(.68,.1,6,16),
+      new THREE.MeshStandardMaterial({color:0xffd700,emissive:0xffd700,emissiveIntensity:.9,metalness:.9}));
+    ring.position.set(0,.73,z);ring.rotation.x=Math.PI/2;scene.add(ring);
+    mktPeds.push(ring);
+    const sp=new THREE.Sprite(new THREE.SpriteMaterial({transparent:true,opacity:0}));
+    sp.position.set(0,1.85,z);sp.scale.set(2,2,1);
+    sp.userData={type:'market',si};scene.add(sp);interactables.push(sp);
+    marketSprites.push(sp);
+  });
+}
+buildMarket();
+function setMarketChar(si,ch){
+  marketChars[si]=ch;
+  const sp=marketSprites[si];
+  if(ch){sp.material=new THREE.SpriteMaterial({map:getCharTex(ch),transparent:true,opacity:1});}
+  else{sp.material=new THREE.SpriteMaterial({transparent:true,opacity:0});}
+}
 function startSolo(){
   const raw=document.getElementById('playerNameInput').value.trim();
   const name=raw||'שחקן';
@@ -1006,43 +1176,71 @@ function startSolo(){
 function aiTick(now,dt){
   if(!soloMode)return;
   const ai=G.players[1];
-  // Move AI towards unclaimed pedestal or fuse machine
   aiT+=dt;
-  if(aiT>2.0){aiT=0;
-    // collect a random char it doesn't have
-    const empty=G.bases[1].map((c,i)=>c?null:i).filter(i=>i!==null);
-    if(ai.held&&empty.length){
-      // find nearest empty slot for base 1
-      const si=empty[0];
-      const sp=slotSprites[1][si];
-      const dx=sp.position.x-ai.x,dz=sp.position.z-ai.z;
-      const d=Math.sqrt(dx*dx+dz*dz);
-      if(d<1.8){G.bases[1][si]=ai.held;setSlotChar(1,si,ai.held);ai.held=null;updateFuseBtn();}
-    } else if(!ai.held){
-      // try to place a char on its own base
-      const filled=G.bases[1].map((c,i)=>c?{i,c}:null).filter(Boolean);
+  if(aiT>1.5){aiT=0;
+    const filled=G.bases[1].map((c,i)=>c?{i,c}:null).filter(Boolean);
+    const missing=SLOTS-filled.length;
+
+    if(gameMode==='coinsrush'){
+      // Grab from market first
+      for(let ms=0;ms<2;ms++){
+        if(marketChars[ms]){
+          const ei=G.bases[1].indexOf(null);
+          if(ei>=0){
+            G.bases[1][ei]=marketChars[ms];setSlotChar(1,ei,marketChars[ms]);
+            marketChars[ms]=null;
+            if(marketSprites[ms])marketSprites[ms].material=new THREE.SpriteMaterial({transparent:true,opacity:0});
+            updateFuseBtn();break;
+          }
+        }
+      }
+      // Fuse when 5+
+      const fil2=G.bases[1].map((c,i)=>c?{i,c}:null).filter(Boolean);
+      if(fil2.length>=5){
+        const toF=fil2.slice(0,5);
+        toF.forEach(({i})=>{G.bases[1][i]=null;setSlotChar(1,i,null);});
+        const res=fuseResult(toF.map(t=>t.c));
+        const ei=G.bases[1].indexOf(null);
+        if(ei>=0){G.bases[1][ei]=res;setSlotChar(1,ei,res);}
+        updateFuseBtn();
+      }
+    } else if(gameMode==='fuserace'){
+      // Fuse ASAP when 5+
       if(filled.length>=5){
-        // AI automates fuse
-        const toFuse=filled.slice(0,5);
-        toFuse.forEach(({i})=>{G.bases[1][i]=null;setSlotChar(1,i,null);});
-        const res=fuseResult(toFuse.map(t=>t.c));
+        const toF=filled.slice(0,5);
+        toF.forEach(({i})=>{G.bases[1][i]=null;setSlotChar(1,i,null);});
+        const res=fuseResult(toF.map(t=>t.c));
+        const ei=G.bases[1].indexOf(null);
+        if(ei>=0){G.bases[1][ei]=res;setSlotChar(1,ei,res);}
+        const ri=RARITY_ORDER.indexOf(res.r);
+        if(ri>bestFusedRar[1]){
+          bestFusedRar[1]=ri;
+          showToast(`🤖 AI fused ${res.em} ${res.name} (${res.r})`);
+          if(ri>=FUSE_WIN_RI){showWin(1);return;}
+        }
+        updateFuseBtn();
+      }
+    } else { // basewars
+      if(filled.length>=5){
+        const toF=filled.slice(0,5);
+        toF.forEach(({i})=>{G.bases[1][i]=null;setSlotChar(1,i,null);});
+        const res=fuseResult(toF.map(t=>t.c));
         const ei=G.bases[1].indexOf(null);
         if(ei>=0){G.bases[1][ei]=res;setSlotChar(1,ei,res);}
         showToast(`🤖 AI עשה Fuse! → ${res.em} ${res.name}`);
         updateFuseBtn();
       }
     }
-    // AI collects new char if a slot is empty
-    const missing=G.bases[1].filter(Boolean).length;
-    if(missing<SLOTS&&!ai.held){
+
+    // Fill empty slots (except FuseRace when nearly full)
+    if(missing>0&&(gameMode!=='fuserace'||filled.length<8)){
       const ni=G.bases[1].indexOf(null);
       if(ni>=0){G.bases[1][ni]=randChar(0);setSlotChar(1,ni,G.bases[1][ni]);}
     }
-    // AI earns coins
     let earned=0;G.bases[1].forEach(c=>{if(c)earned+=c.cps;});
     G.players[1].coins+=earned*2;updateCoinsUI(1);
+    if(gameMode==='coinsrush')checkCoinsWin();
   }
-  // Drift AI avatar near its base
   ai.x+=(12-ai.x)*.7*dt;ai.z+=(0.0-ai.z)*.7*dt;
   pMeshes[1].position.set(ai.x,0,ai.z);
 }
@@ -1091,14 +1289,21 @@ function closeShop(){document.getElementById('shopPopup').classList.remove('show
 // ═══════════════════════════════════════════════
 const steals=[0,0];
 function checkWin(stealerIdx){
-  steals[stealerIdx]++;
-  if(steals[stealerIdx]>=3)showWin(stealerIdx);
+  if(gameMode==='basewars'){
+    steals[stealerIdx]++;
+    if(steals[stealerIdx]>=3)showWin(stealerIdx);
+  }
+  // FuseRace win is in tryFuse, CoinsRush win is in checkCoinsWin
+}
+function checkCoinsWin(){
+  if(gameMode!=='coinsrush'||G.myId<0)return;
+  if(G.players[G.myId].coins>=COINS_RUSH_TARGET)showWin(G.myId);
 }
 function showWin(wi){
-  const loser=1-wi;
+  const modeWinMsg={basewars:'🥷 גנב 3 דמויות!',fuserace:'🏆 Fuse ל-Legendary!',coinsrush:'💰 הגיע ל-50K!'};
   document.getElementById('winCrown').textContent=wi===0?'🏆':'🥇';
   document.getElementById('winTitle').textContent=(wi===G.myId?'אתה ניצחת!':'הפסדת...')+' '+G.players[wi].name;
-  document.getElementById('winSub').textContent=`גנב 3 דמויות!\n💰 ${fmtNum(G.players[0].coins)} vs ${fmtNum(G.players[1].coins)}`;
+  document.getElementById('winSub').textContent=(modeWinMsg[gameMode]||'')+'\n💰 '+fmtNum(G.players[0].coins)+' vs '+fmtNum(G.players[1].coins);
   document.getElementById('wname0').textContent='🟢 '+G.players[0].name;
   document.getElementById('wscore0').textContent='💰 '+fmtNum(G.players[0].coins);
   document.getElementById('wname1').textContent='🔵 '+G.players[1].name;
@@ -1152,17 +1357,18 @@ function movePlayer(dt){
   if(mv)send({type:'move',x:p.x,z:p.z});
 }
 
-// ═══════════════════════════════════════════════
-//  PATCH handleInteract for steal + win tracking + duplicator
-// ═══════════════════════════════════════════════
+// ─── PATCHED handleInteract ─────────────────────────────────────
 function handleInteract(ud){
   if(!ud)return;
   const me=G.myId,p=G.players[me];
   if(ud.type==='fuse'){tryFuse();return;}
-  // ═ Duplicator portal ═
+
+  // ── Duplicator portal (BaseWars only) ──
   if(ud.type==='duplicator'){
+    if(gameMode!=='basewars'){showToast('⚡ המשכפל עובד רק במצב מלחמת בסיסים!');return;}
     if(G.myId<0)return;
     if(ud.bi!==me){showToast('⚠️ זה לא המשכפל שלך!');return;}
+    if(!G.raidActive){showToast('⏳ המשכפל פעיל רק בזמן פשיטה!');return;}
     if(stealMode&&stealModeOwner===me){showToast('⚠️ כבר בסטיל מוד!');return;}
     stealMode=true;stealModeT=8;stealModeOwner=me;
     const ex=1-me;
@@ -1172,12 +1378,50 @@ function handleInteract(ud){
     showToast('🥷 STEAL MODE! 8 שניות לגנוב!',8000);
     return;
   }
-  // ═ Character pedestals ═
+
+  // ── Market grab (CoinsRush only) ──
+  if(ud.type==='market'){
+    if(gameMode!=='coinsrush'){showToast('💰 השוק פעיל רק במצב מרוץ מטבעות!');return;}
+    const ch=marketChars[ud.si];
+    if(!ch){showToast('⚠️ הכן ריק!');return;}
+    const ei=G.bases[me].indexOf(null);
+    if(ei<0){showToast('⚠️ הבסיס שלך מלא! עשה Fuse קודם');return;}
+    G.bases[me][ei]=ch;setSlotChar(me,ei,ch);
+    marketChars[ud.si]=null;
+    marketSprites[ud.si].material=new THREE.SpriteMaterial({transparent:true,opacity:0});
+    send({type:'marketTake',msi:ud.si,bi:me,si:ei,ch});
+    showToast(`✅ לקחת ${ch.em} ${ch.name}!`);
+    updateFuseBtn();return;
+  }
+
+  // ── Character pedestals ──
   if(ud.type==='char'){
     const{bi,si}=ud;
     const ch=G.bases[bi][si];
     const isOwn=bi===me;
-    const canSteal=(G.raidActive||(stealMode&&stealModeOwner===me))&&!isOwn;
+    let canSteal=false;
+
+    if(gameMode==='basewars'&&!isOwn){
+      const activeSteal=G.raidActive||(stealMode&&stealModeOwner===me);
+      if(activeSteal){
+        // Proximity defence: if enemy is within 2 of their own char → blocked
+        const defender=G.players[bi];
+        const sp=slotSprites[bi][si];
+        const ddx=sp.position.x-defender.x,ddz=sp.position.z-defender.z;
+        if(Math.sqrt(ddx*ddx+ddz*ddz)<2.0){
+          showToast('🛡️ מוגן! האויב שומר על הדמות שלו!');return;
+        }
+        canSteal=true;
+      } else {
+        showToast('⏳ גניבה אפשרית רק בזמן פשיטה!');return;
+      }
+    } else if(!isOwn){
+      // FuseRace / CoinsRush: no stealing from bases
+      if(gameMode==='fuserace')showToast('🏆 מצב מירוץ — אין גניבה! רק Fuse מהר יותר!');
+      else if(gameMode==='coinsrush')showToast('💰 לך לשוק המרכזי לקחת דמויות!');
+      return;
+    }
+
     if(!p.held&&ch&&(isOwn||canSteal)){
       p.held=ch;G.bases[bi][si]=null;setSlotChar(bi,si,null);
       updateHeld(me);send({type:'pickup',bi,si});
@@ -1198,8 +1442,6 @@ function handleInteract(ud){
       G.bases[bi][si]=p.held;setSlotChar(bi,si,p.held);
       send({type:'place',bi,si,ch:p.held});
       p.held=null;updateHeld(me);
-    } else if(!isOwn&&!G.raidActive&&!stealMode&&gameMode==='trade'){
-      showToast('🤝 מצב מסחר — שחקנים יכולים להחליף דמויות במרכז');
     }
     updateFuseBtn();
   }
@@ -1214,7 +1456,7 @@ function setupConn(c,myIdx){
     const name=(raw||'שחקן')+(myIdx===0?' (Host)':' (Guest)');
     setName(myIdx,name);
     if(myIdx===0){
-      initBases();
+      initGame();
       setName(1,'חבר');
       c.send(JSON.stringify({type:'init',bases:G.bases,mode:gameMode,p0name:name}));
       document.getElementById('hostStatus').textContent='✅ חובר! שחקו!';
@@ -1262,6 +1504,11 @@ function animate(now){
   pl1.intensity=3+Math.sin(now*.0017)*.8;pl2.intensity=3+Math.sin(now*.0021)*.8;
   // Animate duplicator portals
   dupRings.forEach((r,i)=>{r.rotation.z+=dt*(i===0?1.0:-1.0);r.rotation.y+=dt*.4;});
+  // Animate market rings (CoinsRush)
+  mktPeds.forEach((r,i)=>{
+    r.rotation.z+=dt*(i===0?.8:-.8);
+    r.material.emissiveIntensity=gameMode==='coinsrush'?(.6+Math.sin(now*.004+i)*.4):.15;
+  });
   // Update laser beams
   updateLasers(now);
   // Particles
